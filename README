@@ -1,5 +1,9 @@
 This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
 
+== Quick start
+
+./autogen.sh && ./configure --prefix=/usr/local && make && make install
+
 == General information
 
 With this command you can check usage of pool addresses when address space
