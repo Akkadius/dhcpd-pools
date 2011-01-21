@@ -2,6 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.63)
+AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([dhcpd-pools],[2.13],[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
 AM_INIT_AUTOMAKE(dhcpd-pools, 2.13)
 AC_CONFIG_SRCDIR([config.h.in])
@@ -11,6 +12,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 
 # Checks for libraries.
+LT_INIT
 
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h netinet/in.h stdlib.h string.h strings.h sys/socket.h unistd.h])
