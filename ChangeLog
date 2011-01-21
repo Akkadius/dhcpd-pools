@@ -1,0 +1,112 @@
+2011-01-21  Sami Kerola  <kerolasa@iki.fi>
+	* Autoreconf done & PACKAGE_URL introduced.
+	* PACKAGE_URL introduced to configure.ac
+	* Dominic Germain sent xml, and detailed xml, outputs
+	  patch.
+	* Dominic Germain pointed out include directive bug,
+	  which broke shared network name.
+	* Anonymous contrib addition snmptest.pl which should
+	  provide some sort of SNMP integration.
+	* Range statements have dynamic-bootp flag and it no
+	  longer will break analysis.
+
+2009-11-04  Sami Kerola  <kerolasa@iki.fi>
+	* Roar Pettersen pointed out portability bug related to
+	  posixfadvice arguments.
+	* Roar Pettersen pointed out fclose(stdout) portability
+	  bug.
+	* Clean up function set to be ran at exit instead of end
+	  of main().
+
+2009-05-14  Dan Thorson
+        * Memory boundary check. Lack of this caused illegal memory
+	  refrences when there was plenty of backup leases.
+
+2009-02-18  Sami Kerola  <kerolasa@iki.fi> && Dan Thorson
+	* posix_fadvice to make read-ahead quicker. (SK)
+	* HTML output to be more beatyful. (DT)
+	* --format H as a full html. (DT)
+	* Finglish to English translation. (DT)
+	* Autotools update, now done by the book. (SK)
+
+2008-09-06  Sami Kerola  <kerolasa@iki.fi>
+	* Release 2.9 - bug fixes.
+        * Bug report from Fredrik Vöcks
+	  - Include files & shared network name bug fixed.
+	  - If first range had no leases analysis crashed.
+	* Linux style indent.
+	* Autotool files update.
+
+2008-06-21  Sami Kerola  <kerolasa@iki.fi>
+	* dhcpd-pools.c: Default will skip merge sorting.
+	* getdata.c: Interpretation of range wrote without spaces fixed.
+	* getdata.c: Shared network name ending to brace fixed.
+	* Failover backup IP counting.
+	* CSV output bug fixed.
+
+2008-05-18  Sami Kerola  <kerolasa@iki.fi>
+	* Some automake files to help make install pass without complains.
+	* Function names to error messages where they where missing.
+	* Some sort options where missing from help screen.
+	* Manual page update.
+	* Multi key sorting.
+	* Range flip to support reverse order printing.
+	* Output function & errno caused FreeBSD-7.0 to exit with error
+	  when there was no trouble.
+	* Code cleanup.
+
+2008-05-10  Sami Kerola  <kerolasa@iki.fi>
+	* Release 2.6
+	* Last version did not follow include directives.
+	* The dhcpd.conf parser was still quite stupid.
+	* Touched IP counting.
+	* All networks count was completely broken.
+
+2008-05-05  Sami Kerola  <kerolasa@iki.fi>
+	* Release 2.5
+	* Reverse order for output sorting.
+	* Options parsing fixed.
+	* Bug report by Roar Pettersen
+	  - FreeBSD-7.0 output to file does not work.
+	  - Not quite sure will it work even this release.
+	    Help needed, I don't have FreeBSD-7.0.
+	* Completely new dhcpd.conf parser.
+
+2008-04-30  Sami Kerola  <kerolasa@iki.fi>
+	* Release 2.4
+	* Sorting for range output.
+
+2008-04-20  Sami Kerola  <kerolasa@iki.fi>
+	* Release 2.3
+	* From bug report by Frank Bulk.
+	  - Ranges was matching strings that where not ranges.
+	  - Unchomped new lines made ascii raport to look bad.
+	* Thank's Frank.
+
+2006-03-27  Sami Kerola  <kerolasa@iki.fi>
+	* Release 2.2
+        * No ranges defined -> crash bug fixed.
+	* Better error messages for command line options.
+	* File flushes more clean and error messages added.
+	* Possibility to limit what is printed out.
+	* Output limit update to man page.
+	* Include statement is now followed thou relative paths
+	  are problem.
+
+2006-03-13  Sami Kerola  <sami.kerola@iki.fi>
+
+	* Release 2.1
+	* parse_config function inserts end of line where there
+	  is ; character in configuration. Fixes htonl bug.
+	* Version number was 0.01 in version 2.0. Note to meself
+	  remember increment version number when version changes.
+	* CSV output format.
+	* Manual page.
+	* Autotools are used more like they should be used.
+	* Error reporter wrapper eprintf.
+
+2006-02-28  Sami Kerola  <sami.kerola@iki.fi>
+
+	* Release 2.0.
+	* Porting from awk to c.
+	* HTML table output format.

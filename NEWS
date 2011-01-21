@@ -1,0 +1,120 @@
+dhcpd-pools -- History of visible changes.
+
+Copyright (C) 2006- Sami Kerola <kerolasa@iki.fi>
+See the end for copying conditions.
+
+Please send dhcpd-pools bug reports to kerolasa@iki.fi.
+
+
+Version 2.13
+* Autoreconf to get ./configure et al up to date.
+* PACKAGE_URL introduced to configure.ac
+* Dominic Germain sent xml, and detailed xml, outputs patch.
+* Dominic Germain pointed out include directive bug, which broke
+  shared network name.
+* Anonymous contrib addition snmptest.pl which should provide
+  some sort of SNMP integration.
+* Range statements have dynamic-bootp flag and it no longer will
+  break analysis.
+
+Version 2.12
+* Dan Thorson fixed formating.
+* Roar Pettersen pointed out posix_fadvice portability bug.
+* Roar Pettersen pointed out fclose(stdout) portability bug.
+* Clean up will ran at exit instead of end of program.
+* Stian Øvrevåge pointed out shared network assignment bug.
+
+Version 2.11
+* Dan Thorson fixed memory boundary check for backup leases.
+
+Version 2.10
+* posix_fadvice to make read-ahead quicker.
+* Dan Thorson contributions:
+  o HTML output to be more beatyful.
+  o Full HTML output.
+  o Finglish to English translation.
+* Usage of autotools more properly.
+
+Version 2.9
+
+* Include files & shared network name bug fixed.
+* If first range had no leases analysis crashed.
+* Linux style indent.
+
+Version 2.8
+* dhcpd-pools.c: Default will skip merge sorting.
+* getdata.c: Interpretation of range wrote without spaces fixed.
+* getdata.c: Shared network name ending to brace fixed.
+* Failover backup IP counting.
+* CSV output bug fixed.
+
+Version 2.7
+* Some automake files to help make install pass without complains.
+* Function names to error messages where they where missing.
+* Some sort options where missing from help screen.
+* Manual page update.
+* Multi key sorting.
+* Range flip to support reverse order printing.
+* Output function & errno caused FreeBSD-7.0 to exit with error
+  when there was no trouble.
+* Code cleanup.
+
+Version 2.6
+* I forgot to follow include when I rewrote dhcpd.conf parser.
+* And the dhcpd.conf parser was still quite stupid.
+* All networks count was broken. Results before this version where bogus.
+* Feature: Touched IP counting.
+
+Version 2.5
+* Feature:
+* Reverse order sorting
+* Option parsing fixed.
+* FreeBSD-7.0 output to file did not work.
+* Completely new dhcpd.conf parser.
+
+Version 2.4
+* Feature:
+* Range output sorting.
+
+Version 2.3
+* Bugfixes:
+* Ranges was matching strings that where not ranges.
+* Unchomped new lines made ascii raport to look bad.
+
+
+Version 2.2
+* Bugfixes:
+*. No ranges in dhcpd.conf -> crash.
+* Better error messages.
+* Possibility to limit output.
+* Dhcpd.conf include statement will be followed.
+
+
+Version 2.1
+* Bugfixs:
+*. Range statements misinterpred.
+*. CSV output format.
+*. Manual page.
+
+
+Version 2.0
+
+* Version 1.x was awk script this is one done with C.
+* Only new feature is HTML output.
+
+
+-------------------------------------------------------
+Copying information:
+
+Copyright (C) 2006, Sami Kerola <kerolasa@iki.fi>
+
+   Permission is granted to anyone to make or distribute verbatim
+   copies of this document as received, in any medium, provided
+   that the copyright notice and this permission notice are
+   preserved, thus giving the recipient permission to
+   redistribute in turn.
+
+   Permission is granted to distribute modified versions of this
+   document, or of portions of it, under the above conditions,
+   provided also that they carry prominent notices stating who
+   last changed them.

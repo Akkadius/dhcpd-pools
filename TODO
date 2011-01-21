@@ -1,0 +1,22 @@
+1  Well structured code, with extendible sane architecture.
+2  Server, which has analysis in cache for N seconds and will
+   answer via socket.
+3  Configuration file for server.
+4  State file, where different ranges, shared networks etc have
+   unique identifiers (needed for graphs).
+5  Support for snmp and munin protocols.
+6  SNMP traps when limits get exceeded.
+7  Some clever check_dhcpd_pools binary for Nagios & other
+   monitoring software.
+
+8  Super server support, which will collect analysis from other
+   dhcpd-pool servers.
+9  Nice http view interface on super server, much can be copied
+   from http://piwik.org/
+10 IPv6 support.
+11 And some other things perhaps...
+
+When items 1-7 are done v3 can be released. To support rewrite
+there should be a design document with nice blue print, which is
+a web page. Also getting rid of cvs and taking git in use must
+happen.

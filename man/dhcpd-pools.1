@@ -1,0 +1,136 @@
+.\"	Sami Kerola
+.\"	http://www.iki.fi/kerolasa/
+.\"	kerolasa@iki.fi
+.\"
+.\"	Add'l ontributions by:
+.\"		Dan Thorson
+.\"
+.TH DHCPD-POOLS 1 "Jan 21 2011" "SourceForge" "ISC dhcpd analysis"
+.SH NAME
+dhcpd-pools \- ISC dhcpd pools usage analysis
+.SH SYNOPSIS
+.B dhcpd-pools
+[-c file] [-l file] [-f thcxX] [-s nimcptTe] [-r] [-o file] [-L nr] [-v] [-h]
+.SH DESCRIPTION
+The program analyses ISC dhcpd shared network and pool usage and outputs the
+results in a user selectable format.
+.SH FIELDS
+.TP
+.I "shared net name"
+Name of the shared-network for the range.
+.TP
+.I "first ip"
+First IP in lease pool range.
+.TP
+.I "last ip"
+Last IP in lease pool range.
+.TP
+.I "max"
+Number of IPs which exist in a pool, shared network or all together.
+.TP
+.I "cur"
+Number of leases currently in use.
+.TP
+.I "percent"
+Percent of IPs currently in use compared to max.
+.TP
+.I "touch"
+Number of IP's which appear in the lease file, but who's leases have
+expired. A touched IP is either expired or abandoned.  The touched IP count
+is somewhat misleading when you try to determine if an IP pool is big
+enough; it is a better indicator of whether a pool is too large.
+.TP
+.I "t+c"
+The sum of Touched and Currently in-use leases.
+.TP
+.I "t+c perc"
+Percent of IPs either touched or currently in use, compared to max.
+.TP
+.I "bu"
+Failover pair can allocate these addresses. The count appears only if there
+is failover configuration.
+.TP
+.I "bu perc"
+Percent of addresses that failover pair can allocate. The percent appears
+only if there is failover configuration.
+.SH ARGUMENTS
+.TP
+.I "\-c, \-\-config"
+Path to the dhcpd.conf file.
+.TP
+.I "\-l, \-\-leases"
+Path to the dhcpd.leases file.
+.TP
+.I "\-s, \-\-sort"
+Sort ranges by chosen fields as a sorting keys.  Maximum of five sort keys
+can be defined.  Keys weight from left to right IE if more weighting keys
+are equal next one is used. The IP field is default sort key.
+.TP
+.I "\-r, \-\-reverse"
+Sort results in reverse order.
+.TP
+.I "\-f, \-\-format"
+Output format. Currently there is text, html, full-html and csv
+(comma-separated values). Default is text. Standard html (h) outputs only
+the HTML tables, and is useful for embeding more complex web pages.
+Full-html (H) provides complete HTML headers, etc., including in-line CSS.
+Output format xml (x) is similar to the dhcpstatus Perl module output. The
+extended xml (X) format will print ethernet address details.
+.TP
+.I "\-o, \-\-output"
+File where output is written. Default is stdout.
+.TP
+.I "\-L, \-\-limit"
+Limit what will be printed. Syntax is similar to chmod permission string.
+The limit string uses two digits which vary between 0 to 7.  The first digit
+determines which headers to display, and the second digit determines which
+numeric analysis tables to include in the output. The following values are
+"OR'd" together to create the desired output. The default is 77.
+
+.RS
+.PD 0
+.TP
+.B 01
+Print x
+.TP
+.B 02
+Print y
+.TP
+.B 04
+Print z
+.TP
+.B 10
+Print headers for x
+.TP
+.B 20
+Print headers for y
+.TP
+.B 40
+Print headers for z
+.PD
+.RE
+.TP
+.I "\-v, \-\-version"
+Print version information to standard output and exit successfully.
+.TP
+.I "\-h, \-\-help"
+Print help to standard output and exit successfully.
+.SH FILES
+.if n .ta 2.8i
+.if t .ta 2.1i
+/etc/dhcpd.conf
+.br
+    ISC dhcpd configuration file.
+.br
+.br
+/var/lib/dhcp/dhcpd.leases
+.br
+    ISC dhcpd lease file.
+.SH AUTHOR
+Sami Kerola <kerolasa@iki.fi>
+.br
+http://dhcpd-pools.sourceforge.net/
+.SH "SEE ALSO"
+.BR dhcpd.leases (5),
+.BR dhcpd.conf (5),
+.BR chmod (1)

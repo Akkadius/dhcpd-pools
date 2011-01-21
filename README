@@ -1,0 +1,28 @@
+This is dhcpd-pools which is made for ISC dhcpd pool range
+analysis.
+
+With this command you can check usage of pool addresses when
+address space is great. Command is designed so that it will not
+get slow even there is thousands of IPs in lease file. This kind
+of huge dhcpd installation can be near by DSL DSLAMs or some other
+public access connection points.
+
+This command will not print nice to know information like
+DHCPStatus does. Output is limited only to list only usage for
+ranges, shared network and total address space. Limiting what is
+printed is the right thing to do when there is thousands of
+addresses. If your address space is small some other dhcp
+analyzer might be more suitable for you.
+
+Source code is pretty printed by using indent command switches.
+
+-kr -i8
+
+If you write a patch please use same coding style. In general the
+style is copy from Linux kernel.
+
+http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob_plain;f=Documentation/CodingStyle;hb=HEAD
+
+A dhcpd-pools home page is located at SourceForge.
+
+http://dhcpd-pools.sourceforge.net/
