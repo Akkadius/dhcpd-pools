@@ -1,3 +1,7 @@
+The end of ChangeLog; Fri Jan 21 18:15:50 2011 +0100
+
+See "git log" for change information aftger that point of time.
+
 2011-01-21  Sami Kerola  <kerolasa@iki.fi>
 	* Autoreconf done & PACKAGE_URL introduced.
 	* PACKAGE_URL introduced to configure.ac
