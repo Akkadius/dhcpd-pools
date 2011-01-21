@@ -2,151 +2,186 @@ This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
 
 == Quick start
 
-./autogen.sh && ./configure --prefix=/usr/local && make && make install
+	./autogen.sh
+	./configure --prefix=/usr/local
+	make
+	make install
+
 
 == General information
 
-With this command you can check usage of pool addresses when address space
-is great. Command is designed so that it will not get slow even there is
-thousands of IPs in lease file. This kind of huge dhcpd installation can be
-near by DSL DSLAMs or some other public access connection points.
+	With this command you can check usage of pool addresses
+	when address space is great. Command is designed so that
+	it will not get slow even there is thousands of IPs in
+	lease file. This kind of huge dhcpd installation can be
+	near by DSL DSLAMs or some other public access connection
+	points.
 
-This command will not print nice to know information like DHCPStatus does.
-Output is limited only to list only usage for ranges, shared network and
-total address space. Limiting what is printed is the right thing to do when
-there is thousands of addresses. If your address space is small some other
-dhcp analyzer might be more suitable for you.
+	This command will not print nice to know information like
+	DHCPStatus does. Output is limited only to list only
+	usage for ranges, shared network and total address space.
+	Limiting what is printed is the right thing to do when
+	there is thousands of addresses. If your address space is
+	small some other dhcp analyzer might be more suitable for
+	you.
+
+
+== Test data wanted
+
+	Maintainer is interested to get copy of your dhcpd.conf
+	and dhcpd.leases file, with includes if you use them.
+	Intention is to collect large set of data to build
+	realistic regression test environment. By giving your
+	data to maintainer you can be sure that updates will work
+	for you.
+
+	If you are interested to help this way put all files into
+	tar.gz, and send them to kerolasa@iki.fi. It would be nice
+	that email subject line would have 'dhcpd-pools test data'.
+
 
 == Instructions for developers
 
 AUTOTOOLS:
 
-     * "./autogen.sh" generates all files needed to compile and install the
-       code (run it after checkout from git)
+	* "./autogen.sh" generates all files needed to compile
+	  and install the code (run it after checkout from git)
 
-     * "make distclean" removes all unnecessary files, but the code can
-       still be recompiled with "./configure; make"
+	* "make distclean" removes all unnecessary files, but the
+	  code can still be recompiled with "./configure; make"
 
 PATCHES:
 
-     * First get familiar with git. In case you are completely lost watch
-       Greg Kroah-Hartman explaining the very basics.
-       http://archive.fosdem.org/2010/schedule/events/linuxkernelpatch
+	* First get familiar with git. In case you are completely
+	  lost watch Greg Kroah-Hartman explaining the very
+	  basics.
+	  http://archive.fosdem.org/2010/schedule/events/linuxkernelpatch
 
-     * Get up to date version of the code base.
+	* Get up to date version of the code base.
 
-       $ git clone git://dhcpd-pools.git.sourceforge.net/gitroot/dhcpd-pools/dhcpd-pools
+	  $ git clone git://dhcpd-pools.git.sourceforge.net/gitroot/dhcpd-pools/dhcpd-pools
 
-     * Don't include generated (autotools) stuff to your patches (hint: use
-       git-clean [-X])
+	* Don't include generated (autotools) stuff to your
+	  patches (hint: use git-clean [-X])
 
-     * Add a Signed-off-by line, use "git commit -s"
+	* Add a Signed-off-by line, use "git commit -s"
 
-     * Patches are delivered via email only. The following commands will do
-       the correct thing.
+	* Patches are delivered via email only. The following
+	  commands will do the correct thing.
 
-       $ git format-patch -C origin/master..yourbranch -o ~/patches
+	  $ git format-patch -C origin/master..yourbranch -o ~/patches
 
-       When you send only one patch use the following.
+	  When you send only one patch use the following.
 
-       $ git send-email --to kerolasa@iki.fi 0001*
+	  $ git send-email --to kerolasa@iki.fi 0001*
 
-       The command above expects you have configured email sending properly.
-       See git.wiki for help.
-       https://git.wiki.kernel.org/index.php/GitTips#Mail
+	  The command above expects you have configured email
+	  sending properly. See git.wiki for help.
+	  https://git.wiki.kernel.org/index.php/GitTips#Mail
 
-     * One patch per email, with the changelog in the body of the email.
+	* One patch per email, with the changelog in the body of
+	  the email.
 
-     * When you send series of pathes include introductory message.
+	* When you send series of pathes include introductory
+	  message.
 
-       $ git send-email --compose --to kerolasa@iki.fi ~/00*
+	  $ git send-email --compose --to kerolasa@iki.fi ~/00*
 
-       Good introductory message will have at least
+	  Good introductory message will have at least
 
-       -- snip
-       Your Name (3):
-         firstfile.c: short description
-         secondfile.c: another description
+	  -- snip
+	  Your Name (3):
+	    firstfile.c: short description
+	    secondfile.c: another description
 
-        firstfile.c                         |    2 +-
-        secondfile.c                        |    2 +-
-        secondfile.c                        |    2 +-
-        2 files changed, 3 insertions(+), 3 deletions(-)
-       -- snip
+	   firstfile.c                         |    2 +-
+	   secondfile.c                        |    2 +-
+	   secondfile.c                        |    2 +-
+	   2 files changed, 3 insertions(+), 3 deletions(-)
+	  -- snip
 
-       Above introductory can be generated with git.
+	  Above introductory can be generated with git.
 
-       $ git shortlog master..yourbranch
-       $ git diff --stat master..yourbranch
+	  $ git shortlog master..yourbranch
+	  $ git diff --stat master..yourbranch
 
-     * Subject: [PATCH] subsystem: description. Following ~/.gitconfig will
-       help you a little.
+	* Subject: [PATCH] subsystem: description. Following
+	  ~/.gitconfig will help you a little.
 
-       -- snip
-       [user]
-               name = Your Name
-               email = your.name@example.com
+	  -- snip
+	  [user]
+		  name = Your Name
+		  email = your.name@example.com
 
-       [format]
-               subjectprefix = PATCH
-               numbered = auto
-               signoff = yes
+	  [format]
+		  subjectprefix = PATCH
+		  numbered = auto
+		  signoff = yes
 
-       [sendemail]
-               chainreplyto = false
-               cc = your.name@example.com
-       -- snip
+	  [sendemail]
+		  chainreplyto = false
+		  cc = your.name@example.com
+	  -- snip
 
-     * If someone else wrote the patch, they should be credited (and blamed)
-       for it. To communicate this, add a line:
+	* If someone else wrote the patch, they should be
+	  credited (and blamed) for it. To communicate this, add
+	  a line:
 
-          From: John Doe <jdoe@wherever.com>
+	     From: John Doe <jdoe@wherever.com>
 
-       The sign-off is a simple line at the end of the explanation for the
-       patch, which certifies that you wrote it or otherwise have the right
-       to pass it on as a open-source patch. The rules are pretty simple: if
-       you can certify the below:
+	  The sign-off is a simple line at the end of the
+	  explanation for the patch, which certifies that you
+	  wrote it or otherwise have the right to pass it on as a
+	  open-source patch. The rules are pretty simple: if you
+	  can certify the below:
 
-           By making a contribution to this project, I certify that:
+	      By making a contribution to this project, I certify
+	      that:
 
-           (a) The contribution was created in whole or in part by me and I
-               have the right to submit it under the open source license
-               indicated in the file; or
+	      (a) The contribution was created in whole or in
+		  part by me and I have the right to submit it
+		  under the open source license indicated in the
+		  file; or
 
-           (b) The contribution is based upon previous work that, to the
-               best of my knowledge, is covered under an appropriate open
-               source license and I have the right under that license to
-               submit that work with modifications, whether created in whole
-               or in part by me, under the same open source license (unless
-               I am permitted to submit under a different license), as
-               indicated in the file; or
+	      (b) The contribution is based upon previous work
+		  that, to the best of my knowledge, is covered
+		  under an appropriate open source license and I
+		  have the right under that license to submit
+		  that work with modifications, whether created
+		  in whole or in part by me, under the same open
+		  source license (unless I am permitted to submit
+		  under a different license), as indicated in the
+		  file; or
 
-           (c) The contribution was provided directly to me by some other
-               person who certified (a), (b) or (c) and I have not modified
-               it.
+	      (c) The contribution was provided directly to me by
+		  some other person who certified (a), (b) or (c)
+		  and I have not modified it.
 
-           (d) I understand and agree that this project and the contribution
-               are public and that a record of the contribution (including
-               all personal information I submit with it, including my
-               sign-off) is maintained indefinitely and may be redistributed
-               consistent with this project or the open source license(s)
-               involved.
+	      (d) I understand and agree that this project and
+		  the contribution are public and that a record
+		  of the contribution (including all personal
+		  information I submit with it, including my
+		  sign-off) is maintained indefinitely and may be
+		  redistributed consistent with this project or
+		  the open source license(s) involved.
 
-       then you just add a line saying
+	  then you just add a line saying
 
-               Signed-off-by: Random J Developer <random@developer.example.org>
+	  Signed-off-by: Random J Developer <random@developer.example.org>
 
-       using your real name (sorry, no pseudonyms or anonymous contributions.)
+	  using your real name (sorry, no pseudonyms or anonymous
+	  contributions.)
 
-     * If the the business with git is too difficult just send source code
-       files as is as email attachment to maintainer.
+	* If the the business with git is too difficult just send
+	  source code files as is as email attachment to
+	  maintainer.
 
 CODING STYLE:
 
-     * The preferred coding style is based on the linux kernel Documentation/CodingStyle.
-       For more details see:
+	* The preferred coding style is based on the linux kernel
+	  Documentation/CodingStyle. For more details see:
 
-       http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob_plain;f=Documentation/CodingStyle
+	  http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob_plain;f=Documentation/CodingStyle
 
-     * Source code is pretty printed by using two, and only the two, indent
-       command switches -kr -i8
+	* Source code is pretty printed by using two, and only
+	  the two, indent command switches -kr -i8
