@@ -36,6 +36,7 @@ extern char *malloc();
 #include <strings.h>
 #endif
 #include <getopt.h>
+#include <errno.h>
 
 #include "dhcpd-pools.h"
 #include "defaults.h"
@@ -262,6 +263,13 @@ int main(int argc, char **argv)
 	}
 	free(tmp_ranges);
 	output_analysis();
+	/* After fopen in ouput ioctl does like /dev/null which
+	 * cause ENOTTY, and clean_up will see that without this
+	 * reset. At least linux does this, and possibly some
+	 * other systems. There's a report from FreeBSD 8.0 which
+	 * matches quite well with the symptom. */
+	if (errno == 25)
+		errno = 0;
 
 	if ((config.output_format[0] == 'x')
 	    || (config.output_format[0] == 'X')) {
