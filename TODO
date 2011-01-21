@@ -18,5 +18,4 @@
 
 When items 1-7 are done v3 can be released. To support rewrite
 there should be a design document with nice blue print, which is
-a web page. Also getting rid of cvs and taking git in use must
-happen.
+a web page.
