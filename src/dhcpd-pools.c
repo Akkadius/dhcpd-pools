@@ -122,6 +122,9 @@ int main(int argc, char **argv)
 				strncpy(config.sort, optarg,
 					(size_t) sorts);
 			}
+			for (i = 0; i < sorts; i++) {
+				field_selector(config.sort[i]);
+			}
 			break;
 		case 'r':
 			/* What ever sort in reverse order */
@@ -181,7 +184,7 @@ int main(int argc, char **argv)
 		output_analysis = output_csv;
 		break;
 	default:
-		errx(EXIT_FAILURE, "main: unknown ouput format `%c'",
+		errx(EXIT_FAILURE, "main: unknown output format `%c'",
 		     config.output_format[0]);
 	}
 

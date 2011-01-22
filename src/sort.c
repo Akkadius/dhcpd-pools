@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 #include <err.h>
 
 #include "dhcpd-pools.h"
@@ -117,9 +118,9 @@ void field_selector(char c)
 		returner = ret_tcperc;
 		break;
 	default:
-		errx(EXIT_FAILURE,
-		     "field_selector: unknown sort order `%c'",
-		     config.sort[0]);
+		warnx("field_selector: unknown sort order `%c'", c);
+		errx(EXIT_FAILURE, "Try `%s --help' for more information.",
+			program_invocation_short_name);
 	}
 }
 
