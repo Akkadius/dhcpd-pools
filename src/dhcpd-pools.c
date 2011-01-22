@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 			/* Output sorting option */
 			sorts = strlen(optarg);
 			if (5 < sorts) {
-				warn("main: only first 5 sort orders will be used");
+				warnx("main: only first 5 sort orders will be used");
 				strncpy(config.sort, optarg, (size_t) 5);
 				sorts = 5;
 			} else {
