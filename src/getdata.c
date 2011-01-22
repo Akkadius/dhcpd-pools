@@ -48,6 +48,7 @@ extern char *malloc();
 #define _XOPEN_SOURCE 600
 #include <fcntl.h>
 #include <errno.h>
+#include <err.h>
 #include <ctype.h>
 
 #include "dhcpd-pools.h"
@@ -120,10 +121,16 @@ int parse_leases(void)
 		else if (strstr(line, "binding state active")) {
 			leases[num_leases] = htonl(inp.s_addr);
 			num_leases++;
+			if (leasesmallocsize < num_leases) {
+			        errx(EXIT_FAILURE, "parse_leases: running out of lease memory, report a bug");
+			}
 			sw_active_lease = 1;
 		} else if (strstr(line, "  binding state free")) {
 			touches[num_touches] = htonl(inp.s_addr);
 			num_touches++;
+			if (touchesmallocsize < num_touches) {
+			        errx(EXIT_FAILURE, "parse_leases: running out of touch memory, report a bug");
+			}
 		} else if (strstr(line, "  binding state backup")) {
 			if (num_backups == 0) {
 				backups =
@@ -132,6 +139,9 @@ int parse_leases(void)
 			}
 			backups[num_backups] = htonl(inp.s_addr);
 			num_backups++;
+			if (backupsmallocsize < num_backups) {
+			        errx(EXIT_FAILURE, "parse_leases: running out of backup IPs memory, report a bug");
+			}
 		}
 
 		/* FIXME: move to output.c and use FILE *outfile */
@@ -145,22 +155,7 @@ int parse_leases(void)
 			    ("<active_lease>\n\t<ip>%s</ip>\n\t<macaddress>%s</macaddress>\n</active_lease>\n",
 			     ipstring, macstring);
 		}
-
-		if ((leasesmallocsize < num_leases) ||
-		    (touchesmallocsize < num_touches) ||
-		    (backupsmallocsize < num_backups)) {
-			printf("WARNING: running out of memory\n");
-			printf("\tlease/touch/backup = %lu/%lu/%lu\n",
-			       leasesmallocsize, touchesmallocsize,
-			       backupsmallocsize);
-			printf("\tlease/touch/backup = %lu/%lu/%lu\n",
-			       num_leases, num_touches, num_backups);
-			printf
-			    ("Code should realloc() and init new memory, but no time to write that now!\n");
-			exit(EXIT_FAILURE);
-		}
 	}
-
 	return 0;
 }
 
@@ -198,10 +193,10 @@ int nth_field(int n, char *dest, const char *src)
 /* dhcpd.conf interesting words */
 int is_interesting_config_clause(char *s)
 {
-	if (strstr(s, "shared-network")) {
-		return 1;
-	} else if (strstr(s, "range")) {
+	if (strstr(s, "range")) {
 		return 3;
+	} else if (strstr(s, "shared-network")) {
+		return 1;
 	} else if (strstr(s, "include")) {
 		return 4;
 	} else {
@@ -372,37 +367,6 @@ char *parse_config(int is_include, char *config_file,
 			i = 0;
 
 			switch (argument) {
-			case 0:
-				/* printf ("nothing interesting: %s\n", word); */
-				argument = 0;
-				break;
-			case 1:
-				/* printf ("shared-network named: %s\n", word); */
-				strcpy(next_free_shared_name, word);
-				shared_p =
-				    shared_networks + num_shared_networks;
-				num_shared_networks++;
-				shared_p++;
-				shared_p->name = next_free_shared_name;
-				shared_p->available = 0;
-				shared_p->used = 0;
-				shared_p->touched = 0;
-				shared_p->backups = 0;
-				/* Temporary abuse of argument variable */
-				argument =
-				    strlen(next_free_shared_name) + 1;
-				if (last_shared_name >
-				    next_free_shared_name + argument) {
-					next_free_shared_name += argument;
-				} else {
-					/* TODO: make this go away by reallocationg more space. */
-					eprintf
-					    ("parse_config: End of shared-network space, increase SHARED_NETWORKS_NAMES and recompile");
-					exit(EXIT_FAILURE);
-				}
-				argument = 0;
-				braces_shared = braces;
-				break;
 			case 2:
 				/* printf ("range 2nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
@@ -431,6 +395,33 @@ char *parse_config(int is_include, char *config_file,
 				range_p->first_ip = htonl(inp.s_addr) - 1;
 				argument = 2;
 				break;
+			case 1:
+				/* printf ("shared-network named: %s\n", word); */
+				strcpy(next_free_shared_name, word);
+				shared_p =
+				    shared_networks + num_shared_networks;
+				num_shared_networks++;
+				shared_p++;
+				shared_p->name = next_free_shared_name;
+				shared_p->available = 0;
+				shared_p->used = 0;
+				shared_p->touched = 0;
+				shared_p->backups = 0;
+				/* Temporary abuse of argument variable */
+				argument =
+				    strlen(next_free_shared_name) + 1;
+				if (last_shared_name >
+				    next_free_shared_name + argument) {
+					next_free_shared_name += argument;
+				} else {
+					/* TODO: make this go away by reallocationg more space. */
+					eprintf
+					    ("parse_config: End of shared-network space, increase SHARED_NETWORKS_NAMES and recompile");
+					exit(EXIT_FAILURE);
+				}
+				argument = 0;
+				braces_shared = braces;
+				break;
 			case 4:
 				/* printf ("include file: %s\n", word); */
 				argument = 0;
@@ -440,6 +431,10 @@ char *parse_config(int is_include, char *config_file,
 						 next_free_shared_name,
 						 shared_p);
 				newclause = true;
+				break;
+			case 0:
+				/* printf ("nothing interesting: %s\n", word); */
+				argument = 0;
 				break;
 			default:
 				eprintf
