@@ -30,6 +30,7 @@ extern void exit();
 extern char *malloc();
 #endif				/* STDC_HEADERS */
 #include <errno.h>
+#include <err.h>
 #include <stdarg.h>
 #ifdef  HAVE_STRING_H
 #include <string.h>
@@ -38,40 +39,16 @@ extern char *malloc();
 #endif
 
 /* Simple memory allocation wrapper */
-void *safe_malloc(size_t size)
+void *safe_malloc(const size_t size)
 {
 	void *ret = malloc(size);
+
 	if (ret == NULL) {
-		eprintf("safe_malloc: malloc: ");
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE,
+		    "safe_malloc: cannot allocate %lu bytes: ", size);
 	}
+
 	return ret;
-}
-
-/* Copyright (C) 1999 Lucent Technologies
- * Excerpted from 'The Practice of Programming'
- * by Brian W. Kernighan and Rob Pike
- * slight modifications by Sami Kerola.
- * eprintf: print error message and exit */
-void eprintf(char *fmt, ...)
-{
-	va_list args;
-
-	fflush(stdout);
-	fprintf(stderr, "%s: ", program_name);
-
-	va_start(args, fmt);
-	vfprintf(stderr, fmt, args);
-	va_end(args);
-
-	if (fmt[0] != '\0' && fmt[strlen(fmt) - 1] == ':')
-		fprintf(stderr, " %s", strerror(errno));
-	/* Should be safe, after all dhcpd-pools has only one
-	 * thread. */
-	errno = 0;
-
-	fprintf(stderr, "\n");
-	fflush(stderr);
 }
 
 void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
@@ -86,24 +63,21 @@ void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
 	memcpy(ranges, tmp_ranges, num_ranges * sizeof(struct range_t));
 }
 
-
 /* Free memory, flush buffers etc */
 void clean_up(void)
 {
 	int ret;
 	if (errno) {
-		eprintf
-		    ("clean_up: errno (%d) set but not checked in correct place; if this is repeatable send strace output as a bug report:",
-		     errno);
+		warn("clean_up: errno (%d) set but not checked in correct place.\nif this is repeatable send strace output as a bug report", errno);
 	}
 	/* Just in case there something in buffers */
 	ret = fflush(stdout);
 	if (errno || ret) {
-		eprintf("clean_up: stdout:");
+		warn("clean_up: stdout");
 	}
 	ret = fflush(stderr);
 	if (errno || ret) {
-		eprintf("clean_up: stderr:");
+		warn("clean_up: stderr");
 	}
 	free(config.dhcpdconf_file);
 	free(config.dhcpdlease_file);
@@ -132,7 +106,7 @@ void usage(int status)
 	out = status != 0 ? stderr : stdout;
 
 	fprintf(out, "\
-Usage: %s [OPTIONS]\n", program_name);
+Usage: %s [OPTIONS]\n", program_invocation_short_name);
 	fprintf(out, "\
 This is ISC dhcpd pools usage analyzer.\n\
 \n");
@@ -147,9 +121,6 @@ This is ISC dhcpd pools usage analyzer.\n\
                           x for xml\n\
                           X for xml with active lease details\n\
                           c for comma separated values\n");
-/* TODO
-                        s for snmp\n");
- */
 	fprintf(out, "\
   -s --sort [nimcptTe]  sort ranges by\n\
                           n name\n\
@@ -170,5 +141,5 @@ This is ISC dhcpd pools usage analyzer.\n\
 Report bugs to <%s>\n\
 Homepage: %s\n", PACKAGE_BUGREPORT, PACKAGE_URL);
 
-        exit(out == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
+	exit(out == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
 }

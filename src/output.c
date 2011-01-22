@@ -24,6 +24,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <err.h>
 
 #include "dhcpd-pools.h"
 
@@ -39,8 +40,8 @@ int output_txt(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			eprintf("output_txt: %s:", config.output_file);
-			exit(EXIT_FAILURE);
+			err(EXIT_FAILURE, "output_txt: %s",
+			    config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -172,12 +173,12 @@ int output_txt(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			eprintf("output_txt: fflush:");
+			warn("output_txt: fflush");
 		}
 	} else {
 		ret = fclose(outfile);
 		if (ret) {
-			eprintf("output_txt: fclose:");
+			warn("output_txt: fclose");
 		}
 	}
 
@@ -196,8 +197,8 @@ int output_xml(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			eprintf("output_xml: %s:", config.output_file);
-			exit(EXIT_FAILURE);
+			err(EXIT_FAILURE, "output_xml: %s",
+			    config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -276,12 +277,12 @@ int output_xml(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			eprintf("output_xml: fflush:");
+			warn("output_xml: fflush");
 		}
 	} else {
 		ret = fclose(outfile);
 		if (ret) {
-			eprintf("output_xml: fclose:");
+			warn("output_xml: fclose");
 		}
 	}
 
@@ -425,8 +426,8 @@ int output_html(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			eprintf("output_html: %s:", config.output_file);
-			exit(EXIT_FAILURE);
+			err(EXIT_FAILURE, "output_html: %s",
+			    config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -607,12 +608,12 @@ int output_html(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			eprintf("output_html: fflush:");
+			warn("output_html: fflush");
 		}
 	} else {
 		ret = fclose(outfile);
 		if (ret) {
-			eprintf("output_html: fclose:");
+			warn("output_html: fclose");
 		}
 	}
 	return 0;
@@ -630,8 +631,8 @@ int output_csv(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			eprintf("output_csv: %s:", config.output_file);
-			exit(EXIT_FAILURE);
+			err(EXIT_FAILURE, "output_csv: %s",
+			    config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -763,13 +764,13 @@ int output_csv(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			eprintf("output_cvs: fflush:");
+			warn("output_cvs: fflush");
 		}
 
 	} else {
 		ret = fclose(outfile);
 		if (ret) {
-			eprintf("output_cvs: fclose:");
+			warn("output_cvs: fclose");
 		}
 
 	}

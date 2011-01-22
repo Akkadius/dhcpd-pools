@@ -61,15 +61,14 @@ struct range_t
   unsigned long int backups;
 };
 /* Global variables */
-static int true = 1;
-static int false = 0;
+static int const true = 1;
+static int const false = 0;
 
-char *program_name;
 struct configuration_t config;
 
-static int output_limit_bit_1 = 1;
-static int output_limit_bit_2 = 2;
-static int output_limit_bit_3 = 4;
+static int const output_limit_bit_1 = 1;
+static int const output_limit_bit_2 = 2;
+static int const output_limit_bit_3 = 4;
 unsigned int fullhtml;
 
 struct shared_network_t *shared_networks;
@@ -97,8 +96,7 @@ int prepare_data (void);
 int do_counting (void);
 void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges);
 /* General support functions */
-void *safe_malloc (size_t size);
-void eprintf (char *, ...);
+void *safe_malloc (const size_t size);
 void print_version (void);
 void usage (int status);
 /* qsort required functions... */

@@ -27,7 +27,6 @@
 #ifdef  HAVE_STDLIB_H
 #include <stdlib.h>
 #else				/* Not STDC_HEADERS */
-extern void exit();
 extern char *malloc();
 #endif				/* STDC_HEADERS */
 #ifdef  HAVE_STRING_H
@@ -37,13 +36,14 @@ extern char *malloc();
 #endif
 #include <getopt.h>
 #include <errno.h>
+#include <err.h>
 
 #include "dhcpd-pools.h"
 #include "defaults.h"
 
 int main(int argc, char **argv)
 {
-	int c, sorts = 0;
+	int i, c, sorts = 0;
 	int option_index = 0;
 	char *tmp;
 	struct range_t *tmp_ranges;
@@ -62,17 +62,13 @@ int main(int argc, char **argv)
 		{0, 0, 0, 0}
 	};
 
-	program_name = argv[0];
-	atexit(clean_up);
-
-	/* TODO: make either dynamic or find out max path lenght that auto config
-	 * provides */
+	/* FIXME: make these allocations dynamic up on need. */
 	config.dhcpdconf_file = safe_malloc(sizeof(char) * MAXLEN);
 	config.dhcpdlease_file = safe_malloc(sizeof(char) * MAXLEN);
 	config.output_file = safe_malloc(sizeof(char) * MAXLEN);
 
-	/* Make sure string has zero lenght if there is no command line
-	 * option */
+	/* Make sure string has zero lenght if there is no
+	 * command line option */
 	config.output_file[0] = '\0';
 
 	/* File location defaults */
@@ -105,55 +101,28 @@ int main(int argc, char **argv)
 			break;
 		case 'c':
 			/* config file */
-			if (optarg != NULL) {
-				strncpy(config.dhcpdconf_file, optarg,
-					(size_t) MAXLEN - 1);
-			} else {
-				eprintf
-				    ("main: for argument configuration file parameter not set");
-				usage(EXIT_FAILURE);
-			}
+			strncpy(config.dhcpdconf_file, optarg,
+				(size_t) MAXLEN - 1);
 			break;
 		case 'l':
 			/* lease file */
-			if (optarg != NULL) {
-				strncpy(config.dhcpdlease_file, optarg,
-					(size_t) MAXLEN - 1);
-			} else {
-				eprintf
-				    ("main: for argument lease file parameter not set");
-				usage(EXIT_FAILURE);
-			}
+			strncpy(config.dhcpdlease_file, optarg,
+				(size_t) MAXLEN - 1);
 			break;
 		case 'f':
 			/* Output format */
-			if (optarg != NULL) {
-				strncpy(config.output_format, optarg,
-					(size_t) 1);
-			} else {
-				eprintf
-				    ("main: for argument output format parameter not set");
-				usage(EXIT_FAILURE);
-			}
+			strncpy(config.output_format, optarg, (size_t) 1);
 			break;
 		case 's':
 			/* Output sorting option */
-			if (optarg != NULL) {
-				sorts = strlen(optarg);
-				if (5 < sorts) {
-					eprintf
-					    ("main: only 5 first sort orders will be used");
-					strncpy(config.sort, optarg,
-						(size_t) 5);
-					sorts = 5;
-				} else {
-					strncpy(config.sort, optarg,
-						(size_t) sorts);
-				}
+			sorts = strlen(optarg);
+			if (5 < sorts) {
+				warn("main: only first 5 sort orders will be used");
+				strncpy(config.sort, optarg, (size_t) 5);
+				sorts = 5;
 			} else {
-				eprintf
-				    ("main: for argument sort order parameter not set");
-				usage(EXIT_FAILURE);
+				strncpy(config.sort, optarg,
+					(size_t) sorts);
 			}
 			break;
 		case 'r':
@@ -162,51 +131,33 @@ int main(int argc, char **argv)
 			break;
 		case 'o':
 			/* Output file */
-			if (optarg != NULL) {
-				strncpy(config.output_file, optarg,
-					(size_t) MAXLEN - 1);
-			} else {
-				eprintf
-				    ("main: for argument output file parameter not set");
-				usage(EXIT_FAILURE);
-			}
+			strncpy(config.output_file, optarg,
+				(size_t) MAXLEN - 1);
 			break;
 		case 'L':
 			/* Specification what will be printed */
-			if (optarg != NULL) {
-				if (optarg[0] >= '0' && optarg[0] < '8') {
-					config.output_limit[0] =
-					    (int) optarg[0] - '0';
+			for (i = 0; i < 2; i++) {
+				if (optarg[i] >= '0' && optarg[i] < '8') {
+					config.output_limit[i] =
+					    (int) optarg[i] - '0';
 				} else {
-					eprintf
-					    ("main: output mask %s illegal",
-					     argv[optind]);
-					usage(EXIT_FAILURE);
-				}
-				if (optarg[1] >= '0' && optarg[1] < '8') {
-					config.output_limit[1] =
-					    (int) optarg[1] - '0';
-				} else {
-					eprintf
-					    ("main: output mask %s illegal",
+					errx(EXIT_FAILURE,
+					     "main: output mask `%s' is illegal",
 					     optarg);
-					usage(EXIT_FAILURE);
 				}
-			} else {
-				eprintf
-				    ("main: for argument output mask parameter not set");
-				usage(EXIT_FAILURE);
 			}
 			break;
 		case 'v':
 			/* Print version */
 			print_version();
-			exit(EXIT_SUCCESS);
+			return (EXIT_SUCCESS);
 		case 'h':
 			/* Print help */
 			usage(EXIT_SUCCESS);
 		default:
-			usage(EXIT_FAILURE);
+			errx(EXIT_FAILURE,
+			     "Try `%s --help' for more information.",
+			     program_invocation_short_name);
 		}
 	}
 
@@ -236,8 +187,8 @@ int main(int argc, char **argv)
 		output_analysis = output_txt;
 		break;
 	default:
-		eprintf("main: unknown ouput format");
-		usage(EXIT_FAILURE);
+		errx(EXIT_FAILURE, "main: unknown ouput format `%c'",
+		     config.output_format[0]);
 	}
 
 	/* Do the job */
@@ -278,7 +229,8 @@ int main(int argc, char **argv)
 		printf("</dhcpstatus>\n");
 	};
 
-	exit(EXIT_SUCCESS);
+	clean_up();
+	return (EXIT_SUCCESS);
 }
 
 /* Global allocations, counter resets etc */

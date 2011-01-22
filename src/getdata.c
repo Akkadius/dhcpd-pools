@@ -27,7 +27,6 @@
 #ifdef  HAVE_STDLIB_H
 #include <stdlib.h>
 #else				/* Not STDC_HEADERS */
-extern void exit();
 extern char *malloc();
 #define EXIT_FAILURE    1	/* Failing exit status.  */
 #define EXIT_SUCCESS    0	/* Successful exit status.  */
@@ -45,17 +44,20 @@ extern char *malloc();
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 600
+#endif
 #include <fcntl.h>
 #include <errno.h>
 #include <err.h>
 #include <ctype.h>
+#include <assert.h>
 
 #include "dhcpd-pools.h"
 #include "defaults.h"
 
-/* Parse dhcpd.leases file. All performance boosts for this
- * function are wellcome */
+/* Parse dhcpd.leases file. All performance boosts for this function are
+ * wellcome */
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
@@ -71,30 +73,29 @@ int parse_leases(void)
 
 	dhcpd_leases = fopen(config.dhcpdlease_file, "r");
 	if (dhcpd_leases == NULL) {
-		eprintf("parse_leases: %s:", config.dhcpdlease_file);
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE, "parse_leases: %s",
+		    config.dhcpdlease_file);
 	}
 #ifdef POSIX_FADV_NOREUSE
 	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_NOREUSE);
 	if (errno) {
-		eprintf("parse_leases: fadvise:");
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE, "parse_leases: fadvise noreuse");
 	}
 #endif				/* POSIX_FADV_NOREUSE */
 #ifdef POSIX_FADV_SEQUENTIAL
 	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
-		eprintf("parse_leases: fadvise:");
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE, "parse_leases: fadvise sequential");
 	}
 #endif				/* POSIX_FADV_SEQUENTIAL */
+
 	/* I found out that there's one lease address per 300 bytes in
-	 * dhcpd.leases file. Malloc is little bit pessimistic and uses
-	 * 250. If someone has higher density in lease file I'm
-	 * interested to hear about that. */
+	 * dhcpd.leases file. Malloc is little bit pessimistic and uses 250.
+	 * If someone has higher density in lease file I'm interested to
+	 * hear about that. */
 	if (stat(config.dhcpdlease_file, &lease_file_stats)) {
-		eprintf("parse_leases: %s:", config.dhcpdlease_file);
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE, "parse_leases: %s",
+		    config.dhcpdlease_file);
 	}
 	leasesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
 	touchesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
@@ -121,16 +122,12 @@ int parse_leases(void)
 		else if (strstr(line, "binding state active")) {
 			leases[num_leases] = htonl(inp.s_addr);
 			num_leases++;
-			if (leasesmallocsize < num_leases) {
-			        errx(EXIT_FAILURE, "parse_leases: running out of lease memory, report a bug");
-			}
+			assert(!(leasesmallocsize < num_leases));
 			sw_active_lease = 1;
 		} else if (strstr(line, "  binding state free")) {
 			touches[num_touches] = htonl(inp.s_addr);
 			num_touches++;
-			if (touchesmallocsize < num_touches) {
-			        errx(EXIT_FAILURE, "parse_leases: running out of touch memory, report a bug");
-			}
+			assert(!(touchesmallocsize < num_touches));
 		} else if (strstr(line, "  binding state backup")) {
 			if (num_backups == 0) {
 				backups =
@@ -139,19 +136,18 @@ int parse_leases(void)
 			}
 			backups[num_backups] = htonl(inp.s_addr);
 			num_backups++;
-			if (backupsmallocsize < num_backups) {
-			        errx(EXIT_FAILURE, "parse_leases: running out of backup IPs memory, report a bug");
-			}
+			assert(!(backupsmallocsize < num_backups));
 		}
 
-		/* FIXME: move to output.c and use FILE *outfile */
+		/* FIXME: move to output.c and use the FILE
+		 * *outfile */
 		if ((config.output_format[0] == 'X')
 		    && (sw_active_lease == 1)
 		    && (strstr(line, "hardware ethernet"))) {
 			nth_field(3, macstring, line);
 			macstring[strlen(macstring) - 1] = '\0';
 
-                        printf
+			printf
 			    ("<active_lease>\n\t<ip>%s</ip>\n\t<macaddress>%s</macaddress>\n</active_lease>\n",
 			     ipstring, macstring);
 		}
@@ -159,11 +155,10 @@ int parse_leases(void)
 	return 0;
 }
 
-/* Like strcpy but for field which is separated by white spaces.
- * Number of first field is 1 and not 0 like C programs should
- * have. Question of semantics, send mail to author if this
- * annoys. All performance boosts for this function are well
- * come. */
+/* Like strcpy but for field which is separated by white spaces. Number of
+ * first field is 1 and not 0 like C programs should have. Question of
+ * semantics, send mail to author if this annoys. All performance boosts for
+ * this function are well come. */
 int nth_field(int n, char *dest, const char *src)
 {
 	int i, j = 0, wordn = 0, len;
@@ -204,8 +199,7 @@ int is_interesting_config_clause(char *s)
 	}
 }
 
-/* TODO: This spagetti monster function need to be rewrote at
- * least ones. */
+/* FIXME: This spagetti monster function need to be rewrote at least ones. */
 char *parse_config(int is_include, char *config_file,
 		   char *current_shared_name,
 		   char *next_free_shared_name,
@@ -232,23 +226,21 @@ char *parse_config(int is_include, char *config_file,
 	/* Open configuration file */
 	dhcpd_config = fopen(config_file, "r");
 	if (dhcpd_config == NULL) {
-		eprintf("parse_config: %s:", config_file);
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE, "parse_config: %s", config_file);
 	}
 #ifdef POSIX_FADV_NOREUSE
 	posix_fadvise((long) dhcpd_config, 0, 0, POSIX_FADV_NOREUSE);
 	if (errno) {
-		eprintf("parse_config: fadvise:");
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE, "parse_config: fadvise noreuse");
 	}
 #endif				/* POSIX_FADV_NOREUSE */
 #ifdef POSIX_FADV_SEQUENTIAL
 	posix_fadvise((long) dhcpd_config, 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
-		eprintf("parse_config: fadvise:");
-		exit(EXIT_FAILURE);
+		err(EXIT_FAILURE, "parse_config: fadvise sequential");
 	}
 #endif				/* POSIX_FADV_SEQUENTIAL */
+
 	/* Very hairy stuff begins. */
 	while (!feof(dhcpd_config)) {
 		c = fgetc(dhcpd_config);
@@ -268,7 +260,8 @@ char *parse_config(int is_include, char *config_file,
 			}
 			continue;
 		case '\n':
-			/* New line resets comment section, but not if quoted */
+			/* New line resets comment section, but
+			 * not if quoted */
 			if (quote == false) {
 				comment = false;
 			}
@@ -283,11 +276,11 @@ char *parse_config(int is_include, char *config_file,
 				newclause = true;
 				i = 0;
 			} else if (argument == 2) {
-				/* Range ends to ; and this hair in code make two
-				 * ranges wrote to gether like...
+				/* Range ends to ; and this hair in code
+				 * make two ranges wrote to gether like...
 				 *
 				 * range 10.20.30.40 10.20.30.41;range 10.20.30.42 10.20.30.43;
-				 * 
+				 *
 				 * ...to be interpreted correctly. */
 				c = ' ';
 			}
@@ -316,11 +309,13 @@ char *parse_config(int is_include, char *config_file,
 				if (braces_shared == braces) {
 					current_shared_name =
 					    shared_net_names;
-					/* TODO: Using 1000 is lame, but works. */
+					/* FIXME: Using 1000 is lame, but
+					 * works. */
 					braces_shared = 1000;
 					shared_p = shared_networks;
 				}
-				/* Not literally true, but works for this program */
+				/* Not literally true, but works for this
+				 * program */
 				newclause = true;
 			}
 			continue;
@@ -343,8 +338,9 @@ char *parse_config(int is_include, char *config_file,
 		    && (!isspace(c) || quote == true)) {
 			word[i] = c;
 			i++;
-			/* Long word which is almost causing overflow. Not any of words
-			 * this program is looking for are this long. */
+			/* Long word which is almost causing overflow. None
+			 * of words are this long which the program is
+			 * searching. */
 			if (MAXLEN < i) {
 				newclause = false;
 				i = 0;
@@ -379,9 +375,8 @@ char *parse_config(int is_include, char *config_file,
 				range_p->shared_net = shared_p;
 				num_ranges++;
 				if (RANGES < num_ranges) {
-					eprintf
-					    ("parse_config: Range space full! Increase RANGES and recompile.");
-					exit(EXIT_FAILURE);
+					errx(EXIT_FAILURE,
+					     "parse_config: Range space full! Increase RANGES and recompile.");
 				}
 				newclause = true;
 				break;
@@ -389,7 +384,8 @@ char *parse_config(int is_include, char *config_file,
 				/* printf ("range 1nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
 				if (!(inet_aton(word, &inp))) {
-					/* word was not ip, try again */
+					/* word was not ip, try
+					 * again */
 					break;
 				}
 				range_p->first_ip = htonl(inp.s_addr) - 1;
@@ -407,17 +403,19 @@ char *parse_config(int is_include, char *config_file,
 				shared_p->used = 0;
 				shared_p->touched = 0;
 				shared_p->backups = 0;
-				/* Temporary abuse of argument variable */
+				/* Temporary abuse of argument
+				 * variable */
 				argument =
 				    strlen(next_free_shared_name) + 1;
-				if (last_shared_name >
-				    next_free_shared_name + argument) {
+				if (next_free_shared_name + argument <
+				    last_shared_name) {
 					next_free_shared_name += argument;
 				} else {
-					/* TODO: make this go away by reallocationg more space. */
-					eprintf
-					    ("parse_config: End of shared-network space, increase SHARED_NETWORKS_NAMES and recompile");
-					exit(EXIT_FAILURE);
+					/* FIXME: make this go
+					 * away by reallocationg
+					 * more space. */
+					errx(EXIT_FAILURE,
+					     "parse_config: End of shared-network space, increase SHARED_NETWORKS_NAMES and recompile");
 				}
 				argument = 0;
 				braces_shared = braces;
@@ -437,9 +435,8 @@ char *parse_config(int is_include, char *config_file,
 				argument = 0;
 				break;
 			default:
-				eprintf
-				    ("parse_config: This cannot happen, report a bug!");
-				exit(EXIT_FAILURE);
+				warnx("impossible occurred, report a bug");
+				assert(0);
 			}
 		}
 	}

@@ -8,7 +8,9 @@ AM_INIT_AUTOMAKE(dhcpd-pools, 2.13)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 
-# Checks for programs.
+AC_GNU_SOURCE
+
+# Checks for programs
 AC_PROG_CC
 
 # Checks for libraries.

@@ -129,7 +129,8 @@ int do_counting(void)
 			range_p->shared_net->available += block_size;
 		}
 
-		/* Reverse so that not even a one IP will be missed. */
+		/* Go backwards one step so that not even a one IP will be
+		 * missed. This is possibly always unnecessary. */
 		if (i) {
 			i--;
 		}
@@ -140,10 +141,9 @@ int do_counting(void)
 		range_p++;
 	}
 
-	/* During count of other shared networks default network and
-	 * all networks got mixed to gether semantically. This fixes
-	 * the problem, but is not elegant. TODO: fix semantics of all
-	 * and default share_network. */
+	/* FIXME: During count of other shared networks default network and
+	 * all networks got mixed to gether semantically. This fixes the
+	 * problem, but is not elegant. */
 	shared_networks->available = 0;
 	shared_networks->used = 0;
 	shared_networks->touched = 0;
