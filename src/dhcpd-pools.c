@@ -97,8 +97,6 @@ int main(int argc, char **argv)
 			break;
 
 		switch (c) {
-		case 0:
-			break;
 		case 'c':
 			/* config file */
 			strncpy(config.dhcpdconf_file, optarg,
@@ -181,10 +179,6 @@ int main(int argc, char **argv)
 		break;
 	case 'c':
 		output_analysis = output_csv;
-		break;
-	case 's':
-		/* output_analysis = output_snmp; */
-		output_analysis = output_txt;
 		break;
 	default:
 		errx(EXIT_FAILURE, "main: unknown ouput format `%c'",
