@@ -76,16 +76,16 @@ int parse_leases(void)
 		err(EXIT_FAILURE, "parse_leases: %s",
 		    config.dhcpdlease_file);
 	}
-#ifdef POSIX_FADV_NOREUSE
-	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_NOREUSE);
+#ifdef POSIX_FADV_WILLNEED
+	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_WILLNEED);
 	if (errno) {
-		err(EXIT_FAILURE, "parse_leases: fadvise noreuse");
+		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
 	}
-#endif				/* POSIX_FADV_NOREUSE */
+#endif				/* POSIX_FADV_WILLNEED */
 #ifdef POSIX_FADV_SEQUENTIAL
 	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
-		err(EXIT_FAILURE, "parse_leases: fadvise sequential");
+		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
 	}
 #endif				/* POSIX_FADV_SEQUENTIAL */
 
@@ -228,16 +228,16 @@ char *parse_config(int is_include, char *config_file,
 	if (dhcpd_config == NULL) {
 		err(EXIT_FAILURE, "parse_config: %s", config_file);
 	}
-#ifdef POSIX_FADV_NOREUSE
-	posix_fadvise((long) dhcpd_config, 0, 0, POSIX_FADV_NOREUSE);
+#ifdef POSIX_FADV_WILLNEED
+	posix_fadvise((long) dhcpd_config, 0, 0, POSIX_FADV_WILLNEED);
 	if (errno) {
-		err(EXIT_FAILURE, "parse_config: fadvise noreuse");
+		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
 	}
-#endif				/* POSIX_FADV_NOREUSE */
+#endif				/* POSIX_FADV_WILLNEED */
 #ifdef POSIX_FADV_SEQUENTIAL
 	posix_fadvise((long) dhcpd_config, 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
-		err(EXIT_FAILURE, "parse_config: fadvise sequential");
+		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
 	}
 #endif				/* POSIX_FADV_SEQUENTIAL */
 
