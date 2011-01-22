@@ -246,6 +246,7 @@ int main(int argc, char **argv)
 		     shared_net_names + strlen(shared_net_names) + 1,
 		     shared_networks);
 
+	/* FIXME: move to output.c and use FILE *outfile */
 	if ((config.output_format[0] == 'x')
 	    || (config.output_format[0] == 'X')) {
 		printf("<dhcpstatus>\n");
@@ -271,6 +272,7 @@ int main(int argc, char **argv)
 	if (errno == 25)
 		errno = 0;
 
+	/* FIXME: move to output.c and use FILE *outfile */
 	if ((config.output_format[0] == 'x')
 	    || (config.output_format[0] == 'X')) {
 		printf("</dhcpstatus>\n");

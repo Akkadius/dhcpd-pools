@@ -134,16 +134,16 @@ int parse_leases(void)
 			num_backups++;
 		}
 
-		if ((sw_active_lease == 1)
+		/* FIXME: move to output.c and use FILE *outfile */
+		if ((config.output_format[0] == 'X')
+		    && (sw_active_lease == 1)
 		    && (strstr(line, "hardware ethernet"))) {
 			nth_field(3, macstring, line);
 			macstring[strlen(macstring) - 1] = '\0';
 
-			if (config.output_format[0] == 'X') {
-				printf
-				    ("<active_lease>\n\t<ip>%s</ip>\n\t<macaddress>%s</macaddress>\n</active_lease>\n",
-				     ipstring, macstring);
-			};
+                        printf
+			    ("<active_lease>\n\t<ip>%s</ip>\n\t<macaddress>%s</macaddress>\n</active_lease>\n",
+			     ipstring, macstring);
 		}
 
 		if ((leasesmallocsize < num_leases) ||
