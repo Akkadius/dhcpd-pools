@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.63)
+AC_PREREQ(2.64)
 AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([dhcpd-pools],[2.13],[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
 AM_INIT_AUTOMAKE(dhcpd-pools, 2.13)
