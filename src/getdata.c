@@ -49,7 +49,6 @@ extern char *malloc();
 #include <fcntl.h>
 #include <errno.h>
 #include <ctype.h>
-#include <limits.h>
 
 #include "dhcpd-pools.h"
 #include "defaults.h"
@@ -425,12 +424,11 @@ char *parse_config(int is_include, char *config_file,
 			case 3:
 				/* printf ("range 1nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
-				inet_aton(word, &inp);
-				range_p->first_ip = htonl(inp.s_addr) - 1;
-				if (range_p->first_ip == UINT_MAX) {
+				if (!(inet_aton(word, &inp))) {
 					/* word was not ip, try again */
 					break;
 				}
+				range_p->first_ip = htonl(inp.s_addr) - 1;
 				argument = 2;
 				break;
 			case 4:
