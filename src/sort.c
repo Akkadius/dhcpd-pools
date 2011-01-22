@@ -135,7 +135,7 @@ int get_order(struct range_t *left, struct range_t *right)
 			ret =
 			    strcmp(left->shared_net->name,
 				   right->shared_net->name);
-			if (ret > 0) {
+			if (0 < ret) {
 				return (0);
 			} else if (ret < 0) {
 				return (1);
@@ -170,7 +170,7 @@ void mergesort_ranges(struct range_t *orig, int size, struct range_t *temp)
 	if (size < MIN_MERGE_SIZE) {
 		for (left = 0; left < size; left++) {
 			hold = *(orig + left);
-			for (right = left - 1; right >= 0; right--) {
+			for (right = left - 1; 0 <= right; right--) {
 				if (get_order((orig + right), &hold)) {
 					break;
 				}

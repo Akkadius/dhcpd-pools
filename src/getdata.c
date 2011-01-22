@@ -1,5 +1,5 @@
 /*
-** Copyright (C) 2006- Sami Kerola <	>
+** Copyright (C) 2006- Sami Kerola <kerolasa@iki.fi>
 **  
 ** This program is free software; you can redistribute it and/or modify
 ** it under the terms of the GNU General Public License as published by
@@ -146,9 +146,9 @@ int parse_leases(void)
 			};
 		}
 
-		if ((num_leases > leasesmallocsize) ||
-		    (num_touches > touchesmallocsize) ||
-		    (num_backups > backupsmallocsize)) {
+		if ((leasesmallocsize < num_leases) ||
+		    (touchesmallocsize < num_touches) ||
+		    (backupsmallocsize < num_backups)) {
 			printf("WARNING: running out of memory\n");
 			printf("\tlease/touch/backup = %lu/%lu/%lu\n",
 			       leasesmallocsize, touchesmallocsize,
@@ -350,7 +350,7 @@ char *parse_config(int is_include, char *config_file,
 			i++;
 			/* Long word which is almost causing overflow. Not any of words
 			 * this program is looking for are this long. */
-			if (i > MAXLEN) {
+			if (MAXLEN < i) {
 				newclause = false;
 				i = 0;
 				continue;
@@ -414,7 +414,7 @@ char *parse_config(int is_include, char *config_file,
 				range_p->backups = 0;
 				range_p->shared_net = shared_p;
 				num_ranges++;
-				if (num_ranges > RANGES) {
+				if (RANGES < num_ranges) {
 					eprintf
 					    ("parse_config: Range space full! Increase RANGES and recompile.");
 					exit(EXIT_FAILURE);
@@ -435,7 +435,8 @@ char *parse_config(int is_include, char *config_file,
 				/* printf ("include file: %s\n", word); */
 				argument = 0;
 				next_free_shared_name =
-				    parse_config(false, word, current_shared_name,
+				    parse_config(false, word,
+						 current_shared_name,
 						 next_free_shared_name,
 						 shared_p);
 				newclause = true;

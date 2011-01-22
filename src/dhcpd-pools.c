@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 			/* Output sorting option */
 			if (optarg != NULL) {
 				sorts = strlen(optarg);
-				if (sorts > 5) {
+				if (5 < sorts) {
 					eprintf
 					    ("main: only 5 first sort orders will be used");
 					strncpy(config.sort, optarg,

@@ -54,7 +54,7 @@ int output_txt(void)
 		fprintf
 		    (outfile,
 		     "shared net name     first ip           last ip            max   cur    percent  touch   t+c  t+c perc");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, "     bu  bu perc");
 		}
 		fprintf(outfile, "\n");
@@ -85,7 +85,7 @@ int output_txt(void)
 					  range_p->count)) /
 				(range_p->last_ip - range_p->first_ip -
 				 1));
-			if (num_backups > 0) {
+			if (0 < num_backups) {
 				fprintf(outfile, "%7lu %8.3f",
 					range_p->backups,
 					(float) (100 * range_p->backups) /
@@ -104,7 +104,7 @@ int output_txt(void)
 		fprintf(outfile, "Shared networks:\n");
 		fprintf(outfile,
 			"name                   max   cur     percent  touch    t+c  t+c perc");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, "     bu  bu perc");
 		}
 		fprintf(outfile, "\n");
@@ -123,7 +123,7 @@ int output_txt(void)
 					 (shared_p->touched +
 					  shared_p->used)) /
 				shared_p->available);
-			if (num_backups > 0) {
+			if (0 < num_backups) {
 				fprintf(outfile, "%7lu %8.3f",
 					shared_p->backups,
 					(float) (100 * shared_p->backups) /
@@ -142,7 +142,7 @@ int output_txt(void)
 		fprintf(outfile,
 			"name                   max   cur     percent  touch    t+c  t+c perc");
 
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, "     bu  bu perc");
 		}
 		fprintf(outfile, "\n");
@@ -161,7 +161,7 @@ int output_txt(void)
 				  shared_networks->used)) /
 			shared_networks->available);
 
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, "%7lu %8.3f",
 				shared_networks->backups,
 				(float) (100 * shared_networks->backups) /
@@ -451,7 +451,7 @@ int output_html(void)
 		output_line(outfile, "th", "ralign", "touch");
 		output_line(outfile, "th", "ralign", "t+c");
 		output_line(outfile, "th", "ralign", "t+c perc");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			output_line(outfile, "th", "ralign", "bu");
 			output_line(outfile, "th", "ralign", "bu perc");
 		}
@@ -491,7 +491,7 @@ int output_html(void)
 					       range_p->count)) /
 				     (range_p->last_ip -
 				      range_p->first_ip - 1));
-			if (num_backups > 0) {
+			if (0 < num_backups) {
 				output_long(outfile, "td",
 					    range_p->backups);
 				output_float(outfile, "td",
@@ -517,7 +517,7 @@ int output_html(void)
 		output_line(outfile, "th", "ralign", "touch");
 		output_line(outfile, "th", "ralign", "t+c");
 		output_line(outfile, "th", "ralign", "t+c perc");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			output_line(outfile, "th", "ralign", "bu");
 			output_line(outfile, "th", "ralign", "bu perc");
 		}
@@ -542,7 +542,7 @@ int output_html(void)
 					      (shared_p->touched +
 					       shared_p->used)) /
 				     shared_p->available);
-			if (num_backups > 0) {
+			if (0 < num_backups) {
 				output_long(outfile, "td",
 					    shared_p->backups);
 				output_float(outfile, "td",
@@ -565,7 +565,7 @@ int output_html(void)
 		output_line(outfile, "th", "ralign", "touch");
 		output_line(outfile, "th", "ralign", "t+c");
 		output_line(outfile, "th", "ralign", "t+c perc");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			output_line(outfile, "th", "ralign", "bu");
 			output_line(outfile, "th", "ralign", "bu perc");
 		}
@@ -590,7 +590,7 @@ int output_html(void)
 				      (shared_networks->touched +
 				       shared_networks->used)) /
 			     shared_networks->available);
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			output_long(outfile, "td",
 				    shared_networks->backups);
 			output_float(outfile, "td",
@@ -645,7 +645,7 @@ int output_csv(void)
 		fprintf
 		    (outfile,
 		     "\"shared net name\",\"first ip\",\"last ip\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, ",\"bu\",\"bu perc\"");
 		}
 		fprintf(outfile, "\n");
@@ -677,7 +677,7 @@ int output_csv(void)
 					  range_p->count)) /
 				(range_p->last_ip - range_p->first_ip -
 				 1));
-			if (num_backups > 0) {
+			if (0 < num_backups) {
 				fprintf(outfile, ",\"%lu\",\"%.3f\"",
 					range_p->backups,
 					(float) (100 * range_p->backups) /
@@ -695,7 +695,7 @@ int output_csv(void)
 		fprintf(outfile, "\"Shared networks:\"\n");
 		fprintf(outfile,
 			"\"name\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, ",\"bu\",\"bu perc\"");
 		}
 		fprintf(outfile, "\n");
@@ -715,7 +715,7 @@ int output_csv(void)
 					 (shared_p->touched +
 					  shared_p->used)) /
 				shared_p->available);
-			if (num_backups > 0) {
+			if (0 < num_backups) {
 				fprintf(outfile, ",\"%lu\",\"%.3f\"",
 					shared_p->backups,
 					(float) (100 * shared_p->backups) /
@@ -732,7 +732,7 @@ int output_csv(void)
 		fprintf(outfile, "\"Sum of all ranges:\"\n");
 		fprintf(outfile,
 			"\"name\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, ",\"bu\",\"bu perc\"");
 		}
 		fprintf(outfile, "\n");
@@ -751,7 +751,7 @@ int output_csv(void)
 				 (shared_networks->touched +
 				  shared_networks->used)) /
 			shared_networks->available);
-		if (num_backups > 0) {
+		if (0 < num_backups) {
 			fprintf(outfile, "%7lu %8.3f",
 				shared_networks->backups,
 				(float) (100 * shared_networks->backups) /

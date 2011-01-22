@@ -61,7 +61,7 @@ int prepare_data(void)
 	      &rangecomp);
 
 	/* Sort backups */
-	if (num_backups > 0) {
+	if (0 < num_backups) {
 		qsort(backups, (size_t) num_backups, sizeof(long int),
 		      &intcomp);
 	}
@@ -81,9 +81,9 @@ int do_counting(void)
 	/* Walk through ranges */
 	for (k = 0; k < num_ranges; k++) {
 		/* Count IPs in use */
-		for (; range_p->last_ip > leases[i]
+		for (; leases[i] < range_p->last_ip
 		     && (unsigned long) i < num_leases; i++) {
-			if (range_p->first_ip > leases[i]) {
+			if (leases[i] < range_p->first_ip) {
 				continue;
 			}
 			/* IP with in range */
@@ -94,9 +94,9 @@ int do_counting(void)
 		}
 
 		/* Count touched IPs */
-		for (; range_p->last_ip > touches[j]
+		for (; touches[j] < range_p->last_ip
 		     && (unsigned long) j < num_touches; j++) {
-			if (range_p->first_ip > touches[j]) {
+			if (touches[j] < range_p->first_ip) {
 				continue;
 			}
 			/* IP with in range */
@@ -107,10 +107,10 @@ int do_counting(void)
 		}
 
 		/* Count backup IPs */
-		if (num_backups > 0) {
-			for (; range_p->last_ip > backups[m]
+		if (0 < num_backups) {
+			for (; backups[m] < range_p->last_ip
 			     && (unsigned long) m < num_touches; m++) {
-				if (range_p->first_ip > touches[m]) {
+				if (touches[m] < range_p->first_ip) {
 					continue;
 				}
 				/* IP with in range */
