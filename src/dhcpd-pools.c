@@ -206,11 +206,11 @@ int main(int argc, char **argv)
 	}
 	free(tmp_ranges);
 	output_analysis();
-	/* After fopen in ouput ioctl does like /dev/null which
+	/* After fopen in output ioctl does like /dev/null which
 	 * cause ENOTTY, and clean_up will see that without this
 	 * reset. At least linux does this, and possibly some
 	 * other systems. There's a report from FreeBSD 8.0 which
-	 * matches quite well with the symptom. */
+	 * matches quite well with this symptom. */
 	if (errno == 25)
 		errno = 0;
 
