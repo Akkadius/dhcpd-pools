@@ -50,6 +50,16 @@ void *safe_malloc(const size_t size)
 	return ret;
 }
 
+/* Simple strdup wrapper */
+inline char *safe_strdup(const char *str)
+{
+	char *ret = strdup(str);
+
+	if (!ret && str)
+		err(EXIT_FAILURE, "cannot duplicate string");
+	return ret;
+}
+
 void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
 {
 	unsigned int i = num_ranges - 1, j;
@@ -66,6 +76,7 @@ void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
 void clean_up(void)
 {
 	int ret;
+
 	if (errno) {
 		warn("clean_up: errno (%d) set but not checked in correct place.\nif this is repeatable send strace output as a bug report", errno);
 	}
@@ -78,6 +89,7 @@ void clean_up(void)
 	if (errno || ret) {
 		warn("clean_up: stderr");
 	}
+
 	free(config.dhcpdconf_file);
 	free(config.dhcpdlease_file);
 	free(config.output_file);

@@ -700,7 +700,8 @@ int long_only;
 								_
 								("%s: option `--%s' doesn't allow an argument\n"),
 								argv[0],
-								pfound->name);
+								pfound->
+								name);
 						else
 							/* +option or -option */
 							fprintf(stderr,
@@ -710,7 +711,8 @@ int long_only;
 								argv[optind
 								     -
 								     1][0],
-								pfound->name);
+								pfound->
+								name);
 					}
 
 					nextchar += strlen(nextchar);
@@ -884,7 +886,8 @@ int long_only;
 					else {
 						if (print_errors)
 							fprintf(stderr, _("\
-%s: option `-W %s' doesn't allow an argument\n"), argv[0], pfound->name);
+%s: option `-W %s' doesn't allow an argument\n"), argv[0], pfound->
+								name);
 
 						nextchar +=
 						    strlen(nextchar);

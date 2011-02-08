@@ -119,7 +119,7 @@ void field_selector(char c)
 	default:
 		warnx("field_selector: unknown sort order `%c'", c);
 		errx(EXIT_FAILURE, "Try `%s --help' for more information.",
-			program_invocation_short_name);
+		     program_invocation_short_name);
 	}
 }
 

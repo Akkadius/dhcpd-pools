@@ -114,7 +114,8 @@ int main(int argc, char **argv)
 			/* Output sorting option */
 			sorts = strlen(optarg);
 			if (5 < sorts) {
-				warnx("main: only first 5 sort orders will be used");
+				warnx
+				    ("main: only first 5 sort orders will be used");
 				strncpy(config.sort, optarg, (size_t) 5);
 				sorts = 5;
 			} else {
@@ -193,12 +194,6 @@ int main(int argc, char **argv)
 		     shared_net_names + strlen(shared_net_names) + 1,
 		     shared_networks);
 
-	/* FIXME: move to output.c and use FILE *outfile */
-	if ((config.output_format[0] == 'x')
-	    || (config.output_format[0] == 'X')) {
-		printf("<dhcpstatus>\n");
-	};
-
 	parse_leases();
 	prepare_data();
 	do_counting();
@@ -219,12 +214,6 @@ int main(int argc, char **argv)
 	if (errno == 25)
 		errno = 0;
 
-	/* FIXME: move to output.c and use FILE *outfile */
-	if ((config.output_format[0] == 'x')
-	    || (config.output_format[0] == 'X')) {
-		printf("</dhcpstatus>\n");
-	};
-
 	clean_up();
 	return (EXIT_SUCCESS);
 }
@@ -239,6 +228,7 @@ int prepare_memory()
 	    safe_malloc(sizeof(char) * SHARED_NETWORKS_NAMES);
 
 	ranges = safe_malloc(sizeof(struct range_t) * RANGES);
+	macaddr = NULL;
 
 	/* First shared network entry is all networks */
 	strcpy(shared_net_names, "All networks");

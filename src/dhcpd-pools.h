@@ -59,6 +59,13 @@ struct range_t
   unsigned long int touched;
   unsigned long int backups;
 };
+struct macaddr_t
+{
+  char *ethernet;
+  char *ip;
+  struct macaddr_t *next;
+};
+
 /* Global variables */
 static int const true = 1;
 static int const false = 0;
@@ -86,6 +93,8 @@ unsigned long int num_touches;
 unsigned long int *backups;
 unsigned long int num_backups;
 
+struct macaddr_t *macaddr;
+
 /* Function prototypes */
 int prepare_memory (void);
 int parse_leases (void);
@@ -96,6 +105,7 @@ int do_counting (void);
 void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges);
 /* General support functions */
 void *safe_malloc (const size_t size);
+inline char *safe_strdup(const char *str);
 void print_version (void);
 void usage (int status);
 /* qsort required functions... */

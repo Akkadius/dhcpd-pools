@@ -60,9 +60,10 @@ extern char *malloc();
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
-	char *line, *ipstring, *macstring, *macstring2;
+	char *line, *ipstring, *macstring;
 	struct in_addr inp;
 	struct stat lease_file_stats;
+	struct macaddr_t *macaddr_p;
 	unsigned long leasesmallocsize;
 	unsigned long touchesmallocsize;
 	unsigned long backupsmallocsize;
@@ -78,13 +79,15 @@ int parse_leases(void)
 #ifdef POSIX_FADV_WILLNEED
 	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_WILLNEED);
 	if (errno) {
-		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
+		err(EXIT_FAILURE, "parse_leases: fadvise %s",
+		    config.dhcpdlease_file);
 	}
 #endif				/* POSIX_FADV_WILLNEED */
 #ifdef POSIX_FADV_SEQUENTIAL
 	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
-		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
+		err(EXIT_FAILURE, "parse_leases: fadvise %s",
+		    config.dhcpdlease_file);
 	}
 #endif				/* POSIX_FADV_SEQUENTIAL */
 
@@ -105,8 +108,12 @@ int parse_leases(void)
 
 	line = safe_malloc(sizeof(long int) * MAXLEN);
 	ipstring = safe_malloc(sizeof(long int) * MAXLEN);
-	macstring = safe_malloc(sizeof(long int) * MAXLEN);
-	macstring2 = safe_malloc(sizeof(long int) * MAXLEN);
+	if (config.output_format[0] == 'X') {
+		macstring = safe_malloc(sizeof(char) * 18);
+		macaddr = safe_malloc(sizeof(struct macaddr_t));
+		macaddr_p = macaddr;
+		macaddr_p->next = NULL;
+	}
 
 	while (!feof(dhcpd_leases)) {
 		fgets(line, MAXLEN, dhcpd_leases);
@@ -138,18 +145,23 @@ int parse_leases(void)
 			assert(!(backupsmallocsize < num_backups));
 		}
 
-		/* FIXME: move to output.c and use the FILE
-		 * *outfile */
-		if ((config.output_format[0] == 'X')
+		if ((macaddr != NULL)
 		    && (sw_active_lease == 1)
 		    && (strstr(line, "hardware ethernet"))) {
 			nth_field(3, macstring, line);
-			macstring[strlen(macstring) - 1] = '\0';
-
-			printf
-			    ("<active_lease>\n\t<ip>%s</ip>\n\t<macaddress>%s</macaddress>\n</active_lease>\n",
-			     ipstring, macstring);
+			macstring[17] = '\0';
+			macaddr_p->ethernet = safe_strdup(macstring);
+			macaddr_p->ip = safe_strdup(ipstring);
+			macaddr_p->next =
+			    safe_malloc(sizeof(struct macaddr_t));
+			macaddr_p = macaddr_p->next;
+			macaddr_p->next = NULL;
 		}
+	}
+	free(line);
+	free(ipstring);
+	if (macaddr != NULL) {
+		free(macstring);
 	}
 	return 0;
 }
