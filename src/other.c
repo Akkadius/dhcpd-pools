@@ -51,7 +51,7 @@ void *safe_malloc(const size_t size)
 }
 
 /* Simple strdup wrapper */
-inline char *safe_strdup(const char *str)
+char *safe_strdup(const char *str)
 {
 	char *ret = strdup(str);
 

@@ -105,7 +105,7 @@ int do_counting (void);
 void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges);
 /* General support functions */
 void *safe_malloc (const size_t size);
-inline char *safe_strdup(const char *str);
+char *safe_strdup(const char *str);
 void print_version (void);
 void usage (int status);
 /* qsort required functions... */
