@@ -11,6 +11,7 @@ configure
 contrib/Makefile
 contrib/Makefile.in
 depcomp
+INSTALL
 install-sh
 libtool
 ltmain.sh
