@@ -12,6 +12,9 @@ AC_GNU_SOURCE
 
 # Checks for programs
 AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL
 
 # Checks for libraries.
 LT_INIT
@@ -25,7 +28,7 @@ AC_TYPE_SIZE_T
 
 # Checks for library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([inet_ntoa memset strerror strstr])
+AC_CHECK_FUNCS([inet_ntoa memset strerror strstr strdup])
 
 # GNU commandline parsing in getopt.h present?
 AC_CHECK_HEADERS(getopt.h, AC_DEFINE(HAVE_GETOPT_H),
