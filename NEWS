@@ -6,6 +6,29 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.14
+# git shortlog v2.13..v2.14
+Sami Kerola (18):
+      Fix to range dynamic-bootp specifier
+      Automake 2.64 is needed.
+      Arithmetic comparisons to be same way around
+      The xml output is dirty and marked as FIXME
+      Optimization on basis of gcov
+      Use what libc will provide
+      Not a syscall error, warn should be warnx.
+      Impossible to reach sections removed
+      posix_fadvice advice parameter change
+      Do not analyze if sort field selector is rubbish.
+      autogen.sh: test bug fix & clean up to messages
+      autogen.sh: typo fix in previous commit
+      Copyright notice change to GNU license 3
+      Allow xml output with leases to use output file
+      INSTALL file is unnecessary
+      fix to safe_strdup prototype.
+      ignore INSTALL file
+      configure.ac: autoscan updates
+      Release 2.14
+
 Version 2.13
 * Autoreconf to get ./configure et al up to date.
 * PACKAGE_URL introduced to configure.ac

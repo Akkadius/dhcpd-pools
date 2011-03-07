@@ -3,8 +3,8 @@
 
 AC_PREREQ(2.64)
 AC_CONFIG_MACRO_DIR([m4])
-AC_INIT([dhcpd-pools],[2.13],[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
-AM_INIT_AUTOMAKE(dhcpd-pools, 2.13)
+AC_INIT([dhcpd-pools],[2.14],[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
+AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 
