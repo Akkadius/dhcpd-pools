@@ -5,12 +5,13 @@ AC_PREREQ(2.64)
 AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([dhcpd-pools],[2.14],[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
 AM_INIT_AUTOMAKE
-AC_CONFIG_SRCDIR([config.h.in])
+AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
 AC_GNU_SOURCE
 
 # Checks for programs
+AC_PROG_AWK
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_MAKE_SET
@@ -20,7 +21,16 @@ AC_PROG_LIBTOOL
 LT_INIT
 
 # Checks for header files.
-AC_CHECK_HEADERS([arpa/inet.h fcntl.h libintl.h netinet/in.h stdlib.h string.h strings.h sys/socket.h unistd.h])
+
+AC_CHECK_HEADERS([arpa/inet.h \
+	fcntl.h \
+	libintl.h \
+	netinet/in.h \
+	stdlib.h \
+	string.h \
+	strings.h \
+	sys/socket.h \
+	unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
