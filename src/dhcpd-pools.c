@@ -151,7 +151,6 @@ int main(int argc, char **argv)
 		case 'v':
 			/* Print version */
 			print_version();
-			return (EXIT_SUCCESS);
 		case 'h':
 			/* Print help */
 			usage(EXIT_SUCCESS);

@@ -109,6 +109,7 @@ void print_version(void)
 		"This is free software: you are free to change and redistribute it.\n");
 	fprintf(stdout,
 		"There is NO WARRANTY, to the extent permitted by law.\n");
+        exit(EXIT_SUCCESS);
 }
 
 void usage(int status)

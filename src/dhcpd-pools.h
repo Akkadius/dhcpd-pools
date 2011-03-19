@@ -98,20 +98,34 @@ struct macaddr_t *macaddr;
 /* Function prototypes */
 int prepare_memory (void);
 int parse_leases (void);
-char * parse_config (int, char *, char *, char *, struct shared_network_t *);
-int nth_field (int n, char *dest, const char *src);
+char * parse_config (int, char *, char *, char *, struct shared_network_t *)
+	__attribute__((nonnull (2, 3, 4)));
+int nth_field (int n, char *dest, const char *src)
+	__attribute__((nonnull (2, 3)))
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+	__attribute__((__hot__))
+#endif
+	;
 int prepare_data (void);
 int do_counting (void);
-void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges);
+void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
+	__attribute__((nonnull (1, 2)));
 /* General support functions */
-void *safe_malloc (const size_t size);
-char *safe_strdup(const char *str);
-void print_version (void);
-void usage (int status);
+void *safe_malloc (const size_t size)
+#if __GNUC__ >= 3
+	__attribute__ ((__malloc__))
+	#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+		__attribute__ ((__alloc_size__ ((1))))
+	#endif
+#endif
+	;
+char *safe_strdup(const char *str) __attribute__((nonnull (1)));
+void print_version (void) __attribute__((noreturn));
+void usage (int status) __attribute__((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
-int intcomp (const void *x, const void *y);
-int rangecomp (const void *r1, const void *r2);
+int intcomp (const void *x, const void *y) __attribute__((nonnull (1, 2)));
+int rangecomp (const void *r1, const void *r2) __attribute__((nonnull (1, 2)));
 /* sort function pointer and functions */
 int sort_name (void);
 unsigned long int (*returner) (struct range_t r);
@@ -123,8 +137,8 @@ unsigned long int ret_touched(struct range_t r);
 unsigned long int ret_tc(struct range_t r);
 unsigned long int ret_tcperc(struct range_t r);
 void field_selector(char c);
-int get_order(struct range_t *left, struct range_t *right);
-void mergesort_ranges (struct range_t *orig, int size, struct range_t *temp);
+int get_order(struct range_t *left, struct range_t *right) __attribute__((nonnull (1, 2)));
+void mergesort_ranges (struct range_t *orig, int size, struct range_t *temp) __attribute__((nonnull (1, 3)));
 /* output function pointer and functions */
 int (*output_analysis) (void);
 int output_txt (void);
