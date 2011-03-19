@@ -163,6 +163,7 @@ int parse_leases(void)
 	if (macaddr != NULL) {
 		free(macstring);
 	}
+	fclose(dhcpd_leases);
 	return 0;
 }
 
@@ -452,5 +453,6 @@ char *parse_config(int is_include, char *config_file,
 		}
 	}
 	free(word);
+	fclose(dhcpd_config);
 	return next_free_shared_name;
 }

@@ -94,6 +94,8 @@ void clean_up(void)
 	free(config.dhcpdlease_file);
 	free(config.output_file);
 	free(ranges);
+	free(leases);
+	free(touches);
 	free(shared_net_names);
 	free(shared_networks);
 }
