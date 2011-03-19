@@ -60,10 +60,10 @@ extern char *malloc();
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
-	char *line, *ipstring, *macstring;
+	char *line, *ipstring, *macstring = NULL;
 	struct in_addr inp;
 	struct stat lease_file_stats;
-	struct macaddr_t *macaddr_p;
+	struct macaddr_t *macaddr_p = NULL;
 	unsigned long leasesmallocsize;
 	unsigned long touchesmallocsize;
 	unsigned long backupsmallocsize;
