@@ -42,12 +42,27 @@ AC_CHECK_FUNCS([inet_ntoa memset strerror strstr strdup])
 
 # GNU commandline parsing in getopt.h present?
 AC_CHECK_HEADERS(getopt.h, AC_DEFINE(HAVE_GETOPT_H),
-        import_sources="getopt.c getopt1.c $import_sources")
+	import_sources="getopt.c getopt1.c $import_sources")
 
 AC_CONFIG_FILES([Makefile
-                 man/Makefile
-                 src/Makefile
-                 contrib/Makefile])
+		 man/Makefile
+		 src/Makefile
+		 contrib/Makefile])
+
+AC_MSG_CHECKING(whether program_invocation_short_name is defined)
+AC_TRY_COMPILE([#include <argp.h>],
+		[program_invocation_short_name = "test";],
+		AC_DEFINE(HAVE_PROGRAM_INVOCATION_SHORT_NAME, 1,
+			[Define if program_invocation_short_name is defined])
+		AC_MSG_RESULT(yes),
+		AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING([whether __progname is defined])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([extern char *__progname;],
+	[if (*__progname == 0) return;])],
+	AC_DEFINE(HAVE___PROGNAME, 1, [Define if __progname is defined])
+	AC_MSG_RESULT(yes),
+	AC_MSG_RESULT(no))
 
 AC_ARG_WITH(dhcpd-conf,
 	[AC_HELP_STRING([--with-dhcpd-conf], [default path of dhcpd.conf])],
