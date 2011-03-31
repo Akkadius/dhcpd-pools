@@ -3,7 +3,9 @@
 
 AC_PREREQ(2.64)
 AC_CONFIG_MACRO_DIR([m4])
-AC_INIT([dhcpd-pools],[2.14],[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
+AC_INIT([dhcpd-pools],
+	m4_esyscmd([build-aux/git-version-gen .tarball-version]),
+	[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
