@@ -388,7 +388,7 @@ char *parse_config(int is_include, char *config_file,
 				num_ranges++;
 				if (RANGES < num_ranges) {
 					errx(EXIT_FAILURE,
-					     "parse_config: Range space full! Increase RANGES and recompile.");
+					     "parse_config: increase default.h RANGES and recompile.");
 				}
 				newclause = true;
 				break;
@@ -427,8 +427,15 @@ char *parse_config(int is_include, char *config_file,
 					 * away by reallocationg
 					 * more space. */
 					errx(EXIT_FAILURE,
-					     "parse_config: End of shared-network space, increase SHARED_NETWORKS_NAMES and recompile");
+					     "parse_config: increase default.h SHARED_NETWORKS_NAMES and recompile");
 				}
+				if (SHARED_NETWORKS < num_shared_networks) {
+					/* FIXME: make this go
+					 * away by reallocationg
+					 * more space. */
+					errx(EXIT_FAILURE,
+					     "parse_config: increase default.h SHARED_NETWORKS and recompile");
+                                }
 				argument = 0;
 				braces_shared = braces;
 				break;

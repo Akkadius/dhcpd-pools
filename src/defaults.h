@@ -22,10 +22,10 @@
 static const int MAXLEN = 1024;
 
 /* Total number of characters in all shared network names */
-static const int SHARED_NETWORKS_NAMES = 24576;
+static const int SHARED_NETWORKS_NAMES = 65536;
 
 /* Maximum number of shared networks */
-static const int SHARED_NETWORKS = 1024;
+static const int SHARED_NETWORKS = 8192;
 
 /* Maximum number of ranges */
 static const unsigned int RANGES = 65536;
