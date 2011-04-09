@@ -77,9 +77,6 @@ void clean_up(void)
 {
 	int ret;
 
-	if (errno) {
-		warn("clean_up: errno (%d) set but not checked in correct place.\nif this is repeatable send strace output as a bug report", errno);
-	}
 	/* Just in case there something in buffers */
 	ret = fflush(stdout);
 	if (errno || ret) {
