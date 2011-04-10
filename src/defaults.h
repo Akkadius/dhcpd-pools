@@ -13,7 +13,7 @@
 **
 ** You should have received a copy of the GNU General Public License
 ** along with this program.  If not, see <http://www.gnu.org/licenses/>.   
-*/ 
+*/
 
 #ifndef DEFAULTS_H
 # define DEFAULTS_H 1
@@ -22,15 +22,12 @@
 static const int MAXLEN = 1024;
 
 /* Total number of characters in all shared network names */
-static const int SHARED_NETWORKS_NAMES = 65536;
+static const unsigned int SHARED_NETWORKS_NAMES = 65536;
 
 /* Maximum number of shared networks */
-static const int SHARED_NETWORKS = 8192;
+static const unsigned int SHARED_NETWORKS = 8192;
 
 /* Maximum number of ranges */
-static const unsigned int RANGES = 65536;
+unsigned int RANGES;
 
-/* Merge sort split size */
-static const int MIN_MERGE_SIZE = 8;
-
-#endif /* DEFAULTS_H */
+#endif				/* DEFAULTS_H */

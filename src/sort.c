@@ -26,7 +26,6 @@
 #include <err.h>
 
 #include "dhcpd-pools.h"
-#include "defaults.h"
 
 /* Sort functions for range sorting */
 int intcomp(const void *x, const void *y)
@@ -167,6 +166,8 @@ void mergesort_ranges(struct range_t *orig, int size, struct range_t *temp)
 {
 	int left, right, i;
 	struct range_t hold;
+	/* Merge sort split size */
+	static const int MIN_MERGE_SIZE = 8;
 
 	if (size < MIN_MERGE_SIZE) {
 		for (left = 0; left < size; left++) {

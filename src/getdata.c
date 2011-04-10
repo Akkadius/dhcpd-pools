@@ -386,9 +386,14 @@ char *parse_config(int is_include, char *config_file,
 				range_p->backups = 0;
 				range_p->shared_net = shared_p;
 				num_ranges++;
-				if (RANGES < num_ranges) {
-					errx(EXIT_FAILURE,
-					     "parse_config: increase default.h RANGES and recompile.");
+				if (RANGES < num_ranges + 1) {
+					RANGES *= 2;
+					ranges =
+					    safe_realloc(ranges,
+							 sizeof(struct
+								range_t) *
+							 RANGES);
+					range_p = ranges + num_ranges;
 				}
 				newclause = true;
 				break;
@@ -429,13 +434,14 @@ char *parse_config(int is_include, char *config_file,
 					errx(EXIT_FAILURE,
 					     "parse_config: increase default.h SHARED_NETWORKS_NAMES and recompile");
 				}
-				if (SHARED_NETWORKS < num_shared_networks) {
-					/* FIXME: make this go
+				if (SHARED_NETWORKS <
+				    num_shared_networks + 2) {
+					/* FIXME: make this
 					 * away by reallocationg
 					 * more space. */
 					errx(EXIT_FAILURE,
 					     "parse_config: increase default.h SHARED_NETWORKS and recompile");
-                                }
+				}
 				argument = 0;
 				braces_shared = braces;
 				break;

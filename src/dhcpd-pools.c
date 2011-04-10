@@ -213,6 +213,7 @@ int main(int argc, char **argv)
 /* Global allocations, counter resets etc */
 int prepare_memory()
 {
+	RANGES = 64;
 	num_ranges = num_shared_networks = 0;
 	shared_networks =
 	    safe_malloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);

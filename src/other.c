@@ -41,12 +41,22 @@ extern char *malloc();
 void *safe_malloc(const size_t size)
 {
 	void *ret = malloc(size);
-
 	if (ret == NULL) {
 		err(EXIT_FAILURE,
 		    "safe_malloc: cannot allocate %lu bytes: ", size);
 	}
 
+	return ret;
+}
+
+/* Simple memory reallocation wrapper */
+void *safe_realloc(void *ptr, const size_t size)
+{
+	void *ret = realloc(ptr, size);
+
+	if (!ret && size)
+		err(EXIT_FAILURE,
+		    "safe_realloc: cannot allocate %zu bytes", size);
 	return ret;
 }
 
@@ -108,7 +118,7 @@ void print_version(void)
 		"This is free software: you are free to change and redistribute it.\n");
 	fprintf(stdout,
 		"There is NO WARRANTY, to the extent permitted by law.\n");
-        exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
 
 void usage(int status)

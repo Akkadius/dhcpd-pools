@@ -148,6 +148,7 @@ void *safe_malloc(const size_t size)
 #endif
 #endif
     ;
+void *safe_realloc(void *ptr, const size_t size);
 char *safe_strdup(const char *str) __attribute__ ((nonnull(1)));
 void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
