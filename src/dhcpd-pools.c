@@ -189,9 +189,7 @@ int main(int argc, char **argv)
 
 	/* Do the job */
 	prepare_memory();
-	parse_config(true, config.dhcpdconf_file, shared_net_names,
-		     shared_net_names + strlen(shared_net_names) + 1,
-		     shared_networks);
+	parse_config(true, config.dhcpdconf_file, shared_networks);
 
 	parse_leases();
 	prepare_data();
@@ -217,13 +215,12 @@ int prepare_memory()
 	num_ranges = num_shared_networks = 0;
 	shared_networks =
 	    safe_malloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);
-	shared_net_names =
-	    safe_malloc(sizeof(char) * SHARED_NETWORKS_NAMES);
 
 	ranges = safe_malloc(sizeof(struct range_t) * RANGES);
 	macaddr = NULL;
 
 	/* First shared network entry is all networks */
-	strcpy(shared_net_names, "All networks");
+	shared_networks->name = safe_strdup("All networks");
+
 	return 0;
 }

@@ -21,9 +21,6 @@
 /* Maximum line length in dhcpd.conf and dhcpd.leases */
 static const int MAXLEN = 1024;
 
-/* Total number of characters in all shared network names */
-static const unsigned int SHARED_NETWORKS_NAMES = 65536;
-
 /* Maximum number of shared networks */
 static const unsigned int SHARED_NETWORKS = 8192;
 

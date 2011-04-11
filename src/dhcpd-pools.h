@@ -107,7 +107,6 @@ static int const output_limit_bit_3 = 4;
 unsigned int fullhtml;
 
 struct shared_network_t *shared_networks;
-char *shared_net_names;
 unsigned int num_shared_networks;
 
 struct range_t *ranges;
@@ -127,8 +126,8 @@ struct macaddr_t *macaddr;
 /* Function prototypes */
 int prepare_memory(void);
 int parse_leases(void);
-char *parse_config(int, char *, char *, char *, struct shared_network_t *)
-    __attribute__ ((nonnull(2, 3, 4)));
+void parse_config(int, char *, struct shared_network_t *)
+    __attribute__ ((nonnull(2, 3)));
 int nth_field(int n, char *dest, const char *src)
     __attribute__ ((nonnull(2, 3)))
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)

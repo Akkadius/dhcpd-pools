@@ -85,25 +85,22 @@ void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
 /* Free memory, flush buffers etc */
 void clean_up(void)
 {
-	int ret;
+	unsigned int i;
 
 	/* Just in case there something in buffers */
-	ret = fflush(stdout);
-	if (errno || ret) {
-		warn("clean_up: stdout");
+	if (fflush(NULL)) {
+		warn("clean_up: fflush");
 	}
-	ret = fflush(stderr);
-	if (errno || ret) {
-		warn("clean_up: stderr");
+	num_shared_networks++;
+	for (i = 0; i < num_shared_networks; i++) {
+		free((shared_networks + i)->name);
 	}
-
 	free(config.dhcpdconf_file);
 	free(config.dhcpdlease_file);
 	free(config.output_file);
 	free(ranges);
 	free(leases);
 	free(touches);
-	free(shared_net_names);
 	free(shared_networks);
 }
 

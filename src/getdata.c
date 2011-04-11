@@ -212,10 +212,8 @@ int is_interesting_config_clause(char *s)
 }
 
 /* FIXME: This spagetti monster function need to be rewrote at least ones. */
-char *parse_config(int is_include, char *config_file,
-		   char *current_shared_name,
-		   char *next_free_shared_name,
-		   struct shared_network_t *shared_p)
+void parse_config(int is_include, char *config_file,
+		  struct shared_network_t *shared_p)
 {
 	FILE *dhcpd_config;
 	int i = 0, newclause = true, argument = false, comment =
@@ -225,14 +223,11 @@ char *parse_config(int is_include, char *config_file,
 	struct in_addr inp;
 	struct range_t *range_p;
 
-	char *last_shared_name;
-	last_shared_name = SHARED_NETWORKS_NAMES + shared_net_names;
-
 	word = safe_malloc(sizeof(char) * MAXLEN);
 
 	if (is_include) {
 		/* Default place holder for ranges "All networks". */
-		shared_p->name = current_shared_name;
+		shared_p->name = shared_networks->name;
 	}
 
 	/* Open configuration file */
@@ -319,8 +314,6 @@ char *parse_config(int is_include, char *config_file,
 				braces--;
 				/* End of shared-network */
 				if (braces_shared == braces) {
-					current_shared_name =
-					    shared_net_names;
 					/* FIXME: Using 1000 is lame, but
 					 * works. */
 					braces_shared = 1000;
@@ -410,30 +403,14 @@ char *parse_config(int is_include, char *config_file,
 				break;
 			case 1:
 				/* printf ("shared-network named: %s\n", word); */
-				strcpy(next_free_shared_name, word);
+				num_shared_networks++;
 				shared_p =
 				    shared_networks + num_shared_networks;
-				num_shared_networks++;
-				shared_p++;
-				shared_p->name = next_free_shared_name;
+				shared_p->name = safe_strdup(word);
 				shared_p->available = 0;
 				shared_p->used = 0;
 				shared_p->touched = 0;
 				shared_p->backups = 0;
-				/* Temporary abuse of argument
-				 * variable */
-				argument =
-				    strlen(next_free_shared_name) + 1;
-				if (next_free_shared_name + argument <
-				    last_shared_name) {
-					next_free_shared_name += argument;
-				} else {
-					/* FIXME: make this go
-					 * away by reallocationg
-					 * more space. */
-					errx(EXIT_FAILURE,
-					     "parse_config: increase default.h SHARED_NETWORKS_NAMES and recompile");
-				}
 				if (SHARED_NETWORKS <
 				    num_shared_networks + 2) {
 					/* FIXME: make this
@@ -448,11 +425,7 @@ char *parse_config(int is_include, char *config_file,
 			case 4:
 				/* printf ("include file: %s\n", word); */
 				argument = 0;
-				next_free_shared_name =
-				    parse_config(false, word,
-						 current_shared_name,
-						 next_free_shared_name,
-						 shared_p);
+				parse_config(false, word, shared_p);
 				newclause = true;
 				break;
 			case 0:
@@ -467,5 +440,5 @@ char *parse_config(int is_include, char *config_file,
 	}
 	free(word);
 	fclose(dhcpd_config);
-	return next_free_shared_name;
+	return;
 }
