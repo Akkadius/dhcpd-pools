@@ -131,7 +131,7 @@ This is ISC dhcpd pools usage analyzer.\n\
 	fprintf(out, "\
   -c, --config=FILE      path to the dhcpd.conf file\n\
   -l, --leases=FILE      path to the dhcpd.leases file\n\
-  -f, --format=[thcxX]   output format\n");
+  -f, --format=[thHcxX]  output format\n");
 	fprintf(out, "\
                            t for text\n\
                            h for html table\n\
