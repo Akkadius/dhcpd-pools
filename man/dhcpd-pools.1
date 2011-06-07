@@ -5,12 +5,12 @@
 .\"	Add'l ontributions by:
 .\"		Dan Thorson
 .\"
-.TH DHCPD-POOLS 1 "Jan 21 2011" "SourceForge" "ISC dhcpd analysis"
+.TH DHCPD-POOLS "1" "June 2011" "dhcpd-pools 2.15" "User Commands"
 .SH NAME
 dhcpd-pools \- ISC dhcpd pools usage analysis
 .SH SYNOPSIS
 .B dhcpd-pools
-[-c file] [-l file] [-f thcxX] [-s nimcptTe] [-r] [-o file] [-L nr] [-v] [-h]
+[\fIOPTIONS\fR]
 .SH DESCRIPTION
 The program analyses ISC dhcpd shared network and pool usage and outputs the
 results in a user selectable format.
@@ -55,21 +55,21 @@ Percent of addresses that failover pair can allocate. The percent appears
 only if there is failover configuration.
 .SH ARGUMENTS
 .TP
-.I "\-c, \-\-config"
+\fB\-c\fR, \fB\-\-config\fR=\fIFILE\fR
 Path to the dhcpd.conf file.
 .TP
-.I "\-l, \-\-leases"
+\fB\-l\fR, \fB\-\-leases\fR=\fIFILE\fR
 Path to the dhcpd.leases file.
 .TP
-.I "\-s, \-\-sort"
+\fB\-s\fR, \fB\-\-sort\fR=\fI[nimcptTe]\fR
 Sort ranges by chosen fields as a sorting keys.  Maximum of five sort keys
 can be defined.  Keys weight from left to right IE if more weighting keys
 are equal next one is used. The IP field is default sort key.
 .TP
-.I "\-r, \-\-reverse"
+\fB\-r\fR, \fB\-\-reverse\fR
 Sort results in reverse order.
 .TP
-.I "\-f, \-\-format"
+\fB\-f\fR, \fB\-\-format\fR=\fI[thcxX]\fR
 Output format. Currently there is text, html, full-html and csv
 (comma-separated values). Default is text. Standard html (h) outputs only
 the HTML tables, and is useful for embeding more complex web pages.
@@ -77,16 +77,15 @@ Full-html (H) provides complete HTML headers, etc., including in-line CSS.
 Output format xml (x) is similar to the dhcpstatus Perl module output. The
 extended xml (X) format will print ethernet address details.
 .TP
-.I "\-o, \-\-output"
+\fB\-o\fR, \fB\-\-output\fR=\fIFILE\fR
 File where output is written. Default is stdout.
 .TP
-.I "\-L, \-\-limit"
+\fB\-L\fR, \fB\-\-limit\fR=\fINR\fR
 Limit what will be printed. Syntax is similar to chmod permission string.
 The limit string uses two digits which vary between 0 to 7.  The first digit
 determines which headers to display, and the second digit determines which
 numeric analysis tables to include in the output. The following values are
 "OR'd" together to create the desired output. The default is 77.
-
 .RS
 .PD 0
 .TP
@@ -110,10 +109,10 @@ Print headers for z
 .PD
 .RE
 .TP
-.I "\-v, \-\-version"
+\fB\-v\fR, \fB\-\-version\fR
 Print version information to standard output and exit successfully.
 .TP
-.I "\-h, \-\-help"
+\fB\-h\fR, \fB\-\-help\fR
 Print help to standard output and exit successfully.
 .SH FILES
 .if n .ta 2.8i
@@ -127,9 +126,18 @@ Print help to standard output and exit successfully.
 .br
     ISC dhcpd lease file.
 .SH AUTHOR
-Sami Kerola <kerolasa@iki.fi>
+Written by Sami Kerola.
 .br
-http://dhcpd-pools.sourceforge.net/
+XML support by Dominic Germain, Sogetel inc.
+.PP
+License GPLv3+: GNU GPL version 3 or later
+<http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+.SH "REPORTING BUGS"
+Report bugs to <kerolasa@iki.fi>
+.br
+Homepage: http://dhcpd-pools.sourceforge.net/
 .SH "SEE ALSO"
 .BR dhcpd.leases (5),
 .BR dhcpd.conf (5),

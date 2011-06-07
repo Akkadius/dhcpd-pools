@@ -123,38 +123,38 @@ void usage(int status)
 	FILE *out;
 	out = status != 0 ? stderr : stdout;
 
-	fprintf(out, "\
-Usage: %s [OPTIONS]\n", program_invocation_short_name);
+	fprintf(out, "\n\
+Usage: %s [OPTIONS]\n\n", program_invocation_short_name);
 	fprintf(out, "\
 This is ISC dhcpd pools usage analyzer.\n\
 \n");
 	fprintf(out, "\
-  -c --config   file    path to the dhcpd.conf file\n\
-  -l --leases   file    path to the dhcpd.leases file\n\
-  -f --format   [thcxX]   output format\n");
+  -c, --config=FILE      path to the dhcpd.conf file\n\
+  -l, --leases=FILE      path to the dhcpd.leases file\n\
+  -f, --format=[thcxX]   output format\n");
 	fprintf(out, "\
-                          t for text\n\
-                          h for html table\n\
-                          H for full html page\n\
-                          x for xml\n\
-                          X for xml with active lease details\n\
-                          c for comma separated values\n");
+                           t for text\n\
+                           h for html table\n\
+                           H for full html page\n\
+                           x for xml\n\
+                           X for xml with active lease details\n\
+                           c for comma separated values\n");
 	fprintf(out, "\
-  -s --sort [nimcptTe]  sort ranges by\n\
-                          n name\n\
-                          i IP\n\
-                          m maxium\n\
-                          c current\n\
-                          p percent\n\
-                          t touched\n\
-                          T t+c\n\
-                          e t+c perc\n");
+  -s, --sort=[nimcptTe]  sort ranges by\n\
+                           n name\n\
+                           i IP\n\
+                           m maxium\n\
+                           c current\n\
+                           p percent\n\
+                           t touched\n\
+                           T t+c\n\
+                           e t+c perc\n");
 	fprintf(out, "\
-  -r --reverse		reverse order sort\n\
-  -o --output   file    output into a file\n\
-  -L --limit    nr      output limit mask 77 - 00\n\
-  -v --version          version information\n\
-  -h --help             this screen\n\
+  -r, --reverse		 reverse order sort\n\
+  -o, --output=FILE      output into a file\n\
+  -L, --limit=NR         output limit mask 77 - 00\n\
+  -v, --version          version information\n\
+  -h, --help             this screen\n\
 \n\
 Report bugs to <%s>\n\
 Homepage: %s\n", PACKAGE_BUGREPORT, PACKAGE_URL);
