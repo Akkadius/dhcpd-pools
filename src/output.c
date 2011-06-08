@@ -19,11 +19,11 @@
 #include <config.h>
 #endif
 
-#include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <err.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "dhcpd-pools.h"
 

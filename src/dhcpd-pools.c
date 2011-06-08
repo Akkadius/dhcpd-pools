@@ -20,9 +20,6 @@
 #endif
 
 #include <stdio.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
 #ifdef  HAVE_STDLIB_H
 #include <stdlib.h>
 #else				/* Not STDC_HEADERS */
@@ -33,12 +30,12 @@ extern char *malloc();
 #else
 #include <strings.h>
 #endif
-#include <getopt.h>
-#include <errno.h>
 #include <err.h>
+#include <errno.h>
+#include <getopt.h>
 
-#include "dhcpd-pools.h"
 #include "defaults.h"
+#include "dhcpd-pools.h"
 
 int main(int argc, char **argv)
 {

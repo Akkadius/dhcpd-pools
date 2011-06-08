@@ -19,16 +19,18 @@
 # define DHCPD_POOLS_H 1
 
 #include <config.h>
+#include <stddef.h>
 
 /* Feature test switches */
 #define _POSIX_SOURCE 1
 #define POSIXLY_CORRECT 1
 
 #ifdef	HAVE_STDLIB_H
-#include <stdlib.h>
 #else
 extern void exit();
 extern char *malloc();
+#define EXIT_FAILURE	1
+#define EXIT_SUCCESS	0
 #endif				/* STDC_HEADERS */
 
 #ifndef HAVE_PROGRAM_INVOCATION_SHORT_NAME

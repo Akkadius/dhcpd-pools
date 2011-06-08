@@ -19,10 +19,6 @@
 #include <config.h>
 #endif
 
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #ifdef  HAVE_STDLIB_H
 #include <stdlib.h>
 #else				/* Not STDC_HEADERS */
@@ -37,20 +33,20 @@ extern char *malloc();
 #include <strings.h>
 #endif
 
-#include <stdio.h>
 #include <arpa/inet.h>
+#include <assert.h>
+#include <ctype.h>
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <features.h>
 #include <netinet/in.h>
-#include <sys/socket.h>
+#include <stddef.h>
+#include <stdio.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 600
 #endif
-#include <fcntl.h>
-#include <errno.h>
-#include <err.h>
-#include <ctype.h>
-#include <assert.h>
 
 #include "dhcpd-pools.h"
 #include "defaults.h"

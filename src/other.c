@@ -28,9 +28,9 @@
 extern void exit();
 extern char *malloc();
 #endif				/* STDC_HEADERS */
-#include <errno.h>
 #include <err.h>
-#include <stdarg.h>
+#include <errno.h>
+#include <stddef.h>
 #ifdef  HAVE_STRING_H
 #include <string.h>
 #else
