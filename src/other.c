@@ -100,6 +100,7 @@ void clean_up(void)
 	free(config.output_file);
 	free(ranges);
 	free(leases);
+	free(backups);
 	free(touches);
 	free(shared_networks);
 }
