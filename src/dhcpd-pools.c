@@ -218,6 +218,9 @@ int prepare_memory()
 
 	/* First shared network entry is all networks */
 	shared_networks->name = safe_strdup("All networks");
+	shared_networks->used = 0;
+	shared_networks->touched = 0;
+	shared_networks->backups = 0;
 
 	return 0;
 }
