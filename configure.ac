@@ -42,10 +42,6 @@ AC_TYPE_SIZE_T
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([inet_ntoa memset strerror strstr strdup])
 
-# GNU commandline parsing in getopt.h present?
-AC_CHECK_HEADERS(getopt.h, AC_DEFINE(HAVE_GETOPT_H),
-	import_sources="getopt.c getopt1.c $import_sources")
-
 AC_CONFIG_FILES([Makefile
 		 man/Makefile
 		 src/Makefile
