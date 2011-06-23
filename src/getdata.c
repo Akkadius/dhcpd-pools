@@ -130,7 +130,9 @@ int parse_leases(void)
 	}
 
 	while (!feof(dhcpd_leases)) {
-		fgets(line, MAXLEN, dhcpd_leases);
+		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases)) {
+			err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
+		}
 		/* It's a lease, save IP */
 		if (strstr(line, "lease") == line) {
 			strncpy(ipstring, line, (size_t) MAXLEN);
