@@ -33,27 +33,27 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #include "dhcpd-pools.h"
 
-#include <stdio.h>
 #ifdef  HAVE_STDLIB_H
 #include <stdlib.h>
-#else				/* Not STDC_HEADERS */
+#else
 extern void exit();
 extern char *malloc();
-#endif				/* STDC_HEADERS */
-#include <err.h>
-#include <errno.h>
-#include <stddef.h>
+#endif
+
 #ifdef  HAVE_STRING_H
 #include <string.h>
 #else
 #include <strings.h>
 #endif
+
+#include <err.h>
+#include <errno.h>
+#include <stddef.h>
+#include <stdio.h>
 
 /* Simple memory allocation wrapper */
 void *safe_malloc(const size_t size)

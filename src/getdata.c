@@ -33,9 +33,7 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #ifdef  HAVE_STDLIB_H
 #include <stdlib.h>
@@ -60,14 +58,15 @@ extern char *malloc();
 #include <features.h>
 #include <netinet/in.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE 600
 #endif
 
-#include "dhcpd-pools.h"
 #include "defaults.h"
+#include "dhcpd-pools.h"
 
 /* Parse dhcpd.leases file. All performance boosts for this function are
  * wellcome */

@@ -33,7 +33,10 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/* #include <config.h> */
+
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 #include "dhcpd-pools.h"

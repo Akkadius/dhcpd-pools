@@ -33,9 +33,7 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
 
 #include <arpa/inet.h>
 #include <err.h>
