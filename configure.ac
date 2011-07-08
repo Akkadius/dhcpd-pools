@@ -23,24 +23,38 @@ AC_PROG_LIBTOOL
 LT_INIT
 
 # Checks for header files.
-
-AC_CHECK_HEADERS([arpa/inet.h \
+AC_CHECK_HEADERS([\
+	arpa/inet.h \
 	fcntl.h \
+	langinfo.h \
 	libintl.h \
 	netinet/in.h \
+	stddef.h \
 	stdlib.h \
 	string.h \
 	strings.h \
 	sys/socket.h \
-	unistd.h])
+	unistd.h \
+])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_C_INLINE
 AC_HEADER_STDBOOL
 AC_TYPE_SIZE_T
+AC_TYPE_UINT32_T
 
 # Checks for library functions.
 AC_FUNC_MALLOC
-AC_CHECK_FUNCS([inet_ntoa memset strerror strstr strdup])
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([\
+	inet_ntoa \
+	memset \
+	nl_langinfo \
+	strdup \
+	strerror \
+	strrchr \
+	strstr \
+])
 
 AC_CONFIG_FILES([Makefile
 		 man/Makefile
