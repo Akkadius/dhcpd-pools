@@ -6,6 +6,23 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.15
+# git shortlog v2.14..v2.15
+Sami Kerola (13):
+      dhcpd-pools.h: function attributes declarations
+      dhcpd-pools.h: indentation fix
+      getdata.c: initialize variables to have safe values
+      autotools: point correct location of src
+      flose files & free memory when not needed
+      dhcpd-pools.h: portable program_invocation_short_name
+      build-sys: use git version as program version output
+      build-sys: git describe listed wrong tag
+      getdata: increase max number of shared networks
+      clean_up: checking errno at exit does not make sense
+      make range allocation dynamic
+      shared network names to be dynamically allocated
+      thanks: list update
+
 Version 2.14
 # git shortlog v2.13..v2.14
 Sami Kerola (18):
