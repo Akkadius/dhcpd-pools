@@ -43,6 +43,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define _FILE_OFFSET_BITS 64
+#include <inttypes.h>
+
 #include "dhcpd-pools.h"
 
 int output_txt(void)
@@ -90,7 +93,7 @@ int output_txt(void)
 			}
 			fprintf(outfile, "%-16s", inet_ntoa(first));
 			fprintf(outfile,
-				" - %-16s %5lu %5lu %10.3f  %5lu %5lu %9.3f",
+				" - %-16s %5"PRIu32" %5lu %10.3f  %5lu %5lu %9.3f",
 				inet_ntoa(last),
 				range_p->last_ip - range_p->first_ip - 1,
 				range_p->count,
@@ -256,7 +259,7 @@ int output_xml(void)
 			fprintf(outfile, "- %s</range>\n",
 				inet_ntoa(last));
 			fprintf(outfile, "\t<gateway></gateway>\n");
-			fprintf(outfile, "\t<defined>%lu</defined>\n",
+			fprintf(outfile, "\t<defined>%"PRIu32"</defined>\n",
 				range_p->last_ip - range_p->first_ip - 1);
 			fprintf(outfile, "\t<used>%lu</used>\n",
 				range_p->count);
@@ -679,7 +682,7 @@ int output_csv(void)
 			}
 			fprintf(outfile, "\"%s\",", inet_ntoa(first));
 			fprintf(outfile,
-				"\"%s\",\"%lu\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
+				"\"%s\",\"%"PRIu32"\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
 				inet_ntoa(last),
 				range_p->last_ip - range_p->first_ip - 1,
 				range_p->count,

@@ -37,6 +37,7 @@
 # define DHCPD_POOLS_H 1
 
 #include <config.h>
+#include <arpa/inet.h>
 #include <stddef.h>
 
 /* Feature test switches */
@@ -103,8 +104,8 @@ struct shared_network_t {
 };
 struct range_t {
 	struct shared_network_t *shared_net;
-	unsigned long int first_ip;
-	unsigned long int last_ip;
+	uint32_t first_ip;
+	uint32_t last_ip;
 	unsigned long int count;
 	unsigned long int touched;
 	unsigned long int backups;
@@ -132,13 +133,13 @@ unsigned int num_shared_networks;
 struct range_t *ranges;
 unsigned int num_ranges;
 
-unsigned long int *leases;
+uint32_t *leases;
 unsigned long int num_leases;
 
-unsigned long int *touches;
+uint32_t *touches;
 unsigned long int num_touches;
 
-unsigned long int *backups;
+uint32_t *backups;
 unsigned long int num_backups;
 
 struct macaddr_t *macaddr;

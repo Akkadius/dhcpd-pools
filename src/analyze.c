@@ -44,7 +44,7 @@ int prepare_data(void)
 	unsigned long int i, j, k;
 
 	/* Sort leases */
-	qsort(leases, (size_t) num_leases, sizeof(long int), &intcomp);
+	qsort(leases, (size_t) num_leases, sizeof(uint32_t), &intcomp);
 
 	/* Get rid of lease dublicates */
 	for (k = j = i = 0; i < num_leases; i++) {
@@ -67,7 +67,7 @@ int prepare_data(void)
 		}
 	}
 	num_touches = j;
-	qsort(touches, (size_t) num_touches, sizeof(long int), &intcomp);
+	qsort(touches, (size_t) num_touches, sizeof(uint32_t), &intcomp);
 
 	/* Sort ranges */
 	qsort(ranges, (size_t) num_ranges, sizeof(struct range_t),
@@ -75,7 +75,7 @@ int prepare_data(void)
 
 	/* Sort backups */
 	if (0 < num_backups) {
-		qsort(backups, (size_t) num_backups, sizeof(long int),
+		qsort(backups, (size_t) num_backups, sizeof(uint32_t),
 		      &intcomp);
 	}
 

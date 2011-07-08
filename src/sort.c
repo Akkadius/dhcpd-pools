@@ -44,9 +44,9 @@
 /* Sort functions for range sorting */
 int intcomp(const void *x, const void *y)
 {
-	if (*(unsigned long int *) x < *(unsigned long int *) y)
+	if (*(uint32_t *) x < *(uint32_t *) y)
 		return -1;
-	else if (*(unsigned long int *) y < *(unsigned long int *) x)
+	else if (*(uint32_t *) y < *(uint32_t *) x)
 		return 1;
 	else
 		return 0;
