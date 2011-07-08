@@ -120,6 +120,9 @@ int parse_leases(void)
 	touches =
 	    safe_malloc((size_t) sizeof(long int) * touchesmallocsize);
 
+	memset(leases, 0, sizeof(long int) * leasesmallocsize);
+	memset(touches, 0, sizeof(long int) * touchesmallocsize);
+
 	line = safe_malloc(sizeof(long int) * MAXLEN);
 	ipstring = safe_malloc(sizeof(long int) * MAXLEN);
 	if (config.output_format[0] == 'X') {
