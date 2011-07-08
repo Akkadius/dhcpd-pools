@@ -96,7 +96,7 @@ int do_counting(void)
 	/* Walk through ranges */
 	for (i = j = k = l = 0; i < num_ranges; i++) {
 		/* Count IPs in use */
-		for (j = j; leases[j] < range_p->last_ip
+		for (; leases[j] < range_p->last_ip
 		     && (unsigned long) j < num_leases; j++) {
 			if (leases[j] < range_p->first_ip) {
 				continue;
@@ -109,7 +109,7 @@ int do_counting(void)
 		}
 
 		/* Count touched IPs */
-		for (k = k; touches[k] < range_p->last_ip
+		for (; touches[k] < range_p->last_ip
 		     && (unsigned long) k < num_touches; k++) {
 			if (touches[k] < range_p->first_ip) {
 				continue;
