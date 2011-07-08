@@ -78,9 +78,9 @@ int parse_leases(void)
 	struct in_addr inp;
 	struct stat lease_file_stats;
 	struct macaddr_t *macaddr_p = NULL;
-	unsigned long leasesmallocsize;
-	unsigned long touchesmallocsize;
-	unsigned long backupsmallocsize;
+	size_t leasesmallocsize;
+	size_t touchesmallocsize;
+	size_t backupsmallocsize;
 	int sw_active_lease = 0;
 
 	num_touches = num_leases = num_backups = 0;
@@ -144,12 +144,21 @@ int parse_leases(void)
 		else if (strstr(line, "binding state active")) {
 			leases[num_leases] = htonl(inp.s_addr);
 			num_leases++;
-			assert(!(leasesmallocsize < num_leases));
+			if (leasesmallocsize < num_leases) {
+				leasesmallocsize =
+				    sizeof(unsigned long int) * num_leases * 2;
+				leases = safe_realloc(leases, leasesmallocsize);
+			}
 			sw_active_lease = 1;
 		} else if (strstr(line, "  binding state free")) {
 			touches[num_touches] = htonl(inp.s_addr);
 			num_touches++;
-			assert(!(touchesmallocsize < num_touches));
+			if (touchesmallocsize < num_touches) {
+				touchesmallocsize =
+				    sizeof(unsigned long int) * num_touches * 2;
+				touches =
+				    safe_realloc(touches, touchesmallocsize);
+			}
 		} else if (strstr(line, "  binding state backup")) {
 			if (num_backups == 0) {
 				backups =
@@ -158,7 +167,12 @@ int parse_leases(void)
 			}
 			backups[num_backups] = htonl(inp.s_addr);
 			num_backups++;
-			assert(!(backupsmallocsize < num_backups));
+			if (backupsmallocsize < num_backups) {
+				backupsmallocsize =
+				    sizeof(unsigned long int) * num_backups * 2;
+				backups =
+				    safe_realloc(backups, backupsmallocsize);
+			}
 		}
 
 		if ((macaddr != NULL)
