@@ -148,6 +148,7 @@ int parse_leases(void)
 				leasesmallocsize =
 				    sizeof(unsigned long int) * num_leases * 2;
 				leases = safe_realloc(leases, leasesmallocsize);
+				leasesmallocsize /= sizeof(unsigned long int);
 			}
 			sw_active_lease = 1;
 		} else if (strstr(line, "  binding state free")) {
@@ -158,6 +159,7 @@ int parse_leases(void)
 				    sizeof(unsigned long int) * num_touches * 2;
 				touches =
 				    safe_realloc(touches, touchesmallocsize);
+				touchesmallocsize /= sizeof(unsigned long int);
 			}
 		} else if (strstr(line, "  binding state backup")) {
 			if (num_backups == 0) {
@@ -172,6 +174,7 @@ int parse_leases(void)
 				    sizeof(unsigned long int) * num_backups * 2;
 				backups =
 				    safe_realloc(backups, backupsmallocsize);
+				backupsmallocsize /= sizeof(unsigned long int);
 			}
 		}
 
