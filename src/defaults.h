@@ -37,7 +37,7 @@
 # define DEFAULTS_H 1
 
 /* Maximum line length in dhcpd.conf and dhcpd.leases */
-static const int MAXLEN = 1024;
+static const size_t MAXLEN = 1024;
 
 /* Maximum number of shared networks */
 static const unsigned int SHARED_NETWORKS = 8192;

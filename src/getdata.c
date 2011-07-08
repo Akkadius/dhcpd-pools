@@ -86,18 +86,17 @@ int parse_leases(void)
 
 	dhcpd_leases = fopen(config.dhcpdlease_file, "r");
 	if (dhcpd_leases == NULL) {
-		err(EXIT_FAILURE, "parse_leases: %s",
-		    config.dhcpdlease_file);
+		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
 	}
 #ifdef POSIX_FADV_WILLNEED
-	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_WILLNEED);
+	posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_WILLNEED);
 	if (errno) {
 		err(EXIT_FAILURE, "parse_leases: fadvise %s",
 		    config.dhcpdlease_file);
 	}
 #endif				/* POSIX_FADV_WILLNEED */
 #ifdef POSIX_FADV_SEQUENTIAL
-	posix_fadvise((long) dhcpd_leases, 0, 0, POSIX_FADV_SEQUENTIAL);
+	posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
 		err(EXIT_FAILURE, "parse_leases: fadvise %s",
 		    config.dhcpdlease_file);
@@ -109,15 +108,13 @@ int parse_leases(void)
 	 * If someone has higher density in lease file I'm interested to
 	 * hear about that. */
 	if (stat(config.dhcpdlease_file, &lease_file_stats)) {
-		err(EXIT_FAILURE, "parse_leases: %s",
-		    config.dhcpdlease_file);
+		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
 	}
 	leasesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
 	touchesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
 	backupsmallocsize = (lease_file_stats.st_size / 120) + MAXLEN - 2;
 	leases = safe_malloc(sizeof(long int) * leasesmallocsize);
-	touches =
-	    safe_malloc((size_t) sizeof(long int) * touchesmallocsize);
+	touches = safe_malloc((size_t) sizeof(long int) * touchesmallocsize);
 
 	memset(leases, 0, sizeof(long int) * leasesmallocsize);
 	memset(touches, 0, sizeof(long int) * touchesmallocsize);
@@ -133,11 +130,12 @@ int parse_leases(void)
 
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases)) {
-			err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
+			err(EXIT_FAILURE, "parse_leases: %s",
+			    config.dhcpdlease_file);
 		}
 		/* It's a lease, save IP */
 		if (strstr(line, "lease") == line) {
-			strncpy(ipstring, line, (size_t) MAXLEN);
+			strncpy(ipstring, line, MAXLEN);
 			nth_field(2, ipstring, ipstring);
 			inet_aton(ipstring, &inp);
 			sw_active_lease = 0;
@@ -187,8 +185,7 @@ int parse_leases(void)
 			macstring[17] = '\0';
 			macaddr_p->ethernet = safe_strdup(macstring);
 			macaddr_p->ip = safe_strdup(ipstring);
-			macaddr_p->next =
-			    safe_malloc(sizeof(struct macaddr_t));
+			macaddr_p->next = safe_malloc(sizeof(struct macaddr_t));
 			macaddr_p = macaddr_p->next;
 			macaddr_p->next = NULL;
 		}
@@ -251,8 +248,9 @@ void parse_config(int is_include, char *config_file,
 		  struct shared_network_t *shared_p)
 {
 	FILE *dhcpd_config;
-	int i = 0, newclause = true, argument = false, comment =
+	int newclause = true, argument = false, comment =
 	    false, braces = 0, quote = false;
+	size_t i = 0;
 	char *word, c;
 	int braces_shared = 1000;
 	struct in_addr inp;
@@ -271,13 +269,13 @@ void parse_config(int is_include, char *config_file,
 		err(EXIT_FAILURE, "parse_config: %s", config_file);
 	}
 #ifdef POSIX_FADV_WILLNEED
-	posix_fadvise((long) dhcpd_config, 0, 0, POSIX_FADV_WILLNEED);
+	posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_WILLNEED);
 	if (errno) {
 		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
 	}
 #endif				/* POSIX_FADV_WILLNEED */
 #ifdef POSIX_FADV_SEQUENTIAL
-	posix_fadvise((long) dhcpd_config, 0, 0, POSIX_FADV_SEQUENTIAL);
+	posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
 		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
 	}
@@ -313,8 +311,7 @@ void parse_config(int is_include, char *config_file,
 			if (quote == true) {
 				break;
 			}
-			if (comment == false && argument != 2
-			    && argument != 4) {
+			if (comment == false && argument != 2 && argument != 4) {
 				newclause = true;
 				i = 0;
 			} else if (argument == 2) {
@@ -364,8 +361,7 @@ void parse_config(int is_include, char *config_file,
 		}
 
 		/* Either inside comment or Nth word of clause. */
-		if (comment == true
-		    || (newclause == false && argument == 0)) {
+		if (comment == true || (newclause == false && argument == 0)) {
 			continue;
 		}
 		/* Strip white spaces before new clause word. */
@@ -446,8 +442,7 @@ void parse_config(int is_include, char *config_file,
 				shared_p->used = 0;
 				shared_p->touched = 0;
 				shared_p->backups = 0;
-				if (SHARED_NETWORKS <
-				    num_shared_networks + 2) {
+				if (SHARED_NETWORKS < num_shared_networks + 2) {
 					/* FIXME: make this
 					 * away by reallocationg
 					 * more space. */

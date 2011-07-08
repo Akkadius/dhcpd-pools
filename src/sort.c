@@ -56,11 +56,11 @@ int intcomp(const void *x, const void *y)
 
 int rangecomp(const void *r1, const void *r2)
 {
-	if ((((struct range_t *) r1)->first_ip) <
-	    (((struct range_t *) r2)->first_ip))
+	if ((((struct range_t *)r1)->first_ip) <
+	    (((struct range_t *)r2)->first_ip))
 		return -1;
-	else if ((((struct range_t *) r2)->first_ip) <
-		 (((struct range_t *) r1)->first_ip))
+	else if ((((struct range_t *)r2)->first_ip) <
+		 (((struct range_t *)r1)->first_ip))
 		return 1;
 	else
 		return 0;
@@ -84,8 +84,8 @@ unsigned long int ret_max(struct range_t r)
 unsigned long int ret_percent(struct range_t r)
 {
 	float f;
-	f = (float) r.count / (r.last_ip - r.first_ip - 1);
-	return ((unsigned long int) (f * 100000));
+	f = (float)r.count / (r.last_ip - r.first_ip - 1);
+	return ((unsigned long int)(f * 100000));
 }
 
 unsigned long int ret_touched(struct range_t r)
@@ -101,8 +101,8 @@ unsigned long int ret_tc(struct range_t r)
 unsigned long int ret_tcperc(struct range_t r)
 {
 	float f;
-	f = (float) (r.count + r.touched) / (r.last_ip - r.first_ip - 1);
-	return ((unsigned long int) (f * 10000));
+	f = (float)(r.count + r.touched) / (r.last_ip - r.first_ip - 1);
+	return ((unsigned long int)(f * 10000));
 }
 
 void field_selector(char c)

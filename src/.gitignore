@@ -1,1 +1,7 @@
+*~
+*.o
+.deps/
 dhcpd-pools
+Makefile
+Makefile.in
+tags

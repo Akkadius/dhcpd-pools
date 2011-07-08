@@ -73,8 +73,7 @@ int prepare_data(void)
 	qsort(touches, (size_t) num_touches, sizeof(uint32_t), &intcomp);
 
 	/* Sort ranges */
-	qsort(ranges, (size_t) num_ranges, sizeof(struct range_t),
-	      &rangecomp);
+	qsort(ranges, (size_t) num_ranges, sizeof(struct range_t), &rangecomp);
 
 	/* Sort backups */
 	if (0 < num_backups) {
@@ -89,15 +88,14 @@ int prepare_data(void)
 int do_counting(void)
 {
 	struct range_t *range_p;
-	unsigned int i, j, k, l, block_size;
+	unsigned long i, j, k, l, block_size;
 
 	range_p = ranges;
 
 	/* Walk through ranges */
 	for (i = j = k = l = 0; i < num_ranges; i++) {
 		/* Count IPs in use */
-		for (; leases[j] < range_p->last_ip
-		     && (unsigned long) j < num_leases; j++) {
+		for (; leases[j] < range_p->last_ip && j < num_leases; j++) {
 			if (leases[j] < range_p->first_ip) {
 				continue;
 			}
@@ -109,8 +107,7 @@ int do_counting(void)
 		}
 
 		/* Count touched IPs */
-		for (; touches[k] < range_p->last_ip
-		     && (unsigned long) k < num_touches; k++) {
+		for (; touches[k] < range_p->last_ip && k < num_touches; k++) {
 			if (touches[k] < range_p->first_ip) {
 				continue;
 			}
@@ -124,7 +121,7 @@ int do_counting(void)
 		/* Count backup IPs */
 		if (0 < num_backups) {
 			for (; backups[l] < range_p->last_ip
-			     && (unsigned long) l < num_touches; l++) {
+			     && l < num_touches; l++) {
 				if (touches[l] < range_p->first_ip) {
 					continue;
 				}
@@ -138,8 +135,7 @@ int do_counting(void)
 
 		/* Size of range, shared net & all networks */
 		block_size =
-		    (unsigned int) (range_p->last_ip - range_p->first_ip -
-				    1);
+		    (unsigned int)(range_p->last_ip - range_p->first_ip - 1);
 		if (range_p->shared_net) {
 			range_p->shared_net->available += block_size;
 		}

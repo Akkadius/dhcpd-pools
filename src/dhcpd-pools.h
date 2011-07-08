@@ -65,8 +65,8 @@ extern char *__progname;
 #      define program_invocation_short_name \
        prog_inv_sh_nm_from_file(__FILE__, 1)
 #    endif			/* HAVE_PROGRAM_INVOCATION_SHORT_NAME */
-static char prog_inv_sh_nm_buf[256];
-static inline char *prog_inv_sh_nm_from_file(char *f, char stripext)
+char prog_inv_sh_nm_buf[256];
+inline char *prog_inv_sh_nm_from_file(char *f, char stripext)
 {
 	char *t;
 	if ((t = strrchr(f, '/')) != NULL) {
@@ -119,29 +119,21 @@ struct macaddr_t {
 /* Global variables */
 static int const true = 1;
 static int const false = 0;
-
 struct configuration_t config;
-
 static int const output_limit_bit_1 = 1;
 static int const output_limit_bit_2 = 2;
 static int const output_limit_bit_3 = 4;
 unsigned int fullhtml;
-
 struct shared_network_t *shared_networks;
 unsigned int num_shared_networks;
-
 struct range_t *ranges;
 unsigned int num_ranges;
-
 uint32_t *leases;
 unsigned long int num_leases;
-
 uint32_t *touches;
 unsigned long int num_touches;
-
 uint32_t *backups;
 unsigned long int num_backups;
-
 struct macaddr_t *macaddr;
 
 /* Function prototypes */
@@ -159,7 +151,7 @@ int prepare_data(void);
 int do_counting(void);
 void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
-/* General support functions */
+/* support functions */
 void *safe_malloc(const size_t size)
 #if __GNUC__ >= 3
     __attribute__ ((__malloc__))

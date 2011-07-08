@@ -64,16 +64,16 @@ int main(int argc, char **argv)
 
 	/* Options for getopt_long */
 	static struct option const long_options[] = {
-		{"config", required_argument, 0, (int) 'c'},
-		{"leases", required_argument, 0, (int) 'l'},
-		{"format", required_argument, 0, (int) 'f'},
-		{"sort", required_argument, 0, (int) 's'},
-		{"reverse", no_argument, 0, (int) 'r'},
-		{"output", required_argument, 0, (int) 'o'},
-		{"limit", required_argument, 0, (int) 'L'},
-		{"version", no_argument, 0, (int) 'v'},
-		{"help", no_argument, 0, (int) 'h'},
-		{0, 0, 0, 0}
+		{"config", required_argument, NULL, 'c'},
+		{"leases", required_argument, NULL, 'l'},
+		{"format", required_argument, NULL, 'f'},
+		{"sort", required_argument, NULL, 's'},
+		{"reverse", no_argument, NULL, 'r'},
+		{"output", required_argument, NULL, 'o'},
+		{"limit", required_argument, NULL, 'L'},
+		{"version", no_argument, NULL, 'v'},
+		{"help", no_argument, NULL, 'h'},
+		{NULL, 0, NULL, 0}
 	};
 
 	/* FIXME: make these allocations dynamic up on need. */
@@ -86,14 +86,12 @@ int main(int argc, char **argv)
 	config.output_file[0] = '\0';
 
 	/* File location defaults */
-	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE,
-		(size_t) MAXLEN - 1);
-	strncpy(config.dhcpdlease_file, DHCPDLEASE_FILE,
-		(size_t) MAXLEN - 1);
+	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE, MAXLEN - 1);
+	strncpy(config.dhcpdlease_file, DHCPDLEASE_FILE, MAXLEN - 1);
 	tmp = OUTPUT_LIMIT;
-	config.output_limit[0] = (int) (*tmp - '0');
+	config.output_limit[0] = (*tmp - '0');
 	tmp++;
-	config.output_limit[1] = (int) (*tmp - '0');
+	config.output_limit[1] = (*tmp - '0');
 	fullhtml = false;
 
 	/* Make sure some output format is selected by default */
@@ -113,13 +111,11 @@ int main(int argc, char **argv)
 		switch (c) {
 		case 'c':
 			/* config file */
-			strncpy(config.dhcpdconf_file, optarg,
-				(size_t) MAXLEN - 1);
+			strncpy(config.dhcpdconf_file, optarg, MAXLEN - 1);
 			break;
 		case 'l':
 			/* lease file */
-			strncpy(config.dhcpdlease_file, optarg,
-				(size_t) MAXLEN - 1);
+			strncpy(config.dhcpdlease_file, optarg, MAXLEN - 1);
 			break;
 		case 'f':
 			/* Output format */
@@ -134,8 +130,7 @@ int main(int argc, char **argv)
 				strncpy(config.sort, optarg, (size_t) 5);
 				sorts = 5;
 			} else {
-				strncpy(config.sort, optarg,
-					(size_t) sorts);
+				strncpy(config.sort, optarg, (size_t) sorts);
 			}
 			for (i = 0; i < sorts; i++) {
 				field_selector(config.sort[i]);
@@ -147,15 +142,14 @@ int main(int argc, char **argv)
 			break;
 		case 'o':
 			/* Output file */
-			strncpy(config.output_file, optarg,
-				(size_t) MAXLEN - 1);
+			strncpy(config.output_file, optarg, MAXLEN - 1);
 			break;
 		case 'L':
 			/* Specification what will be printed */
 			for (i = 0; i < 2; i++) {
 				if (optarg[i] >= '0' && optarg[i] < '8') {
 					config.output_limit[i] =
-					    (int) optarg[i] - '0';
+					    optarg[i] - '0';
 				} else {
 					errx(EXIT_FAILURE,
 					     "main: output mask `%s' is illegal",

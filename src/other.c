@@ -123,38 +123,35 @@ void clean_up(void)
 	free(shared_networks);
 }
 
-void print_version(void)
+void __attribute__ ((__noreturn__)) print_version(void)
 {
-	fprintf(stdout, "%s\n", PACKAGE_STRING);
-	fprintf(stdout,
-		"Written by Sami Kerola.\nXML support by Dominic Germain, Sogetel inc.\n\n");
-	fprintf(stdout,
-		"The software has FreeBSD License.\n");
+	fprintf(stdout, "%s\n"
+		"Written by Sami Kerola.\n"
+		"XML support by Dominic Germain, Sogetel inc.\n\n"
+		"The software has FreeBSD License.\n", PACKAGE_STRING);
 	exit(EXIT_SUCCESS);
 }
 
-void usage(int status)
+void __attribute__ ((__noreturn__)) usage(int status)
 {
 	FILE *out;
 	out = status != 0 ? stderr : stdout;
 
-	fprintf(out, "\n\
+	fprintf(out, "\
 Usage: %s [OPTIONS]\n\n", program_invocation_short_name);
+
 	fprintf(out, "\
 This is ISC dhcpd pools usage analyzer.\n\
-\n");
-	fprintf(out, "\
+\n\
   -c, --config=FILE      path to the dhcpd.conf file\n\
   -l, --leases=FILE      path to the dhcpd.leases file\n\
-  -f, --format=[thHcxX]  output format\n");
-	fprintf(out, "\
+  -f, --format=[thHcxX]  output format\n\
                            t for text\n\
                            h for html table\n\
                            H for full html page\n\
                            x for xml\n\
                            X for xml with active lease details\n\
-                           c for comma separated values\n");
-	fprintf(out, "\
+                           c for comma separated values\n\
   -s, --sort=[nimcptTe]  sort ranges by\n\
                            n name\n\
                            i IP\n\
@@ -163,8 +160,7 @@ This is ISC dhcpd pools usage analyzer.\n\
                            p percent\n\
                            t touched\n\
                            T t+c\n\
-                           e t+c perc\n");
-	fprintf(out, "\
+                           e t+c perc\n\
   -r, --reverse		 reverse order sort\n\
   -o, --output=FILE      output into a file\n\
   -L, --limit=NR         output limit mask 77 - 00\n\
