@@ -86,17 +86,16 @@ int prepare_data(void)
 int do_counting(void)
 {
 	struct range_t *range_p;
-	unsigned int i, j, k, m, block_size;
+	unsigned int i, j, k, l, block_size;
 
-	i = j = m = 0;
 	range_p = ranges;
 
 	/* Walk through ranges */
-	for (k = 0; k < num_ranges; k++) {
+	for (i = j = k = l = 0; i < num_ranges; i++) {
 		/* Count IPs in use */
-		for (; leases[i] < range_p->last_ip
-		     && (unsigned long) i < num_leases; i++) {
-			if (leases[i] < range_p->first_ip) {
+		for (j = j; leases[j] < range_p->last_ip
+		     && (unsigned long) j < num_leases; j++) {
+			if (leases[j] < range_p->first_ip) {
 				continue;
 			}
 			/* IP with in range */
@@ -107,9 +106,9 @@ int do_counting(void)
 		}
 
 		/* Count touched IPs */
-		for (; touches[j] < range_p->last_ip
-		     && (unsigned long) j < num_touches; j++) {
-			if (touches[j] < range_p->first_ip) {
+		for (k = k; touches[k] < range_p->last_ip
+		     && (unsigned long) k < num_touches; k++) {
+			if (touches[k] < range_p->first_ip) {
 				continue;
 			}
 			/* IP with in range */
@@ -121,9 +120,9 @@ int do_counting(void)
 
 		/* Count backup IPs */
 		if (0 < num_backups) {
-			for (; backups[m] < range_p->last_ip
-			     && (unsigned long) m < num_touches; m++) {
-				if (touches[m] < range_p->first_ip) {
+			for (; backups[l] < range_p->last_ip
+			     && (unsigned long) l < num_touches; l++) {
+				if (touches[l] < range_p->first_ip) {
 					continue;
 				}
 				/* IP with in range */
@@ -144,11 +143,11 @@ int do_counting(void)
 
 		/* Go backwards one step so that not even a one IP will be
 		 * missed. This is possibly always unnecessary. */
-		if (i) {
-			i--;
-		}
 		if (j) {
 			j--;
+		}
+		if (k) {
+			k--;
 		}
 
 		range_p++;
