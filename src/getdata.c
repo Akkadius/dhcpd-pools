@@ -113,14 +113,14 @@ int parse_leases(void)
 	leasesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
 	touchesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
 	backupsmallocsize = (lease_file_stats.st_size / 120) + MAXLEN - 2;
-	leases = safe_malloc(sizeof(long int) * leasesmallocsize);
-	touches = safe_malloc((size_t) sizeof(long int) * touchesmallocsize);
+	leases = safe_malloc(sizeof(uint32_t) * leasesmallocsize);
+	touches = safe_malloc(sizeof(uint32_t) * touchesmallocsize);
 
-	memset(leases, 0, sizeof(long int) * leasesmallocsize);
-	memset(touches, 0, sizeof(long int) * touchesmallocsize);
+	memset(leases, 0, sizeof(uint32_t) * leasesmallocsize);
+	memset(touches, 0, sizeof(uint32_t) * touchesmallocsize);
 
-	line = safe_malloc(sizeof(long int) * MAXLEN);
-	ipstring = safe_malloc(sizeof(long int) * MAXLEN);
+	line = safe_malloc(sizeof(char) * MAXLEN);
+	ipstring = safe_malloc(sizeof(char) * MAXLEN);
 	if (config.output_format[0] == 'X') {
 		macstring = safe_malloc(sizeof(char) * 18);
 		macaddr = safe_malloc(sizeof(struct macaddr_t));
@@ -164,7 +164,7 @@ int parse_leases(void)
 		} else if (strstr(line, "  binding state backup")) {
 			if (num_backups == 0) {
 				backups =
-				    safe_malloc((size_t) sizeof(long int) *
+				    safe_malloc(sizeof(uint32_t) *
 						backupsmallocsize);
 			}
 			backups[num_backups] = htonl(inp.s_addr);

@@ -64,7 +64,7 @@ int prepare_data(void)
 	for (i = 0; i < num_touches; i++) {
 		if (bsearch
 		    (&touches[i], leases, (size_t) num_leases,
-		     sizeof(long int), &intcomp) == NULL) {
+		     sizeof(uint32_t), &intcomp) == NULL) {
 			touches[j] = touches[i];
 			j++;
 		}
