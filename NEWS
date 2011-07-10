@@ -6,6 +6,36 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.16
+# git shortlog v2.15..v2.16
+Sami Kerola (25):
+      docs: help screen & man page
+      docs: add missing full-html flag
+      headers: include-what-you-use fixes
+      other: free backup ranges
+      prepare_memory bug: initialization missing
+      licensing: use FreeBSD license (was GNUv3)
+      parse_leases: exit at read error
+      getdata: realloc instead of asserting
+      getdata: potential overflow due unit change
+      bug: use uint32_t for IP numbers
+      analyze: use more logical variable names
+      getdata: initialize memory
+      all: include-what-you-see fixes
+      analyze: debugging leftover removed
+      THANKS: add Ahmed AL Dakhil
+      maint: coding style fixes
+      output: change to full html behaviour
+      build-sys: autotools configure.ac update
+      docs: NEWS update
+      docs: remove version from manual page
+      licensing: set placeholder properly
+      bug: use uint32_t for IP numbers
+      build-sys: ignore gprof & gcov files
+      getdata: new xstrstr function for performance
+      other: fix two warnings
+      build-sys: update news for release v2.16
+
 Version 2.15
 # git shortlog v2.14..v2.15
 Sami Kerola (13):
