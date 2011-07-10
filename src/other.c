@@ -74,7 +74,7 @@ void *safe_realloc(void *ptr, const size_t size)
 
 	if (!ret && size)
 		err(EXIT_FAILURE,
-		    "safe_realloc: cannot allocate %zu bytes", size);
+		    "safe_realloc: cannot allocate %lu bytes", size);
 	return ret;
 }
 
@@ -164,11 +164,10 @@ void __attribute__ ((__noreturn__)) usage(int status)
 	out = status != 0 ? stderr : stdout;
 
 	fprintf(out, "\
-Usage: %s [OPTIONS]\n\n", program_invocation_short_name);
-
-	fprintf(out, "\
+Usage: %s [OPTIONS]\n\n\
 This is ISC dhcpd pools usage analyzer.\n\
-\n\
+\n", program_invocation_short_name);
+	fprintf(out, "\
   -c, --config=FILE      path to the dhcpd.conf file\n\
   -l, --leases=FILE      path to the dhcpd.leases file\n\
   -f, --format=[thHcxX]  output format\n\
@@ -177,7 +176,8 @@ This is ISC dhcpd pools usage analyzer.\n\
                            H for full html page\n\
                            x for xml\n\
                            X for xml with active lease details\n\
-                           c for comma separated values\n\
+                           c for comma separated values\n");
+	fprintf(out, "\
   -s, --sort=[nimcptTe]  sort ranges by\n\
                            n name\n\
                            i IP\n\
@@ -189,7 +189,8 @@ This is ISC dhcpd pools usage analyzer.\n\
                            e t+c perc\n\
   -r, --reverse		 reverse order sort\n\
   -o, --output=FILE      output into a file\n\
-  -L, --limit=NR         output limit mask 77 - 00\n\
+  -L, --limit=NR         output limit mask 77 - 00\n");
+	fprintf(out, "\
   -v, --version          version information\n\
   -h, --help             this screen\n\
 \n\
