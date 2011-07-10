@@ -78,6 +78,32 @@ void *safe_realloc(void *ptr, const size_t size)
 	return ret;
 }
 
+int
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+    __attribute__ ((hot))
+#endif
+    xstrstr(char *a, char *b, int len)
+{
+	int i;
+	/* two spaces are very common in lease file, after them
+	 * nearly everything differs */
+	if (a[2] != b[2]) {
+	  return false;
+	}
+	/* "  binding state " == 16 chars, this will skip right
+         * to first difering line. */
+	if (17 < len && a[17] != b[17]) {
+	  return false;
+	}
+	/* looking good, double check the whole thing... */
+	for (i = 0; a[i] != '\0' && b[i] != '\0'; i++) {
+		if (a[i] != b[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
 /* Simple strdup wrapper */
 char *safe_strdup(const char *str)
 {

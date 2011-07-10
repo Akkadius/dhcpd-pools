@@ -134,14 +134,14 @@ int parse_leases(void)
 			    config.dhcpdlease_file);
 		}
 		/* It's a lease, save IP */
-		if (strstr(line, "lease") == line) {
+		if (xstrstr(line, "lease", 5)) {
 			strncpy(ipstring, line, MAXLEN);
 			nth_field(2, ipstring, ipstring);
 			inet_aton(ipstring, &inp);
 			sw_active_lease = 0;
 		}
 		/* Copy IP to correct array */
-		else if (strstr(line, "binding state active")) {
+		else if (xstrstr(line, "  binding state active", 22)) {
 			leases[num_leases] = htonl(inp.s_addr);
 			num_leases++;
 			if (leasesmallocsize < num_leases) {
@@ -151,7 +151,7 @@ int parse_leases(void)
 				leasesmallocsize /= sizeof(uint32_t);
 			}
 			sw_active_lease = 1;
-		} else if (strstr(line, "  binding state free")) {
+		} else if (xstrstr(line, "  binding state free", 20)) {
 			touches[num_touches] = htonl(inp.s_addr);
 			num_touches++;
 			if (touchesmallocsize < num_touches) {
@@ -161,7 +161,7 @@ int parse_leases(void)
 				    safe_realloc(touches, touchesmallocsize);
 				touchesmallocsize /= sizeof(uint32_t);
 			}
-		} else if (strstr(line, "  binding state backup")) {
+		} else if (xstrstr(line, "  binding state backup", 22)) {
 			if (num_backups == 0) {
 				backups =
 				    safe_malloc(sizeof(uint32_t) *
@@ -180,7 +180,7 @@ int parse_leases(void)
 
 		if ((macaddr != NULL)
 		    && (sw_active_lease == 1)
-		    && (strstr(line, "hardware ethernet"))) {
+		    && (xstrstr(line, "  hardware ethernet", 19))) {
 			nth_field(3, macstring, line);
 			macstring[17] = '\0';
 			macaddr_p->ethernet = safe_strdup(macstring);
