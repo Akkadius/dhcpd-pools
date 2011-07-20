@@ -52,6 +52,12 @@ extern char *malloc();
 #define EXIT_SUCCESS	0
 #endif				/* STDC_HEADERS */
 
+#ifdef  HAVE_STRING_H
+#include <string.h>
+#else
+#include <strings.h>
+#endif
+
 #ifndef HAVE_PROGRAM_INVOCATION_SHORT_NAME
 #  ifdef HAVE___PROGNAME
 extern char *__progname;
