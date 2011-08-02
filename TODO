@@ -1,3 +1,11 @@
+### Feature requests
+
+o IPv6 support (Frank)
+o Assigned IPs count (Nelson)
+o Subnet counting class (Henryk)
+
+### Next major version
+
 1  Well structured code, with extendible sane architecture.
 2  Server, which has analysis in cache for N seconds and will
    answer via socket.
