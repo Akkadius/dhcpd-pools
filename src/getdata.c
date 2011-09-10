@@ -175,12 +175,14 @@ int parse_leases(void)
 		    && (sw_active_lease == 1)
 		    && (xstrstr(line, "  hardware ethernet", 19))) {
 			nth_field(3, macstring, line);
-			macstring[17] = '\0';
-			macaddr_p->ethernet = safe_strdup(macstring);
-			macaddr_p->ip = safe_strdup(ipstring);
-			macaddr_p->next = safe_malloc(sizeof(struct macaddr_t));
-			macaddr_p = macaddr_p->next;
-			macaddr_p->next = NULL;
+			if (macstring) {
+			        macstring[17] = '\0';
+			        macaddr_p->ethernet = safe_strdup(macstring);
+			        macaddr_p->ip = safe_strdup(ipstring);
+			        macaddr_p->next = safe_malloc(sizeof(struct macaddr_t));
+			        macaddr_p = macaddr_p->next;
+			        macaddr_p->next = NULL;
+			}
 		}
 	}
 	free(line);

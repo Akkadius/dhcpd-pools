@@ -218,7 +218,7 @@ int main(int argc, char **argv)
 }
 
 /* Global allocations, counter resets etc */
-int prepare_memory()
+int prepare_memory(void)
 {
 	RANGES = 64;
 	num_ranges = num_shared_networks = 0;
