@@ -5,15 +5,16 @@
 .\"	Add'l ontributions by:
 .\"		Dan Thorson
 .\"
-.TH DHCPD-POOLS "1" "June 2011" "dhcpd-pools" "User Commands"
+.TH DHCPD-POOLS "1" "September 2011" "dhcpd-pools" "User Commands"
 .SH NAME
 dhcpd-pools \- ISC dhcpd pools usage analysis
 .SH SYNOPSIS
 .B dhcpd-pools
+[options]
 [\fIOPTIONS\fR]
 .SH DESCRIPTION
 The program analyses ISC dhcpd shared network and pool usage and outputs the
-results in a user selectable format.
+results in a format selected by user.
 .SH FIELDS
 .TP
 .I "shared net name"
@@ -35,10 +36,10 @@ Number of leases currently in use.
 Percent of IPs currently in use compared to max.
 .TP
 .I "touch"
-Number of IP's which appear in the lease file, but who's leases have
-expired. A touched IP is either expired or abandoned.  The touched IP count
-is somewhat misleading when you try to determine if an IP pool is big
-enough; it is a better indicator of whether a pool is too large.
+Number of IP's which appear in the lease file, but who's leases have expired.
+A touched IP is either expired or abandoned.  The touched IP count is
+somewhat misleading when you try to determine if an IP pool is big enough; it
+is a better indicator of whether a pool is too large.
 .TP
 .I "t+c"
 The sum of Touched and Currently in-use leases.
@@ -47,11 +48,11 @@ The sum of Touched and Currently in-use leases.
 Percent of IPs either touched or currently in use, compared to max.
 .TP
 .I "bu"
-Failover pair can allocate these addresses. The count appears only if there
+Failover pair can allocate these addresses.  The count appears only if there
 is failover configuration.
 .TP
 .I "bu perc"
-Percent of addresses that failover pair can allocate. The percent appears
+Percent of addresses that failover pair can allocate.  The percent appears
 only if there is failover configuration.
 .SH ARGUMENTS
 .TP
@@ -63,49 +64,68 @@ Path to the dhcpd.leases file.
 .TP
 \fB\-s\fR, \fB\-\-sort\fR=\fI[nimcptTe]\fR
 Sort ranges by chosen fields as a sorting keys.  Maximum of five sort keys
-can be defined.  Keys weight from left to right IE if more weighting keys
-are equal next one is used. The IP field is default sort key.
+can be defined.  Keys weight from left to right i.e. if more weighting keys
+are equal next one is used.  The IP field is default sort key.
 .TP
 \fB\-r\fR, \fB\-\-reverse\fR
 Sort results in reverse order.
 .TP
 \fB\-f\fR, \fB\-\-format\fR=\fI[thHcxX]\fR
-Output format. Currently there is text, html, full-html and csv
-(comma-separated values). Default is text. Standard html (h) outputs only
-the HTML tables, and is useful for embeding more complex web pages.
-Full-html (H) provides complete HTML headers, etc., including in-line CSS.
-Output format xml (x) is similar to the dhcpstatus Perl module output. The
-extended xml (X) format will print ethernet address details.
+Output format.  The default is
+text
+.RI ( t ).
+Standard html
+.RI ( h )
+outputs only the HTML tables, and is useful for embeding more complex web
+pages.  Full-html
+.RI ( H )
+provides complete HTML headers, etc., including in-line CSS.  The
+.RI ( c )
+stands for comma-separated values.  Output format xml
+.RI ( x )
+is similar to the dhcpstatus Perl module output.  The extended xml
+.RI ( X )
+format will print ethernet address details.
 .TP
 \fB\-o\fR, \fB\-\-output\fR=\fIFILE\fR
-File where output is written. Default is stdout.
+.I File
+where output is written.  Default is stdout.
 .TP
 \fB\-L\fR, \fB\-\-limit\fR=\fINR\fR
-Limit what will be printed. Syntax is similar to chmod permission string.
-The limit string uses two digits which vary between 0 to 7.  The first digit
-determines which headers to display, and the second digit determines which
-numeric analysis tables to include in the output. The following values are
-"OR'd" together to create the desired output. The default is 77.
+The
+.I NR
+will limit what will be printed.  Syntax is similar to
+.IR chmod (1)
+permission string.  The
+.I NR
+limit string uses two digits which vary between
+.IR 0 \ to \ 7 .
+The first digit determines which headers to display, and the second digit
+determines which numeric analysis tables to include in the output.  The
+following values are "OR'd" together to create the desired output.  The
+default is
+.IR 77 .
+.PP
 .RS
 .PD 0
 .TP
 .B 01
-Print x
+Print ranges
 .TP
 .B 02
-Print y
+Print shared networks
 .TP
 .B 04
-Print z
+Print total summary
 .TP
 .B 10
-Print headers for x
+Print range header
 .TP
 .B 20
-Print headers for y
+Print shared network header
 .TP
 .B 40
-Print headers for z
+Print total summary header
 .PD
 .RE
 .TP
@@ -115,16 +135,12 @@ Print version information to standard output and exit successfully.
 \fB\-h\fR, \fB\-\-help\fR
 Print help to standard output and exit successfully.
 .SH FILES
-.if n .ta 2.8i
-.if t .ta 2.1i
+.TP
 /etc/dhcpd.conf
-.br
-    ISC dhcpd configuration file.
-.br
-.br
+ISC dhcpd configuration file.
+.TP
 /var/lib/dhcp/dhcpd.leases
-.br
-    ISC dhcpd lease file.
+ISC dhcpd lease file.
 .SH AUTHOR
 Written by Sami Kerola.
 .br
@@ -132,9 +148,14 @@ XML support by Dominic Germain, Sogetel inc.
 .PP
 The software has FreeBSD License.
 .SH "REPORTING BUGS"
-Report bugs to <kerolasa@iki.fi>
+Report bugs to
+.MT kerolasa@iki.fi
+Sami Kerola
+.ME
 .br
-Homepage: http://dhcpd-pools.sourceforge.net/
+.UR http://dhcpd-pools.sourceforge.net/
+Home page
+.UE
 .SH "SEE ALSO"
 .BR dhcpd.leases (5),
 .BR dhcpd.conf (5),
