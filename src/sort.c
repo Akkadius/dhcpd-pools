@@ -44,7 +44,7 @@
 #include "dhcpd-pools.h"
 
 /* Sort functions for range sorting */
-int intcomp(const void *x, const void *y)
+int intcomp(const void *restrict x, const void *restrict y)
 {
 	if (*(uint32_t *) x < *(uint32_t *) y)
 		return -1;
@@ -54,7 +54,7 @@ int intcomp(const void *x, const void *y)
 		return 0;
 }
 
-int rangecomp(const void *r1, const void *r2)
+int rangecomp(const void *restrict r1, const void *restrict r2)
 {
 	if ((((struct range_t *)r1)->first_ip) <
 	    (((struct range_t *)r2)->first_ip))
@@ -139,7 +139,7 @@ void field_selector(char c)
 }
 
 /* Needed to support multiple key sorting. */
-int get_order(struct range_t *left, struct range_t *right)
+int get_order(struct range_t *restrict left, struct range_t *restrict right)
 {
 	int i, len, ret;
 	unsigned long int lint, rint;
@@ -178,7 +178,7 @@ int get_order(struct range_t *left, struct range_t *right)
 	return (0);
 }
 
-void mergesort_ranges(struct range_t *orig, int size, struct range_t *temp)
+void mergesort_ranges(struct range_t *restrict orig, int size, struct range_t *restrict temp)
 {
 	int left, right, i;
 	struct range_t hold;

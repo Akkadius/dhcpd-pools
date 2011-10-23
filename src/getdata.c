@@ -198,7 +198,7 @@ int parse_leases(void)
  * first field is 1 and not 0 like C programs should have. Question of
  * semantics, send mail to author if this annoys. All performance boosts for
  * this function are well come. */
-int nth_field(int n, char *dest, const char *src)
+int nth_field(int n, char *restrict dest, const char *restrict src)
 {
 	int i, j = 0, wordn = 0, len;
 
@@ -225,7 +225,7 @@ int nth_field(int n, char *dest, const char *src)
 }
 
 /* dhcpd.conf interesting words */
-int is_interesting_config_clause(char *s)
+int is_interesting_config_clause(char *restrict s)
 {
 	if (strstr(s, "range")) {
 		return 3;
@@ -239,8 +239,8 @@ int is_interesting_config_clause(char *s)
 }
 
 /* FIXME: This spagetti monster function need to be rewrote at least ones. */
-void parse_config(int is_include, char *config_file,
-		  struct shared_network_t *shared_p)
+void parse_config(int is_include, const char *restrict config_file,
+		  struct shared_network_t *restrict shared_p)
 {
 	FILE *dhcpd_config;
 	int newclause = true, argument = false, comment =

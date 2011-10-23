@@ -82,7 +82,7 @@ int
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((hot))
 #endif
-    xstrstr(char *a, char *b, int len)
+    xstrstr(char *restrict a, char *restrict b, int len)
 {
 	int i;
 	/* two spaces are very common in lease file, after them
@@ -105,7 +105,7 @@ int
 }
 
 /* Simple strdup wrapper */
-char *safe_strdup(const char *str)
+char *safe_strdup(const char *restrict str)
 {
 	char *ret = strdup(str);
 
@@ -114,7 +114,7 @@ char *safe_strdup(const char *str)
 	return ret;
 }
 
-void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
+void flip_ranges(struct range_t *restrict ranges, struct range_t *restrict tmp_ranges)
 {
 	unsigned int i = num_ranges - 1, j;
 

@@ -145,9 +145,9 @@ struct macaddr_t *macaddr;
 /* Function prototypes */
 int prepare_memory(void);
 int parse_leases(void);
-void parse_config(int, char *, struct shared_network_t *)
+void parse_config(int, const char *__restrict, struct shared_network_t *__restrict)
     __attribute__ ((nonnull(2, 3)));
-int nth_field(int n, char *dest, const char *src)
+int nth_field(int n, char *__restrict dest, const char *__restrict src)
     __attribute__ ((nonnull(2, 3)))
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((__hot__))
@@ -155,7 +155,7 @@ int nth_field(int n, char *dest, const char *src)
     ;
 int prepare_data(void);
 int do_counting(void);
-void flip_ranges(struct range_t *ranges, struct range_t *tmp_ranges)
+void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
 void *safe_malloc(const size_t size)
@@ -166,15 +166,15 @@ void *safe_malloc(const size_t size)
 #endif
 #endif
     ;
-void *safe_realloc(void *ptr, const size_t size);
-char *safe_strdup(const char *str) __attribute__ ((nonnull(1)));
-int xstrstr(char *a, char *b, int len);
+void *safe_realloc(void *__restrict ptr, const size_t size);
+char *safe_strdup(const char *__restrict str) __attribute__ ((nonnull(1)));
+int xstrstr(char *__restrict a, char *__restrict b, int len);
 void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
-int intcomp(const void *x, const void *y) __attribute__ ((nonnull(1, 2)));
-int rangecomp(const void *r1, const void *r2)
+int intcomp(const void *__restrict x, const void *__restrict y) __attribute__ ((nonnull(1, 2)));
+int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
 int sort_name(void);
@@ -187,9 +187,9 @@ unsigned long int ret_touched(struct range_t r);
 unsigned long int ret_tc(struct range_t r);
 unsigned long int ret_tcperc(struct range_t r);
 void field_selector(char c);
-int get_order(struct range_t *left, struct range_t *right)
+int get_order(struct range_t *__restrict left, struct range_t *__restrict right)
     __attribute__ ((nonnull(1, 2)));
-void mergesort_ranges(struct range_t *orig, int size, struct range_t *temp)
+void mergesort_ranges(struct range_t *__restrict orig, int size, struct range_t *__restrict temp)
     __attribute__ ((nonnull(1, 3)));
 /* output function pointer and functions */
 int (*output_analysis) (void);
