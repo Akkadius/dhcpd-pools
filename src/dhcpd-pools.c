@@ -50,6 +50,7 @@ extern char *malloc();
 #include <err.h>
 #include <errno.h>
 #include <getopt.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "defaults.h"

@@ -123,8 +123,6 @@ struct macaddr_t {
 };
 
 /* Global variables */
-static int const true = 1;
-static int const false = 0;
 struct configuration_t config;
 static int const output_limit_bit_1 = 1;
 static int const output_limit_bit_2 = 2;
