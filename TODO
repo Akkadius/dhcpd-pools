@@ -33,6 +33,10 @@
 o IPv6 support (Frank)
 o Assigned IPs count (Nelson)
 o Subnet counting class (Henryk)
+o When time stamps are part of lease situation evaluation (see
+  bug 1) add a --now switch which will one can use to change when
+  expiry happens.
+o Add lease time histogram support.
 
 ### Next major version
 
