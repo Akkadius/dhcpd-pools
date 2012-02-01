@@ -332,8 +332,10 @@ void parse_config(int is_include, const char *restrict config_file,
 			 * shared-network DSL{ ... */
 			if (i == 0) {
 				newclause = true;
+				continue;
+			} else {
+				break;
 			}
-			continue;
 		case '}':
 			if (quote == true) {
 				break;
@@ -383,9 +385,10 @@ void parse_config(int is_include, const char *restrict config_file,
 		else if (newclause == true) {
 			/* Insert string end & set state */
 			word[i] = '\0';
-			newclause = false;
+			if (word[i - 1] != '{') {
+				newclause = false;
+			}
 			i = 0;
-
 			argument = is_interesting_config_clause(word);
 		}
 		/* words after range, shared-network or include */
