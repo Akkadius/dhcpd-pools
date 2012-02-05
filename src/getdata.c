@@ -244,8 +244,8 @@ void parse_config(int is_include, const char *restrict config_file,
 		  struct shared_network_t *restrict shared_p)
 {
 	FILE *dhcpd_config;
-	int newclause = true, argument = false, comment =
-	    false, braces = 0, quote = false;
+	bool newclause = true, comment = false;
+	int quote = 0, braces = 0, argument = 0;
 	size_t i = 0;
 	char *word, c;
 	int braces_shared = 1000;
@@ -304,7 +304,7 @@ void parse_config(int is_include, const char *restrict config_file,
 			break;
 		case ';':
 			/* Quoted colon does not mean new clause */
-			if (quote == true) {
+			if (0 < quote) {
 				break;
 			}
 			if (comment == false && argument != 2 && argument != 4) {
@@ -321,10 +321,10 @@ void parse_config(int is_include, const char *restrict config_file,
 			}
 			continue;
 		case '{':
-			if (quote == true) {
+			if (0 < quote) {
 				break;
 			}
-			if (comment == false) {
+			if (comment == 0) {
 				braces++;
 			}
 			/* i == 0 detects word that ends to brace like:
@@ -337,7 +337,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				break;
 			}
 		case '}':
-			if (quote == true) {
+			if (0 < quote) {
 				break;
 			}
 			if (comment == false) {
@@ -369,7 +369,7 @@ void parse_config(int is_include, const char *restrict config_file,
 		}
 		/* Save to word which clause this is. */
 		if ((newclause == true || argument != 0)
-		    && (!isspace(c) || quote == true)) {
+		    && (!isspace(c) || 0 < quote)) {
 			word[i] = c;
 			i++;
 			/* Long word which is almost causing overflow. None
