@@ -42,6 +42,7 @@
 #else
 extern void exit();
 extern char *malloc();
+extern void _exit();
 #endif
 
 #ifdef  HAVE_STRING_H
@@ -52,9 +53,12 @@ extern char *malloc();
 
 #include <err.h>
 #include <errno.h>
+#include <error.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdio_ext.h>
+#include <unistd.h>
 
 /* Simple memory allocation wrapper */
 void *safe_malloc(const size_t size)
@@ -148,6 +152,32 @@ void clean_up(void)
 	free(backups);
 	free(touches);
 	free(shared_networks);
+}
+
+int close_stream(FILE * stream)
+{
+	const int some_pending = (__fpending(stream) != 0);
+	const int prev_fail = (ferror(stream) != 0);
+	const int fclose_fail = (fclose(stream) != 0);
+	if (prev_fail || (fclose_fail && (some_pending || errno != EBADF))) {
+		if (!fclose_fail)
+			errno = 0;
+		return EOF;
+	}
+	return 0;
+}
+
+/* Use atexit(); */
+void close_stdout(void)
+{
+	if (close_stream(stdout) != 0 && !(errno == EPIPE)) {
+		char const *write_error = "write error";
+		error(0, errno, "%s", write_error);
+		_exit(EXIT_FAILURE);
+	}
+
+	if (close_stream(stderr) != 0)
+		_exit(EXIT_FAILURE);
 }
 
 void __attribute__ ((__noreturn__)) print_version(void)

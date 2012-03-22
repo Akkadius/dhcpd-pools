@@ -77,6 +77,8 @@ int main(int argc, char **argv)
 		{NULL, 0, NULL, 0}
 	};
 
+	atexit(close_stdout);
+
 	/* FIXME: make these allocations dynamic up on need. */
 	config.dhcpdconf_file = safe_malloc(sizeof(char) * MAXLEN);
 	config.dhcpdlease_file = safe_malloc(sizeof(char) * MAXLEN);

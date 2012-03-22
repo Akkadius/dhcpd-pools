@@ -197,7 +197,7 @@ int output_txt(void)
 			warn("output_txt: fflush");
 		}
 	} else {
-		ret = fclose(outfile);
+		ret = close_stream(outfile);
 		if (ret) {
 			warn("output_txt: fclose");
 		}
@@ -304,7 +304,7 @@ int output_xml(void)
 			warn("output_xml: fflush");
 		}
 	} else {
-		ret = fclose(outfile);
+		ret = close_stream(outfile);
 		if (ret) {
 			warn("output_xml: fclose");
 		}
@@ -633,7 +633,7 @@ int output_html(void)
 			warn("output_html: fflush");
 		}
 	} else {
-		ret = fclose(outfile);
+		ret = close_stream(outfile);
 		if (ret) {
 			warn("output_html: fclose");
 		}
@@ -781,7 +781,7 @@ int output_csv(void)
 			warn("output_cvs: fflush");
 		}
 	} else {
-		ret = fclose(outfile);
+		ret = close_stream(outfile);
 		if (ret) {
 			warn("output_cvs: fclose");
 		}
