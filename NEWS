@@ -6,6 +6,30 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.17
+# git shortlog v2.16..v2.17
+Enno Gröper (1):
+      analyse: critical bug in the counting code
+
+Sami Kerola (16):
+      dhcpd-pools.h: move string.h to include
+      dhcpd-pools.h: move string.h to include
+      docs: TODO update
+      Merge branch 'master' of
+      ssh://dhcpd-pools.git.sourceforge.net/gitroot/dhc
+      build: smatch compiler warnings fixed
+      docs: enhance manual page readability
+      all files: use restrict key word for all pointer arguments
+      build-sys: C99 has true and false
+      docs: update thanks
+      TODO: update bugs
+      contrib: add first .awk algorithm test version to contrib
+      docs: update TODO
+      getdata: fix configuration parser bug
+      getdata: do not mix boolean and int data types [cppcheck]
+      output: verify stream status when closing files
+      build-sys: update news for release v2.17
+
 Version 2.16
 # git shortlog v2.15..v2.16
 Sami Kerola (25):
