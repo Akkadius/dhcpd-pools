@@ -38,6 +38,8 @@ AC_CHECK_HEADERS([\
 	unistd.h \
 ])
 
+AC_CHECK_HEADER(uthash.h, [], [AC_MSG_ERROR([Unable to find uthash.h])])
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_HEADER_STDBOOL

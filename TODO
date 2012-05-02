@@ -1,32 +1,10 @@
 ### Bugs
 
-> 1. from huangyu: china,fujian province,fuzhou
->
-> according to my observation, every lease,for example,ip
-> 192.168.0.123 perhaps appears many times in dhcpd.leases,but
-> only the last time's state is the final valid state of this ip
-> 192.168.0.123.
->
-> No matter it appears how many times in dhcpd.leases,and no
-> matter it has how many different state in dhcpd.leases. no
-> matter it had been assigned to how many different mac-address.
-> As long as it's last appearance's binding state is free in
-> dhcpd.leases,then ,it's free,in other word,it's not active.
->
-> and i notice that if a active lease time expired,dhcpd daemon
-> will set this lease's binding state from active to free
-> directly,without released state in this period.
->
-> in other words, when a lease's binding state "active" follow by
-> "free",not follow by "released";dhcpd-pools still think it's
-> active.
->
-> and another bug maybe is:
->
-> i found dhcpd-pools didn't consider if the active lease's ends
-> time is passed so it would still think the lease is active even
-> if dhcpd daemon is stopped for a long time,the leases marked by
-> "active" state in lease_file has expired in fact.
+Reported-by: Huangyu: I found dhcpd-pools didn't consider if the
+   active lease's ends time is passed so it would still think the
+   lease is active even if dhcpd daemon is stopped for a long time,
+   the leases marked by "active" state in lease_file has expired in
+   fact.
 
 ### Feature requests
 

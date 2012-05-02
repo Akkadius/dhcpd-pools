@@ -148,9 +148,7 @@ void clean_up(void)
 	free(config.dhcpdlease_file);
 	free(config.output_file);
 	free(ranges);
-	free(leases);
-	free(backups);
-	free(touches);
+	delete_all_leases();
 	free(shared_networks);
 }
 

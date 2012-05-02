@@ -71,10 +71,8 @@ int parse_leases(void)
 	struct in_addr inp;
 	struct stat lease_file_stats;
 	struct macaddr_t *macaddr_p = NULL;
-	size_t leasesmallocsize;
-	size_t touchesmallocsize;
-	size_t backupsmallocsize;
 	int sw_active_lease = 0;
+	struct leases_t * lease;
 
 	num_touches = num_leases = num_backups = 0;
 
@@ -104,14 +102,6 @@ int parse_leases(void)
 	if (stat(config.dhcpdlease_file, &lease_file_stats)) {
 		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
 	}
-	leasesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
-	touchesmallocsize = (lease_file_stats.st_size / 250) + MAXLEN - 2;
-	backupsmallocsize = (lease_file_stats.st_size / 120) + MAXLEN - 2;
-	leases = safe_malloc(sizeof(uint32_t) * leasesmallocsize);
-	touches = safe_malloc(sizeof(uint32_t) * touchesmallocsize);
-
-	memset(leases, 0, sizeof(uint32_t) * leasesmallocsize);
-	memset(touches, 0, sizeof(uint32_t) * touchesmallocsize);
 
 	line = safe_malloc(sizeof(char) * MAXLEN);
 	ipstring = safe_malloc(sizeof(char) * MAXLEN);
@@ -136,40 +126,24 @@ int parse_leases(void)
 		}
 		/* Copy IP to correct array */
 		else if (xstrstr(line, "  binding state active", 22)) {
-			leases[num_leases] = htonl(inp.s_addr);
-			num_leases++;
-			if (leasesmallocsize < num_leases) {
-				leasesmallocsize =
-				    sizeof(uint32_t) * num_leases * 2;
-				leases = safe_realloc(leases, leasesmallocsize);
-				leasesmallocsize /= sizeof(uint32_t);
+			/* remove old entry, if exists */
+			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
+				delete_lease(lease);
 			}
+			add_lease(htonl(inp.s_addr),ACTIVE);
 			sw_active_lease = 1;
 		} else if (xstrstr(line, "  binding state free", 20)) {
-			touches[num_touches] = htonl(inp.s_addr);
-			num_touches++;
-			if (touchesmallocsize < num_touches) {
-				touchesmallocsize =
-				    sizeof(uint32_t) * num_touches * 2;
-				touches =
-				    safe_realloc(touches, touchesmallocsize);
-				touchesmallocsize /= sizeof(uint32_t);
+			/* remove old entry, if exists */
+			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
+				delete_lease(lease);
 			}
+			add_lease(htonl(inp.s_addr),FREE);
 		} else if (xstrstr(line, "  binding state backup", 22)) {
-			if (num_backups == 0) {
-				backups =
-				    safe_malloc(sizeof(uint32_t) *
-						backupsmallocsize);
+			/* remove old entry, if exists */
+			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
+				delete_lease(lease);
 			}
-			backups[num_backups] = htonl(inp.s_addr);
-			num_backups++;
-			if (backupsmallocsize < num_backups) {
-				backupsmallocsize =
-				    sizeof(uint32_t) * num_backups * 2;
-				backups =
-				    safe_realloc(backups, backupsmallocsize);
-				backupsmallocsize /= sizeof(uint32_t);
-			}
+			add_lease(htonl(inp.s_addr),BACKUP);
 		}
 
 		if ((macaddr != NULL)

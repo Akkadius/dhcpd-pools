@@ -40,6 +40,7 @@
 #include <arpa/inet.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <uthash.h>
 
 /* Feature test switches */
 #define _POSIX_SOURCE 1
@@ -122,6 +123,16 @@ struct macaddr_t {
 	char *ip;
 	struct macaddr_t *next;
 };
+enum ltype {
+	ACTIVE,
+	FREE,
+	BACKUP
+};
+struct leases_t {
+	uint32_t ip;	/* ip as key */
+	enum ltype type;
+	UT_hash_handle hh;
+};
 
 /* Global variables */
 struct configuration_t config;
@@ -133,11 +144,9 @@ struct shared_network_t *shared_networks;
 unsigned int num_shared_networks;
 struct range_t *ranges;
 unsigned int num_ranges;
-uint32_t *leases;
+struct leases_t *leases;
 unsigned long int num_leases;
-uint32_t *touches;
 unsigned long int num_touches;
-uint32_t *backups;
 unsigned long int num_backups;
 struct macaddr_t *macaddr;
 
@@ -200,5 +209,10 @@ int output_xml(void);
 int output_csv(void);
 /* Memory release, file closing etc */
 void clean_up(void);
+/* Hash functions */
+void add_lease(int ip, enum ltype type);
+struct leases_t * find_lease(int ip);
+void delete_lease(struct leases_t * lease);
+void delete_all_leases();
 
 #endif				/* DHCPD_POOLS_H */

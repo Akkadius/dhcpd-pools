@@ -25,6 +25,9 @@ This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
 	small some other dhcp analyzer might be more suitable for
 	you.
 
+== Dependencies to other projects
+
+	http://uthash.sourceforge.net/
 
 == Test data wanted
 

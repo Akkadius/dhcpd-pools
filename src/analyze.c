@@ -42,45 +42,15 @@
 #include "dhcpd-pools.h"
 
 /* Clean up data */
+int ip_sort(struct leases_t *a, struct leases_t *b)
+{
+	return (a->ip - b->ip);
+}
+
 int prepare_data(void)
 {
-	unsigned long int i, j, k;
-
 	/* Sort leases */
-	qsort(leases, (size_t) num_leases, sizeof(uint32_t), &intcomp);
-
-	/* Get rid of lease dublicates */
-	for (k = j = i = 0; i < num_leases; i++) {
-		if (j != leases[i]) {
-			leases[k] = leases[i];
-			j = leases[i];
-			k++;
-		}
-	}
-	num_leases = k;
-
-	/* Delete touched IPs that are in use. */
-	j = 0;
-	for (i = 0; i < num_touches; i++) {
-		if (bsearch
-		    (&touches[i], leases, (size_t) num_leases,
-		     sizeof(uint32_t), &intcomp) == NULL) {
-			touches[j] = touches[i];
-			j++;
-		}
-	}
-	num_touches = j;
-	qsort(touches, (size_t) num_touches, sizeof(uint32_t), &intcomp);
-
-	/* Sort ranges */
-	qsort(ranges, (size_t) num_ranges, sizeof(struct range_t), &rangecomp);
-
-	/* Sort backups */
-	if (0 < num_backups) {
-		qsort(backups, (size_t) num_backups, sizeof(uint32_t),
-		      &intcomp);
-	}
-
+	HASH_SORT(leases, ip_sort);
 	return 0;
 }
 
@@ -88,47 +58,43 @@ int prepare_data(void)
 int do_counting(void)
 {
 	struct range_t *range_p;
-	unsigned long i, j, k, l, block_size;
+	struct leases_t *l;
+	unsigned long i, k, block_size;
 
 	range_p = ranges;
 
 	/* Walk through ranges */
-	for (i = j = k = l = 0; i < num_ranges; i++) {
+	for (i = 0; i < num_ranges; i++) {
 		/* Count IPs in use */
-		for (; leases[j] < range_p->last_ip && j < num_leases; j++) {
-			if (leases[j] < range_p->first_ip) {
+		for (l = leases; l != NULL && range_p->last_ip >= l->ip; l = l->hh.next) {
+			if (l->ip < range_p->first_ip) {
+				/* should not be necessary */
 				continue;
 			}
-			/* IP with in range */
-			range_p->count++;
-			if (range_p->shared_net) {
-				range_p->shared_net->used++;
-			}
-		}
-
-		/* Count touched IPs */
-		for (; touches[k] < range_p->last_ip && k < num_touches; k++) {
-			if (touches[k] < range_p->first_ip) {
-				continue;
-			}
-			/* IP with in range */
-			range_p->touched++;
-			if (range_p->shared_net) {
-				range_p->shared_net->touched++;
-			}
-		}
-
-		/* Count backup IPs */
-		if (0 < num_backups) {
-			for (; backups[l] < range_p->last_ip
-			     && l < num_touches; l++) {
-				if (touches[l] < range_p->first_ip) {
-					continue;
-				}
-				/* IP with in range */
+			/* IP in range */
+			switch (l->type) {
+			case ACTIVE:
+				range_p->count++;
+				break;
+			case FREE:
+				range_p->touched++;
+				break;
+			case BACKUP:
 				range_p->backups++;
-				if (range_p->shared_net) {
+				break;
+			}
+
+			if (range_p->shared_net) {
+				switch (l->type) {
+				case ACTIVE:
+					range_p->shared_net->used++;
+					break;
+				case FREE:
+					range_p->shared_net->touched++;
+					break;
+				case BACKUP:
 					range_p->shared_net->backups++;
+					break;
 				}
 			}
 		}
@@ -138,15 +104,6 @@ int do_counting(void)
 		    (unsigned int)(range_p->last_ip - range_p->first_ip - 1);
 		if (range_p->shared_net) {
 			range_p->shared_net->available += block_size;
-		}
-
-		/* Go backwards one step so that not even a one IP will be
-		 * missed. This is possibly always unnecessary. */
-		if (j) {
-			j--;
-		}
-		if (k) {
-			k--;
 		}
 
 		range_p++;
