@@ -40,6 +40,19 @@ AC_CHECK_HEADERS([\
 	unistd.h \
 ])
 
+AC_ARG_WITH(uthash,
+AC_HELP_STRING([--with-uthash=DIR], [Use uthash from [DIR]/uthash.h)]),
+[ case "$with_uthash" in
+  yes)
+    ;;
+  no)
+    AC_MSG_ERROR([the uthash.h is required])
+    ;;
+  *)
+    CPPFLAGS="$CPPFLAGS -I$with_uthash"
+    ;;
+  esac]
+)
 AC_CHECK_HEADER(uthash.h, [], [AC_MSG_ERROR([Unable to find uthash.h])])
 
 # Checks for typedefs, structures, and compiler characteristics.
