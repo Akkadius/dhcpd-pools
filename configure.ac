@@ -26,11 +26,13 @@ LT_INIT
 # Checks for header files.
 AC_CHECK_HEADERS([\
 	arpa/inet.h \
+	error.h \
 	fcntl.h \
 	langinfo.h \
 	libintl.h \
 	netinet/in.h \
 	stddef.h \
+	stdio_ext.h \
 	stdlib.h \
 	string.h \
 	strings.h \
@@ -50,6 +52,8 @@ AC_TYPE_UINT32_T
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([\
+	__fpending \
+	error \
 	inet_ntoa \
 	memset \
 	nl_langinfo \

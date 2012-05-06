@@ -53,12 +53,29 @@ extern void _exit();
 
 #include <err.h>
 #include <errno.h>
+#ifdef HAVE_ERROR_H
 #include <error.h>
+#endif
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+#ifdef HAVE_STDIO_EXT_H
 #include <stdio_ext.h>
+#endif
 #include <unistd.h>
+
+#ifndef HAVE_ERROR
+#ifdef __FreeBSD__
+#define error errc
+#endif
+#endif
+
+#ifndef HAVE___FPENDING
+static size_t __fpending(FILE * fp)
+{
+	return (fp->_p - fp->_bf._base);
+}
+#endif
 
 /* Simple memory allocation wrapper */
 void *safe_malloc(const size_t size)
