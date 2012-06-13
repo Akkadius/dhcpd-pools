@@ -44,7 +44,11 @@
 /* Clean up data */
 int ip_sort(struct leases_t *a, struct leases_t *b)
 {
-	return (a->ip - b->ip);
+	if (a->ip < b->ip)
+		return -1;
+	if (a->ip > b->ip)
+		return 1;
+	return 0;
 }
 
 int prepare_data(void)
