@@ -6,6 +6,15 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.18
+$ git shortlog v2.17..v2.18
+Ryan Steinmetz (1):
+      build-sys: make build work under FreeBSD
+
+Sami Kerola (2):
+      build-sys: add --with-uthash=DIR ./configure option
+      analyze: a lot of IP counts being missed
+
 Version 2.17
 # git shortlog v2.16..v2.17
 Enno Gröper (1):
