@@ -52,6 +52,7 @@ extern char *malloc();
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <limits.h>
 
 #include "defaults.h"
 #include "dhcpd-pools.h"
@@ -62,6 +63,11 @@ int main(int argc, char **argv)
 	int option_index = 0;
 	char *tmp;
 	struct range_t *tmp_ranges;
+	enum {
+		OPT_WARN = CHAR_MAX + 1,
+		OPT_CRIT
+	};
+	int ret_val;
 
 	/* Options for getopt_long */
 	static struct option const long_options[] = {
@@ -74,6 +80,8 @@ int main(int argc, char **argv)
 		{"limit", required_argument, NULL, 'L'},
 		{"version", no_argument, NULL, 'v'},
 		{"help", no_argument, NULL, 'h'},
+		{"warning", required_argument, NULL, OPT_WARN},
+		{"critical", required_argument, NULL, OPT_CRIT},
 		{NULL, 0, NULL, 0}
 	};
 
@@ -87,6 +95,9 @@ int main(int argc, char **argv)
 	/* Make sure string has zero lenght if there is no
 	 * command line option */
 	config.output_file[0] = '\0';
+	/* Alarming defaults. */
+	config.warning = ALARM_WARN;
+	config.critical = ALARM_CRIT;
 
 	/* File location defaults */
 	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE, MAXLEN - 1);
@@ -160,6 +171,14 @@ int main(int argc, char **argv)
 				}
 			}
 			break;
+		case OPT_WARN:
+			strcpy(config.output_format, "a");
+			config.warning = strtod_or_err(optarg, "illegal argument");
+			break;
+		case OPT_CRIT:
+			strcpy(config.output_format, "a");
+			config.critical = strtod_or_err(optarg, "illegal argument");
+			break;
 		case 'v':
 			/* Print version */
 			print_version();
@@ -177,6 +196,9 @@ int main(int argc, char **argv)
 	switch (config.output_format[0]) {
 	case 't':
 		output_analysis = output_txt;
+		break;
+	case 'a':
+		output_analysis = output_alarming;
 		break;
 	case 'h':
 		output_analysis = output_html;
@@ -214,10 +236,10 @@ int main(int argc, char **argv)
 		flip_ranges(ranges, tmp_ranges);
 	}
 	free(tmp_ranges);
-	output_analysis();
+	ret_val = output_analysis();
 
 	clean_up();
-	return (EXIT_SUCCESS);
+	return (ret_val);
 }
 
 /* Global allocations, counter resets etc */

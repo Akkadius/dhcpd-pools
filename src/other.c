@@ -136,6 +136,28 @@ char *safe_strdup(const char *restrict str)
 	return ret;
 }
 
+/* Return percentage value */
+double strtod_or_err(const char *str, const char *errmesg)
+{
+	double num;
+	char *end = NULL;
+
+	if (str == NULL || *str == '\0')
+		goto err;
+	errno = 0;
+	num = strtod(str, &end);
+
+	if (errno || str == end || (end && *end))
+		goto err;
+
+	return num;
+ err:
+	if (errno)
+		err(EXIT_FAILURE, "%s: '%s'", errmesg, str);
+
+	errx(EXIT_FAILURE, "%s: '%s'", errmesg, str);
+}
+
 void flip_ranges(struct range_t *restrict ranges, struct range_t *restrict tmp_ranges)
 {
 	unsigned int i = num_ranges - 1, j;
@@ -236,6 +258,9 @@ This is ISC dhcpd pools usage analyzer.\n\
   -r, --reverse		 reverse order sort\n\
   -o, --output=FILE      output into a file\n\
   -L, --limit=NR         output limit mask 77 - 00\n");
+	fprintf(out, "\
+      --warning=PERC     set warning alarming limit\n\
+      --critical=PERC    set critical alarming limit\n");
 	fprintf(out, "\
   -v, --version          version information\n\
   -h, --help             this screen\n\

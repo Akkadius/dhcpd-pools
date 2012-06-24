@@ -37,6 +37,7 @@
 
 #include <arpa/inet.h>
 #include <err.h>
+#include <errno.h>
 #include <langinfo.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -787,4 +788,88 @@ int output_csv(void)
 		}
 	}
 	return 0;
+}
+
+int output_alarming(void)
+{
+	FILE *outfile;
+	struct range_t *range_p;
+	struct shared_network_t *shared_p;
+	int i;
+	float perc;
+	int rw = 0, rc = 0, ro = 0, sw = 0, sc = 0, so = 0;
+	int ret_val, ret;
+
+	range_p = ranges;
+	shared_p = shared_networks;
+
+	if (config.output_file[0]) {
+		outfile = fopen(config.output_file, "w+");
+		if (outfile == NULL) {
+			err(EXIT_FAILURE, "output_alarming: %s",
+			    config.output_file);
+		}
+	} else {
+		outfile = stdout;
+	}
+
+	if (config.output_limit[1] & output_limit_bit_1) {
+		for (i = 0; i < num_ranges; i++) {
+			perc = (float)(100 * range_p->count) /
+			    (range_p->last_ip - range_p->first_ip - 1);
+			if (config.critical < perc)
+				rc++;
+			else if (config.warning < perc)
+				rw++;
+			else
+				ro++;
+			range_p++;
+		}
+	}
+	if (config.output_limit[1] & output_limit_bit_2) {
+		for (i = 0; i < num_shared_networks; i++) {
+			perc = (float)(100 * shared_p->used) /
+			    shared_p->available;
+			if (config.critical < perc)
+				sc++;
+			else if (config.warning < perc)
+				sw++;
+			else
+				so++;
+			shared_p++;
+		}
+	}
+	if (0 < rc || 0 < sc) {
+		ret_val = 2;
+		fprintf(outfile, "CRITICAL: %s: ",
+			program_invocation_short_name);
+	} else if (0 < rw || 0 < sw) {
+		ret_val = 1;
+		fprintf(outfile, "WARNING: %s: ",
+			program_invocation_short_name);
+	} else {
+		ret_val = 0;
+		fprintf(outfile, "OK: ");
+	}
+	if (config.output_limit[0] & output_limit_bit_1) {
+		fprintf(outfile, "Ranges; crit: %d warn: %d ok: %d ", rc, rw,
+			ro);
+	}
+	if (config.output_limit[0] & output_limit_bit_2) {
+		fprintf(outfile, "Shared nets; crit: %d warn: %d ok: %d", sc,
+			sw, so);
+	}
+	fprintf(outfile, "\n");
+	if (outfile == stdout) {
+		ret = fflush(stdout);
+		if (ret) {
+			warn("output_alarming: fflush");
+		}
+	} else {
+		ret = close_stream(outfile);
+		if (ret) {
+			warn("output_alarming: fclose");
+		}
+	}
+	return ret_val;
 }
