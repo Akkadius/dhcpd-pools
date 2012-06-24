@@ -153,6 +153,24 @@ Print version information to standard output and exit successfully.
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 Print help to standard output and exit successfully.
+.SH EXAMPLES
+.TP
+Print ranges header, and analysis.
+$ dhcpd-pools -L 11 -c dhcpd.conf -l dhcpd.leases
+.br
+Ranges:
+.br
+shared net name [...]
+.TP
+Print shared networks and totals, both headers and results
+$ dhcpd-pools -L 66 -c dhcpd.conf -l dhcpd.leases shared net name
+.br
+[...]
+.TP
+Alarming
+$ dhcpd-pools -c dhcpd.conf -l dhcpd.leases --critical 80.1 --warning 75
+.br
+CRITICAL: dhcpd-pools: Ranges; crit: 14 warn: 22 ok: 220 Shared nets; crit: 1 warn: 0 ok: 4
 .SH FILES
 .TP
 /etc/dhcpd.conf
