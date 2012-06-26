@@ -6,7 +6,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([dhcpd-pools],
 	m4_esyscmd([build-aux/git-version-gen .tarball-version]),
 	[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wall foreign 1.10 tar-pax no-dist-gzip dist-xz -Wno-portability])
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
