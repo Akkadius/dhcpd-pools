@@ -200,7 +200,7 @@ int nth_field(int n, char *restrict dest, const char *restrict src)
 }
 
 /* dhcpd.conf interesting words */
-int is_interesting_config_clause(char *restrict s)
+static int is_interesting_config_clause(char const *restrict s)
 {
 	if (strstr(s, "range")) {
 		return 3;

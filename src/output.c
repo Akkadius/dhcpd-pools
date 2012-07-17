@@ -314,7 +314,7 @@ int output_xml(void)
 	return 0;
 }
 
-void html_header(FILE *restrict f)
+static void html_header(FILE *restrict f)
 {
 	char outstr[200];
 	struct tm *tmp;
@@ -388,7 +388,7 @@ void html_header(FILE *restrict f)
 	fprintf(f, "<a name=\"ranges\">The lease file mtime: %s</a>", outstr);
 }
 
-void html_footer(FILE *restrict f)
+static void html_footer(FILE *restrict f)
 {
 	fprintf(f, "<p><br></p>\n");
 	fprintf(f, "<hr>\n");
@@ -404,44 +404,46 @@ void html_footer(FILE *restrict f)
 	fprintf(f, "</html>\n");
 }
 
-void newrow(FILE *restrict f)
+static void newrow(FILE *restrict f)
 {
 	fprintf(f, "<tr>\n");
 }
 
-void endrow(FILE *restrict f)
+static void endrow(FILE *restrict f)
 {
 	fprintf(f, "</tr>\n\n");
 }
 
-void output_line(FILE *restrict f, char *restrict type, char *restrict class, char *restrict text)
+static void output_line(FILE *restrict f, char const *restrict type,
+			char const *restrict class, char const *restrict text)
 {
 	fprintf(f, "  <%s class=%s>%s</%s>\n", type, class, text, type);
 }
 
-void output_long(FILE *restrict f, char *restrict type, unsigned long unlong)
+static void output_long(FILE *restrict f, char const *restrict type,
+			unsigned long unlong)
 {
 	fprintf(f, "  <%s class=ralign>%lu</%s>\n", type, unlong, type);
 }
 
-void output_float(FILE * f, char *restrict type, float fl)
+static void output_float(FILE * f, char const *restrict type, float fl)
 {
 	fprintf(f, "  <%s class=ralign>%.3f</%s>\n", type, fl, type);
 }
 
-void table_start(FILE *restrict f)
+static void table_start(FILE *restrict f)
 {
 	fprintf(f, "<table width=\"75%%\" ");
 	fprintf(f, "class=\"%s\" ", PACKAGE_NAME);
 	fprintf(f, "summary=\"ISC dhcpd pool usage report\">\n");
 }
 
-void table_end(FILE *restrict f)
+static void table_end(FILE *restrict f)
 {
 	fprintf(f, "</table>\n");
 }
 
-void newsection(FILE *restrict f, char *restrict title)
+static void newsection(FILE *restrict f, char const *restrict title)
 {
 	newrow(f);
 	output_line(f, "td", "calign", "&nbsp;");

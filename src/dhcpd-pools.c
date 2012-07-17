@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 {
 	int i, c, sorts = 0;
 	int option_index = 0;
-	char *tmp;
+	char const *tmp;
 	struct range_t *tmp_ranges;
 	enum {
 		OPT_WARN = CHAR_MAX + 1,

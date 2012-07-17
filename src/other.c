@@ -104,7 +104,7 @@ int
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((hot))
 #endif
-    xstrstr(char *restrict a, char *restrict b, int len)
+    xstrstr(char *restrict a, const char *restrict b, int len)
 {
 	int i;
 	/* two spaces are very common in lease file, after them
@@ -137,7 +137,7 @@ char *safe_strdup(const char *restrict str)
 }
 
 /* Return percentage value */
-double strtod_or_err(const char *str, const char *errmesg)
+double strtod_or_err(const char *restrict str, const char *restrict errmesg)
 {
 	double num;
 	char *end = NULL;
@@ -158,16 +158,17 @@ double strtod_or_err(const char *str, const char *errmesg)
 	errx(EXIT_FAILURE, "%s: '%s'", errmesg, str);
 }
 
-void flip_ranges(struct range_t *restrict ranges, struct range_t *restrict tmp_ranges)
+void flip_ranges(struct range_t *restrict flip_me,
+		 struct range_t *restrict tmp_ranges)
 {
 	unsigned int i = num_ranges - 1, j;
 
 	for (j = 0; j < num_ranges; j++) {
-		*(tmp_ranges + j) = *(ranges + i);
+		*(tmp_ranges + j) = *(flip_me + i);
 		i--;
 	}
 
-	memcpy(ranges, tmp_ranges, num_ranges * sizeof(struct range_t));
+	memcpy(flip_me, tmp_ranges, num_ranges * sizeof(struct range_t));
 }
 
 /* Free memory, flush buffers etc */

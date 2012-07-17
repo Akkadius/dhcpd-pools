@@ -178,7 +178,7 @@ void *safe_malloc(const size_t size)
     ;
 void *safe_realloc(void *__restrict ptr, const size_t size);
 char *safe_strdup(const char *__restrict str) __attribute__ ((nonnull(1)));
-int xstrstr(char *__restrict a, char *__restrict b, int len);
+int xstrstr(char *__restrict a, const char *__restrict b, int len);
 double strtod_or_err(const char *__restrict str, const char *__restrict errmesg);
 int close_stream(FILE * stream);
 void close_stdout(void);

@@ -42,7 +42,7 @@
 #include "dhcpd-pools.h"
 
 /* Clean up data */
-int ip_sort(struct leases_t *a, struct leases_t *b)
+static int ip_sort(struct leases_t *a, struct leases_t *b)
 {
 	if (a->ip < b->ip)
 		return -1;
