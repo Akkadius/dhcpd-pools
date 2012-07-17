@@ -72,7 +72,7 @@ int parse_leases(void)
 	struct stat lease_file_stats;
 	struct macaddr_t *macaddr_p = NULL;
 	int sw_active_lease = 0;
-	struct leases_t * lease;
+	struct leases_t *lease;
 
 	num_touches = num_leases = num_backups = 0;
 
@@ -130,20 +130,20 @@ int parse_leases(void)
 			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(htonl(inp.s_addr),ACTIVE);
+			add_lease(htonl(inp.s_addr), ACTIVE);
 			sw_active_lease = 1;
 		} else if (xstrstr(line, "  binding state free", 20)) {
 			/* remove old entry, if exists */
 			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(htonl(inp.s_addr),FREE);
+			add_lease(htonl(inp.s_addr), FREE);
 		} else if (xstrstr(line, "  binding state backup", 22)) {
 			/* remove old entry, if exists */
 			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(htonl(inp.s_addr),BACKUP);
+			add_lease(htonl(inp.s_addr), BACKUP);
 		}
 
 		if ((macaddr != NULL)
@@ -151,12 +151,13 @@ int parse_leases(void)
 		    && (xstrstr(line, "  hardware ethernet", 19))) {
 			nth_field(3, macstring, line);
 			if (macstring) {
-			        macstring[17] = '\0';
-			        macaddr_p->ethernet = safe_strdup(macstring);
-			        macaddr_p->ip = safe_strdup(ipstring);
-			        macaddr_p->next = safe_malloc(sizeof(struct macaddr_t));
-			        macaddr_p = macaddr_p->next;
-			        macaddr_p->next = NULL;
+				macstring[17] = '\0';
+				macaddr_p->ethernet = safe_strdup(macstring);
+				macaddr_p->ip = safe_strdup(ipstring);
+				macaddr_p->next =
+				    safe_malloc(sizeof(struct macaddr_t));
+				macaddr_p = macaddr_p->next;
+				macaddr_p->next = NULL;
 			}
 		}
 	}

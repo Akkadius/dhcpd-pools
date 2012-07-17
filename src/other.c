@@ -71,7 +71,7 @@ extern void _exit();
 #endif
 
 #ifndef HAVE___FPENDING
-static size_t __fpending(FILE * fp)
+static size_t __fpending(FILE *fp)
 {
 	return (fp->_p - fp->_bf._base);
 }
@@ -110,12 +110,12 @@ int
 	/* two spaces are very common in lease file, after them
 	 * nearly everything differs */
 	if (a[2] != b[2]) {
-	  return false;
+		return false;
 	}
 	/* "  binding state " == 16 chars, this will skip right
-         * to first difering line. */
+	 * to first difering line. */
 	if (17 < len && a[17] != b[17]) {
-	  return false;
+		return false;
 	}
 	/* looking good, double check the whole thing... */
 	for (i = 0; a[i] != '\0' && b[i] != '\0'; i++) {
@@ -192,7 +192,7 @@ void clean_up(void)
 	free(shared_networks);
 }
 
-int close_stream(FILE * stream)
+int close_stream(FILE *stream)
 {
 	const int some_pending = (__fpending(stream) != 0);
 	const int prev_fail = (ferror(stream) != 0);

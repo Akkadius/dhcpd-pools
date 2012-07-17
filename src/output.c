@@ -426,7 +426,7 @@ static void output_long(FILE *restrict f, char const *restrict type,
 	fprintf(f, "  <%s class=ralign>%lu</%s>\n", type, unlong, type);
 }
 
-static void output_float(FILE * f, char const *restrict type, float fl)
+static void output_float(FILE *f, char const *restrict type, float fl)
 {
 	fprintf(f, "  <%s class=ralign>%.3f</%s>\n", type, fl, type);
 }
