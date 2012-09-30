@@ -2,6 +2,7 @@
 
 bin_PROGRAMS = dhcpd-pools
 AC_PROG_RANLIB = resolv
+AM_CPPFLAGS = -I. -I..
 
 dhcpd_pools_SOURCES = \
 	analyze.c \
@@ -13,5 +14,3 @@ dhcpd_pools_SOURCES = \
 	other.c \
 	output.c \
 	sort.c
-
-INCLUDES = -I. -I..
