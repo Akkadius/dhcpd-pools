@@ -797,7 +797,7 @@ int output_alarming(void)
 	FILE *outfile;
 	struct range_t *range_p;
 	struct shared_network_t *shared_p;
-	int i;
+	unsigned int i;
 	float perc;
 	int rw = 0, rc = 0, ro = 0, sw = 0, sc = 0, so = 0;
 	int ret_val, ret;
