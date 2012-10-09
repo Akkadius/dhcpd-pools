@@ -30,6 +30,7 @@ AC_CHECK_HEADERS([\
 	fcntl.h \
 	langinfo.h \
 	libintl.h \
+	limits.h \
 	netinet/in.h \
 	stddef.h \
 	stdio_ext.h \
@@ -62,10 +63,13 @@ AC_TYPE_SIZE_T
 AC_TYPE_UINT32_T
 
 # Checks for library functions.
+AC_FUNC_ERROR_AT_LINE
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
+AC_FUNC_STRTOD
 AC_CHECK_FUNCS([\
 	__fpending \
+	atexit \
 	error \
 	inet_ntoa \
 	memset \
