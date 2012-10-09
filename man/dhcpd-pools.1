@@ -5,17 +5,16 @@
 .\"	Add'l ontributions by:
 .\"		Dan Thorson
 .\"
-.TH DHCPD-POOLS "1" "September 2011" "dhcpd-pools" "User Commands"
+.TH DHCPD-POOLS "1" "October 2012" "dhcpd-pools" "User Commands"
 .SH NAME
 dhcpd-pools \- ISC dhcpd pools usage analysis
 .SH SYNOPSIS
 .B dhcpd-pools
 [options]
-[\fIOPTIONS\fR]
 .SH DESCRIPTION
 The program analyses ISC dhcpd shared network and pool usage and outputs the
 results in a format selected by user.
-.SH FIELDS
+.SH OUTPUT FIELDS
 .TP
 .I "shared net name"
 Name of the shared-network for the range.
@@ -54,7 +53,7 @@ is failover configuration.
 .I "bu perc"
 Percent of addresses that failover pair can allocate.  The percent appears
 only if there is failover configuration.
-.SH ARGUMENTS
+.SH OPTIONS
 .TP
 \fB\-c\fR, \fB\-\-config\fR=\fIFILE\fR
 Path to the dhcpd.conf file.
