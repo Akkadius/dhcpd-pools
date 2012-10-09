@@ -74,6 +74,7 @@ AC_CHECK_FUNCS([\
 	inet_ntoa \
 	memset \
 	nl_langinfo \
+	posix_fadvise \
 	strdup \
 	strerror \
 	strrchr \

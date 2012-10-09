@@ -80,20 +80,22 @@ int parse_leases(void)
 	if (dhcpd_leases == NULL) {
 		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
 	}
-#ifdef POSIX_FADV_WILLNEED
+#ifdef HAVE_POSIX_FADVISE
+# ifdef POSIX_FADV_WILLNEED
 	posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_WILLNEED);
 	if (errno) {
 		err(EXIT_FAILURE, "parse_leases: fadvise %s",
 		    config.dhcpdlease_file);
 	}
-#endif				/* POSIX_FADV_WILLNEED */
-#ifdef POSIX_FADV_SEQUENTIAL
+# endif				/* POSIX_FADV_WILLNEED */
+# ifdef POSIX_FADV_SEQUENTIAL
 	posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_SEQUENTIAL);
 	if (errno) {
 		err(EXIT_FAILURE, "parse_leases: fadvise %s",
 		    config.dhcpdlease_file);
 	}
-#endif				/* POSIX_FADV_SEQUENTIAL */
+# endif				/* POSIX_FADV_SEQUENTIAL */
+#endif				/* HAVE_POSIX_FADVISE */
 
 	/* I found out that there's one lease address per 300 bytes in
 	 * dhcpd.leases file. Malloc is little bit pessimistic and uses 250.
