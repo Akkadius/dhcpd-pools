@@ -35,14 +35,6 @@
 
 #include <config.h>
 
-#ifdef  HAVE_STDLIB_H
-#include <stdlib.h>
-#else				/* Not STDC_HEADERS */
-extern char *malloc();
-#define EXIT_FAILURE    1	/* Failing exit status.  */
-#define EXIT_SUCCESS    0	/* Successful exit status.  */
-#endif				/* STDC_HEADERS */
-
 #include <arpa/inet.h>
 #include <assert.h>
 #include <ctype.h>
@@ -54,13 +46,12 @@ extern char *malloc();
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/stat.h>
-#ifndef _XOPEN_SOURCE
-#define _XOPEN_SOURCE 600
-#endif
 
 #include "defaults.h"
 #include "dhcpd-pools.h"
+#include "xalloc.h"
 
 /* Parse dhcpd.leases file. All performance boosts for this function are
  * wellcome */
@@ -105,11 +96,11 @@ int parse_leases(void)
 		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
 	}
 
-	line = safe_malloc(sizeof(char) * MAXLEN);
-	ipstring = safe_malloc(sizeof(char) * MAXLEN);
+	line = xmalloc(sizeof(char) * MAXLEN);
+	ipstring = xmalloc(sizeof(char) * MAXLEN);
 	if (config.output_format[0] == 'X') {
-		macstring = safe_malloc(sizeof(char) * 18);
-		macaddr = safe_malloc(sizeof(struct macaddr_t));
+		macstring = xmalloc(sizeof(char) * 18);
+		macaddr = xmalloc(sizeof(struct macaddr_t));
 		macaddr_p = macaddr;
 		macaddr_p->next = NULL;
 	}
@@ -154,10 +145,10 @@ int parse_leases(void)
 			nth_field(3, macstring, line);
 			if (macstring) {
 				macstring[17] = '\0';
-				macaddr_p->ethernet = safe_strdup(macstring);
-				macaddr_p->ip = safe_strdup(ipstring);
+				macaddr_p->ethernet = xstrdup(macstring);
+				macaddr_p->ip = xstrdup(ipstring);
 				macaddr_p->next =
-				    safe_malloc(sizeof(struct macaddr_t));
+				    xmalloc(sizeof(struct macaddr_t));
 				macaddr_p = macaddr_p->next;
 				macaddr_p->next = NULL;
 			}
@@ -229,7 +220,7 @@ void parse_config(int is_include, const char *restrict config_file,
 	struct in_addr inp;
 	struct range_t *range_p;
 
-	word = safe_malloc(sizeof(char) * MAXLEN);
+	word = xmalloc(sizeof(char) * MAXLEN);
 
 	if (is_include) {
 		/* Default place holder for ranges "All networks". */
@@ -389,7 +380,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				if (RANGES < num_ranges + 1) {
 					RANGES *= 2;
 					ranges =
-					    safe_realloc(ranges,
+					    xrealloc(ranges,
 							 sizeof(struct
 								range_t) *
 							 RANGES);
@@ -413,7 +404,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				num_shared_networks++;
 				shared_p =
 				    shared_networks + num_shared_networks;
-				shared_p->name = safe_strdup(word);
+				shared_p->name = xstrdup(word);
 				shared_p->available = 0;
 				shared_p->used = 0;
 				shared_p->touched = 0;

@@ -34,19 +34,8 @@
  */
 
 #include <config.h>
-
-#ifdef  HAVE_STDLIB_H
 #include <stdlib.h>
-#else
-extern char *malloc();
-#endif
-
-#ifdef  HAVE_STRING_H
 #include <string.h>
-#else
-#include <strings.h>
-#endif
-
 #include <err.h>
 #include <errno.h>
 #include <getopt.h>
@@ -54,8 +43,11 @@ extern char *malloc();
 #include <stdio.h>
 #include <limits.h>
 
+#include "close-stream.h"
+#include "closeout.h"
 #include "defaults.h"
 #include "dhcpd-pools.h"
+#include "xalloc.h"
 
 int main(int argc, char **argv)
 {
@@ -88,9 +80,9 @@ int main(int argc, char **argv)
 	atexit(close_stdout);
 
 	/* FIXME: make these allocations dynamic up on need. */
-	config.dhcpdconf_file = safe_malloc(sizeof(char) * MAXLEN);
-	config.dhcpdlease_file = safe_malloc(sizeof(char) * MAXLEN);
-	config.output_file = safe_malloc(sizeof(char) * MAXLEN);
+	config.dhcpdconf_file = xmalloc(sizeof(char) * MAXLEN);
+	config.dhcpdlease_file = xmalloc(sizeof(char) * MAXLEN);
+	config.output_file = xmalloc(sizeof(char) * MAXLEN);
 
 	/* Make sure string has zero lenght if there is no
 	 * command line option */
@@ -228,7 +220,7 @@ int main(int argc, char **argv)
 	parse_leases();
 	prepare_data();
 	do_counting();
-	tmp_ranges = safe_malloc(sizeof(struct range_t) * num_ranges);
+	tmp_ranges = xmalloc(sizeof(struct range_t) * num_ranges);
 	if (sorts != 0) {
 		mergesort_ranges(ranges, num_ranges, tmp_ranges);
 	}
@@ -248,13 +240,13 @@ int prepare_memory(void)
 	RANGES = 64;
 	num_ranges = num_shared_networks = 0;
 	shared_networks =
-	    safe_malloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);
+	    xmalloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);
 
-	ranges = safe_malloc(sizeof(struct range_t) * RANGES);
+	ranges = xmalloc(sizeof(struct range_t) * RANGES);
 	macaddr = NULL;
 
 	/* First shared network entry is all networks */
-	shared_networks->name = safe_strdup("All networks");
+	shared_networks->name = xstrdup("All networks");
 	shared_networks->used = 0;
 	shared_networks->touched = 0;
 	shared_networks->backups = 0;

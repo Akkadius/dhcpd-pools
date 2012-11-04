@@ -6,7 +6,8 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([dhcpd-pools],
 	m4_esyscmd([build-aux/git-version-gen .tarball-version]),
 	[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
-AM_INIT_AUTOMAKE([-Wall foreign 1.10 tar-pax no-dist-gzip dist-xz -Wno-portability])
+AC_CONFIG_AUX_DIR([build-aux])
+AM_INIT_AUTOMAKE([-Wall foreign 1.10 tar-pax no-dist-gzip dist-xz -Wextra-portability])
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
@@ -15,6 +16,8 @@ AC_GNU_SOURCE
 # Checks for programs
 AC_PROG_AWK
 AC_PROG_CC_C99
+gl_EARLY
+gl_INIT
 AC_C_RESTRICT
 AC_PROG_CXX
 AC_PROG_MAKE_SET
@@ -82,6 +85,7 @@ AC_CHECK_FUNCS([\
 ])
 
 AC_CONFIG_FILES([Makefile
+		 lib/Makefile
 		 man/Makefile
 		 src/Makefile
 		 contrib/Makefile])

@@ -34,11 +34,12 @@
  */
 
 #include "dhcpd-pools.h"
+#include "xalloc.h"
 
 void add_lease(int ip, enum ltype type)
 {
 	struct leases_t *l;
-	l = safe_malloc(sizeof(struct leases_t));
+	l = xmalloc(sizeof(struct leases_t));
 	l->ip = ip;
 	l->type = type;
 	HASH_ADD_INT(leases, ip, l);

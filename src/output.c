@@ -38,6 +38,7 @@
 #include <arpa/inet.h>
 #include <err.h>
 #include <errno.h>
+#include <inttypes.h>
 #include <langinfo.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -45,10 +46,9 @@
 #include <sys/stat.h>
 #include <time.h>
 
-#define _FILE_OFFSET_BITS 64
-#include <inttypes.h>
-
+#include "close-stream.h"
 #include "dhcpd-pools.h"
+#include "strftime.h"
 
 int output_txt(void)
 {

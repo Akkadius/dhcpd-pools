@@ -37,68 +37,14 @@
 
 #include "dhcpd-pools.h"
 
-#ifdef  HAVE_STDLIB_H
-#include <stdlib.h>
-#else
-extern void exit();
-extern char *malloc();
-extern void _exit();
-#endif
-
-#ifdef  HAVE_STRING_H
-#include <string.h>
-#else
-#include <strings.h>
-#endif
-
 #include <err.h>
 #include <errno.h>
-#ifdef HAVE_ERROR_H
-#include <error.h>
-#endif
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
-#ifdef HAVE_STDIO_EXT_H
-#include <stdio_ext.h>
-#endif
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-
-#ifndef HAVE_ERROR
-#ifdef __FreeBSD__
-#define error errc
-#endif
-#endif
-
-#ifndef HAVE___FPENDING
-static size_t __fpending(FILE *fp)
-{
-	return (fp->_p - fp->_bf._base);
-}
-#endif
-
-/* Simple memory allocation wrapper */
-void *safe_malloc(const size_t size)
-{
-	void *ret = malloc(size);
-	if (ret == NULL) {
-		err(EXIT_FAILURE,
-		    "safe_malloc: cannot allocate %lu bytes: ", size);
-	}
-
-	return ret;
-}
-
-/* Simple memory reallocation wrapper */
-void *safe_realloc(void *ptr, const size_t size)
-{
-	void *ret = realloc(ptr, size);
-
-	if (!ret && size)
-		err(EXIT_FAILURE,
-		    "safe_realloc: cannot allocate %lu bytes", size);
-	return ret;
-}
 
 int
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
@@ -124,16 +70,6 @@ int
 		}
 	}
 	return true;
-}
-
-/* Simple strdup wrapper */
-char *safe_strdup(const char *restrict str)
-{
-	char *ret = strdup(str);
-
-	if (!ret && str)
-		err(EXIT_FAILURE, "cannot duplicate string");
-	return ret;
 }
 
 /* Return percentage value */
@@ -190,32 +126,6 @@ void clean_up(void)
 	free(ranges);
 	delete_all_leases();
 	free(shared_networks);
-}
-
-int close_stream(FILE *stream)
-{
-	const int some_pending = (__fpending(stream) != 0);
-	const int prev_fail = (ferror(stream) != 0);
-	const int fclose_fail = (fclose(stream) != 0);
-	if (prev_fail || (fclose_fail && (some_pending || errno != EBADF))) {
-		if (!fclose_fail)
-			errno = 0;
-		return EOF;
-	}
-	return 0;
-}
-
-/* Use atexit(); */
-void close_stdout(void)
-{
-	if (close_stream(stdout) != 0 && !(errno == EPIPE)) {
-		char const *write_error = "write error";
-		error(0, errno, "%s", write_error);
-		_exit(EXIT_FAILURE);
-	}
-
-	if (close_stream(stderr) != 0)
-		_exit(EXIT_FAILURE);
 }
 
 void __attribute__ ((__noreturn__)) print_version(void)

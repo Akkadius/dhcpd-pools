@@ -168,20 +168,8 @@ int do_counting(void);
 void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
-void *safe_malloc(const size_t size)
-#if __GNUC__ >= 3
-    __attribute__ ((__malloc__))
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
-    __attribute__ ((__alloc_size__((1))))
-#endif
-#endif
-    ;
-void *safe_realloc(void *__restrict ptr, const size_t size);
-char *safe_strdup(const char *__restrict str) __attribute__ ((nonnull(1)));
 int xstrstr(char *__restrict a, const char *__restrict b, int len);
 double strtod_or_err(const char *__restrict str, const char *__restrict errmesg);
-int close_stream(FILE * stream);
-void close_stdout(void);
 void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
