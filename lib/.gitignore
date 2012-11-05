@@ -159,3 +159,9 @@
 /xstrtod.h
 /xstrtod.lo
 /xstrtod.o
+/fcntl.in.h
+/langinfo.in.h
+/netinet_in.in.h
+/stdalign.in.h
+/sys_socket.in.h
+/sys_uio.in.h

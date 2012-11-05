@@ -29,19 +29,10 @@ LT_INIT
 # Checks for header files.
 AC_CHECK_HEADERS([\
 	arpa/inet.h \
-	error.h \
 	fcntl.h \
-	langinfo.h \
 	libintl.h \
 	limits.h \
-	netinet/in.h \
-	stddef.h \
-	stdio_ext.h \
-	stdlib.h \
-	string.h \
-	strings.h \
 	sys/socket.h \
-	unistd.h \
 ])
 
 AC_ARG_WITH(uthash,
@@ -67,21 +58,15 @@ AC_TYPE_UINT32_T
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([\
 	__fpending \
 	atexit \
-	error \
 	inet_ntoa \
 	memset \
-	nl_langinfo \
 	posix_fadvise \
 	strdup \
-	strerror \
 	strrchr \
-	strstr \
 ])
 
 AC_CONFIG_FILES([Makefile
