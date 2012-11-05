@@ -168,7 +168,7 @@ int do_counting(void);
 void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
-int xstrstr(char *__restrict a, const char *__restrict b, int len);
+int xstrstr(const char *__restrict a, const char *__restrict b, int len);
 double strtod_or_err(const char *__restrict str, const char *__restrict errmesg);
 void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));

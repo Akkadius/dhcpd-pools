@@ -42,7 +42,7 @@
 #include "dhcpd-pools.h"
 
 /* Clean up data */
-static int ip_sort(struct leases_t *a, struct leases_t *b)
+static int ip_sort(const struct leases_t *restrict a, const struct leases_t *restrict b)
 {
 	if (a->ip < b->ip)
 		return -1;
@@ -61,8 +61,8 @@ int prepare_data(void)
 /* Join leases and ranges into couter structs */
 int do_counting(void)
 {
-	struct range_t *range_p;
-	struct leases_t *l;
+	struct range_t *restrict range_p;
+	const struct leases_t *restrict l;
 	unsigned long i, k, block_size;
 
 	range_p = ranges;

@@ -50,7 +50,7 @@ int
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((hot))
 #endif
-    xstrstr(char *restrict a, const char *restrict b, int len)
+    xstrstr(const char *restrict a, const char *restrict b, const int len)
 {
 	int i;
 	/* two spaces are very common in lease file, after them
