@@ -165,3 +165,5 @@
 /stdalign.in.h
 /sys_socket.in.h
 /sys_uio.in.h
+/fcntl.h
+/langinfo.h
