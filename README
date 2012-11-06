@@ -2,7 +2,7 @@ This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
 
 == Quick start
 
-	./autogen.sh
+	./bootstrap
 	./configure --prefix=/usr/local
 	make
 	make install
@@ -27,6 +27,12 @@ This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
 
 == Dependencies to other projects
 
+	http://www.gnu.org/software/gnulib/
+
+		If you have gnulib checked out somewhere at file
+		system you can avoid download by setting
+		GNULIB_SRCDIR environment variable.
+
 	http://uthash.sourceforge.net/
 
 == Test data wanted
@@ -47,8 +53,8 @@ This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
 
 AUTOTOOLS:
 
-	* "./autogen.sh" generates all files needed to compile
-	  and install the code (run it after checkout from git)
+	* "./bootstrap" generates all files needed to compile and
+	  install the code (run it after checkout from git)
 
 	* "make distclean" removes all unnecessary files, but the
 	  code can still be recompiled with "./configure; make"
