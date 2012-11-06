@@ -6,6 +6,29 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.19
+$ git shortlog v2.18..v2.19
+Sami Kerola (19):
+      alarming: make native nagios support to dhcpd-pools
+      docs: add examples to manual page
+      docs: add note how to limit alarming scope
+      contrib: add nagios.conf example
+      build-sys: create only xz compressed distribution package
+      all: fix compiler warninings
+      style: fix few indentation issues
+      build-sys: use AM_CPPFLAGS rather than INCLUDES
+      output: fix sign-compare warning [clang]
+      build-sys: add what autoscan found bein missing
+      build-sys: be conservative about posix_fadvice
+      docs: clarify man page
+      build-sys: add gnulib
+      build-sys: clean gnulib & autotools checks
+      performance: add few restict and const key words
+      build-sys: remove files which where added by accident
+      docs: mention gnulib in README file
+      build-sys: update gitignore
+      release: 2.19
+
 Version 2.18
 $ git shortlog v2.17..v2.18
 Ryan Steinmetz (1):
