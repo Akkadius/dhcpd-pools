@@ -55,6 +55,8 @@ int prepare_data(void)
 {
 	/* Sort leases */
 	HASH_SORT(leases, ip_sort);
+	/* Sort ranges */
+	qsort(ranges, (size_t) num_ranges, sizeof(struct range_t), &rangecomp);
 	return 0;
 }
 
@@ -62,17 +64,20 @@ int prepare_data(void)
 int do_counting(void)
 {
 	struct range_t *restrict range_p;
-	const struct leases_t *restrict l;
+	const struct leases_t *restrict l = leases;
 	unsigned long i, k, block_size;
 
-	range_p = ranges;
 	unsigned long r_end;
+	range_p = ranges;
 
 	/* Walk through ranges */
 	for (i = 0; i < num_ranges; i++) {
-		/* Count IPs in use */
+		for (; l != NULL && range_p->first_ip < l->ip; l = l->hh.prev)
+			/* rewind */ ;
+		if (l == NULL)
+			l = leases;
 		r_end = range_p->last_ip + 1;
-		for (l = leases; l != NULL && l->ip < r_end; l = l->hh.next) {
+		for (; l != NULL && l->ip < r_end; l = l->hh.next) {
 			if (l->ip < range_p->first_ip) {
 				/* should not be necessary */
 				continue;
