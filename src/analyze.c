@@ -66,11 +66,13 @@ int do_counting(void)
 	unsigned long i, k, block_size;
 
 	range_p = ranges;
+	unsigned long r_end;
 
 	/* Walk through ranges */
 	for (i = 0; i < num_ranges; i++) {
 		/* Count IPs in use */
-		for (l = leases; l != NULL && range_p->last_ip >= l->ip; l = l->hh.next) {
+		r_end = range_p->last_ip + 1;
+		for (l = leases; l != NULL && l->ip < r_end; l = l->hh.next) {
 			if (l->ip < range_p->first_ip) {
 				/* should not be necessary */
 				continue;
