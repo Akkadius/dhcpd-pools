@@ -188,6 +188,8 @@ int nth_field(int n, char *restrict dest, const char *restrict src)
 		} else {
 			if (j == 0) {
 				wordn++;
+				if (n + 1 < wordn)
+					break;
 			}
 			if (wordn == n) {
 				dest[j] = src[i];
