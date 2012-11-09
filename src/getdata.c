@@ -196,15 +196,13 @@ int nth_field(int n, char *restrict dest, const char *restrict src)
 /* dhcpd.conf interesting words */
 static int is_interesting_config_clause(char const *restrict s)
 {
-	if (strstr(s, "range")) {
+	if (strstr(s, "range"))
 		return 3;
-	} else if (strstr(s, "shared-network")) {
+	if (strstr(s, "shared-network"))
 		return 1;
-	} else if (strstr(s, "include")) {
+	if (strstr(s, "include"))
 		return 4;
-	} else {
-		return 0;
-	}
+	return 0;
 }
 
 /* FIXME: This spagetti monster function need to be rewrote at least ones. */
