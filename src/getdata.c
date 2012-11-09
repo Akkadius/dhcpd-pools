@@ -112,8 +112,8 @@ int parse_leases(void)
 		}
 		/* It's a lease, save IP */
 		if (xstrstr(line, "lease", 5)) {
-			strncpy(ipstring, line, MAXLEN);
-			nth_field(2, ipstring, ipstring);
+			memcpy(ipstring, line + 6, 16);
+			nth_field(ipstring, ipstring);
 			inet_aton(ipstring, &inp);
 			sw_active_lease = 0;
 			continue;
@@ -147,7 +147,7 @@ int parse_leases(void)
 		if ((macaddr != NULL)
 		    && (sw_active_lease == 1)
 		    && (xstrstr(line, "  hardware ethernet", 19))) {
-			nth_field(3, macstring, line);
+			nth_field(macstring, line + 20);
 			if (macstring) {
 				macstring[17] = '\0';
 				macaddr_p->ethernet = xstrdup(macstring);
@@ -168,36 +168,18 @@ int parse_leases(void)
 	return 0;
 }
 
-/* Like strcpy but for field which is separated by white spaces. Number of
- * first field is 1 and not 0 like C programs should have. Question of
- * semantics, send mail to author if this annoys. All performance boosts for
- * this function are well come. */
-int nth_field(int n, char *restrict dest, const char *restrict src)
+/* Like strcpy but for field which is separated by white spaces. */
+void nth_field(char *restrict dest, const char *restrict src)
 {
-	int i, j = 0, wordn = 0, len;
-
+	size_t i, len;
 	len = strlen(src);
-
 	for (i = 0; i < len; i++) {
-		if (isspace(src[i])) {
-			if (!(wordn < n)) {
-				dest[j] = '\0';
-				break;
-			}
-			j = 0;
-		} else {
-			if (j == 0) {
-				wordn++;
-				if (n + 1 < wordn)
-					break;
-			}
-			if (wordn == n) {
-				dest[j] = src[i];
-			}
-			j++;
+		dest[i] = src[i];
+		if (src[i] == ' ' || dest[i] == '\0') {
+			dest[i] = '\0';
+			break;
 		}
 	}
-	return 0;
 }
 
 /* dhcpd.conf interesting words */
