@@ -84,11 +84,11 @@ int do_counting(void)
 			}
 			/* IP in range */
 			switch (l->type) {
-			case ACTIVE:
-				range_p->count++;
-				break;
 			case FREE:
 				range_p->touched++;
+				break;
+			case ACTIVE:
+				range_p->count++;
 				break;
 			case BACKUP:
 				range_p->backups++;
@@ -97,11 +97,11 @@ int do_counting(void)
 
 			if (range_p->shared_net) {
 				switch (l->type) {
-				case ACTIVE:
-					range_p->shared_net->used++;
-					break;
 				case FREE:
 					range_p->shared_net->touched++;
+					break;
+				case ACTIVE:
+					range_p->shared_net->used++;
 					break;
 				case BACKUP:
 					range_p->shared_net->backups++;

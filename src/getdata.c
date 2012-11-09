@@ -116,29 +116,34 @@ int parse_leases(void)
 			nth_field(2, ipstring, ipstring);
 			inet_aton(ipstring, &inp);
 			sw_active_lease = 0;
+			continue;
+		}
+		if (xstrstr(line, "  binding state free", 20)) {
+			/* remove old entry, if exists */
+			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
+				delete_lease(lease);
+			}
+			add_lease(htonl(inp.s_addr), FREE);
+			continue;
 		}
 		/* Copy IP to correct array */
-		else if (xstrstr(line, "  binding state active", 22)) {
+		if (xstrstr(line, "  binding state active", 22)) {
 			/* remove old entry, if exists */
 			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
 			add_lease(htonl(inp.s_addr), ACTIVE);
 			sw_active_lease = 1;
-		} else if (xstrstr(line, "  binding state free", 20)) {
-			/* remove old entry, if exists */
-			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
-				delete_lease(lease);
-			}
-			add_lease(htonl(inp.s_addr), FREE);
-		} else if (xstrstr(line, "  binding state backup", 22)) {
+			continue;
+		}
+		if (xstrstr(line, "  binding state backup", 22)) {
 			/* remove old entry, if exists */
 			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
 			add_lease(htonl(inp.s_addr), BACKUP);
+			continue;
 		}
-
 		if ((macaddr != NULL)
 		    && (sw_active_lease == 1)
 		    && (xstrstr(line, "  hardware ethernet", 19))) {
