@@ -48,10 +48,9 @@ int intcomp(const void *restrict x, const void *restrict y)
 {
 	if (*(uint32_t *) x < *(uint32_t *) y)
 		return -1;
-	else if (*(uint32_t *) y < *(uint32_t *) x)
+	if (*(uint32_t *) y < *(uint32_t *) x)
 		return 1;
-	else
-		return 0;
+	return 0;
 }
 
 int rangecomp(const void *restrict r1, const void *restrict r2)
@@ -59,11 +58,10 @@ int rangecomp(const void *restrict r1, const void *restrict r2)
 	if ((((struct range_t *)r1)->first_ip) <
 	    (((struct range_t *)r2)->first_ip))
 		return -1;
-	else if ((((struct range_t *)r2)->first_ip) <
+	if ((((struct range_t *)r2)->first_ip) <
 		 (((struct range_t *)r1)->first_ip))
 		return 1;
-	else
-		return 0;
+	return 0;
 }
 
 unsigned long int ret_ip(struct range_t r)
