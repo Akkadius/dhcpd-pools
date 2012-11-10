@@ -149,13 +149,11 @@ int get_order(struct range_t *restrict left, struct range_t *restrict right)
 			ret =
 			    strcmp(left->shared_net->name,
 				   right->shared_net->name);
-			if (0 < ret) {
+			if (0 < ret)
 				return (0);
-			} else if (ret < 0) {
+			if (ret < 0)
 				return (1);
-			} else {
-				continue;
-			}
+			continue;
 		}
 
 		/* Select which function is pointed by returner */
