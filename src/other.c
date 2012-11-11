@@ -55,7 +55,7 @@ int
 	int i;
 	/* two spaces are very common in lease file, after them
 	 * nearly everything differs */
-	if (a[2] != b[2]) {
+	if (likely(a[2] != b[2])) {
 		return false;
 	}
 	/* "  binding state " == 16 chars, this will skip right

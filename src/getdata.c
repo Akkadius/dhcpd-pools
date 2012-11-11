@@ -175,7 +175,7 @@ void nth_field(char *restrict dest, const char *restrict src)
 	len = strlen(src);
 	for (i = 0; i < len; i++) {
 		dest[i] = src[i];
-		if (src[i] == ' ' || dest[i] == '\0') {
+		if (unlikely(src[i] == ' ')) {
 			dest[i] = '\0';
 			break;
 		}
@@ -233,7 +233,7 @@ void parse_config(int is_include, const char *restrict config_file,
 #endif				/* POSIX_FADV_SEQUENTIAL */
 
 	/* Very hairy stuff begins. */
-	while (!feof(dhcpd_config)) {
+	while (unlikely(!feof(dhcpd_config))) {
 		c = fgetc(dhcpd_config);
 		/* Certain characters are magical */
 		switch (c) {

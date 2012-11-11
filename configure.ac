@@ -69,6 +69,20 @@ AC_CHECK_FUNCS([\
 	strrchr \
 ])
 
+AC_MSG_CHECKING([if the compiler supports __builtin_expect])
+AC_TRY_COMPILE(, [
+    return __builtin_expect(1, 1) ? 1 : 0
+], [
+    have_builtin_expect=yes
+    AC_MSG_RESULT([yes])
+], [
+    have_builtin_expect=no
+    AC_MSG_RESULT([no])
+])
+if test x$have_builtin_expect = xyes ; then
+    AC_DEFINE([HAVE_BUILTIN_EXPECT], [1], [Define to 1 if the compiler supports __builtin_expect.])
+fi
+
 AC_CONFIG_FILES([Makefile
 		 lib/Makefile
 		 man/Makefile
