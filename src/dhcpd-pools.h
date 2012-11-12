@@ -126,7 +126,12 @@ int do_counting(void);
 void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
-int xstrstr(const char *__restrict a, const char *__restrict b, int len);
+int xstrstr(const char *__restrict a, const char *__restrict b, int len)
+    __attribute__ ((nonnull(1, 2)))
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+    __attribute__ ((__hot__))
+#endif
+    ;
 double strtod_or_err(const char *__restrict str, const char *__restrict errmesg);
 void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
