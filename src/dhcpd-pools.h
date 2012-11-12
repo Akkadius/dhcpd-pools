@@ -40,58 +40,8 @@
 #include <arpa/inet.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <uthash.h>
-
-/* Feature test switches */
-#define _POSIX_SOURCE 1
-#define POSIXLY_CORRECT 1
-
-#ifdef	HAVE_STDLIB_H
-#else
-extern void exit();
-extern char *malloc();
-#define EXIT_FAILURE	1
-#define EXIT_SUCCESS	0
-#endif				/* STDC_HEADERS */
-
-#ifdef  HAVE_STRING_H
 #include <string.h>
-#else
-#include <strings.h>
-#endif
-
-#ifndef HAVE_PROGRAM_INVOCATION_SHORT_NAME
-#  ifdef HAVE___PROGNAME
-extern char *__progname;
-#    define program_invocation_short_name __progname
-#  else				/* HAVE___PROGNAME */
-#    ifdef HAVE_GETEXECNAME
-#      include <stdlib.h>
-#      define program_invocation_short_name \
-       prog_inv_sh_nm_from_file(getexecname(), 0)
-#    else			/* HAVE_GETEXECNAME */
-#      define program_invocation_short_name \
-       prog_inv_sh_nm_from_file(__FILE__, 1)
-#    endif			/* HAVE_PROGRAM_INVOCATION_SHORT_NAME */
-char prog_inv_sh_nm_buf[256];
-inline char *prog_inv_sh_nm_from_file(char *f, char stripext)
-{
-	char *t;
-	if ((t = strrchr(f, '/')) != NULL) {
-		t++;
-	} else {
-		t = f;
-	}
-	strncpy(prog_inv_sh_nm_buf, t, sizeof(prog_inv_sh_nm_buf) - 1);
-	prog_inv_sh_nm_buf[sizeof(prog_inv_sh_nm_buf) - 1] = '\0';
-
-	if (stripext && (t = strrchr(prog_inv_sh_nm_buf, '.')) != NULL) {
-		*t = '\0';
-	}
-	return prog_inv_sh_nm_buf;
-}
-#  endif
-#endif
+#include <uthash.h>
 
 #ifdef HAVE_BUILTIN_EXPECT
 # define likely(x)	__builtin_expect(!!(x), 1)
