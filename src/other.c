@@ -59,7 +59,7 @@ int
 		return false;
 	}
 	/* "  binding state " == 16 chars, this will skip right
-	 * to first difering line. */
+	 * to first differing line. */
 	if (17 < len && a[17] != b[17]) {
 		return false;
 	}
@@ -160,7 +160,7 @@ This is ISC dhcpd pools usage analyzer.\n\
   -s, --sort=[nimcptTe]  sort ranges by\n\
                            n name\n\
                            i IP\n\
-                           m maxium\n\
+                           m maximum\n\
                            c current\n\
                            p percent\n\
                            t touched\n\

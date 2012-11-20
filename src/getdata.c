@@ -54,7 +54,7 @@
 #include "xalloc.h"
 
 /* Parse dhcpd.leases file. All performance boosts for this function are
- * wellcome */
+ * welcome */
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
@@ -194,7 +194,7 @@ static int is_interesting_config_clause(char const *restrict s)
 	return 0;
 }
 
-/* FIXME: This spagetti monster function need to be rewrote at least ones. */
+/* FIXME: This spaghetti monster function need to be rewrote at least ones. */
 void parse_config(int is_include, const char *restrict config_file,
 		  struct shared_network_t *restrict shared_p)
 {
@@ -267,7 +267,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				i = 0;
 			} else if (argument == 2) {
 				/* Range ends to ; and this hair in code
-				 * make two ranges wrote to gether like...
+				 * make two ranges wrote together like...
 				 *
 				 * range 10.20.30.40 10.20.30.41;range 10.20.30.42 10.20.30.43;
 				 *
@@ -398,7 +398,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				shared_p->backups = 0;
 				if (SHARED_NETWORKS < num_shared_networks + 2) {
 					/* FIXME: make this
-					 * away by reallocationg
+					 * away by reallocating
 					 * more space. */
 					errx(EXIT_FAILURE,
 					     "parse_config: increase default.h SHARED_NETWORKS and recompile");

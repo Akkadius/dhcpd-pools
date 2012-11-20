@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 	config.dhcpdlease_file = xmalloc(sizeof(char) * MAXLEN);
 	config.output_file = xmalloc(sizeof(char) * MAXLEN);
 
-	/* Make sure string has zero lenght if there is no
+	/* Make sure string has zero length if there is no
 	 * command line option */
 	config.output_file[0] = '\0';
 	/* Alarming defaults. */

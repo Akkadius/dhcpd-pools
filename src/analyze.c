@@ -60,7 +60,7 @@ int prepare_data(void)
 	return 0;
 }
 
-/* Join leases and ranges into couter structs */
+/* Join leases and ranges into counter structs */
 int do_counting(void)
 {
 	struct range_t *restrict range_p;
@@ -121,7 +121,7 @@ int do_counting(void)
 	}
 
 	/* FIXME: During count of other shared networks default network and
-	 * all networks got mixed to gether semantically. This fixes the
+	 * all networks got mixed together semantically. This fixes the
 	 * problem, but is not elegant. */
 	shared_networks->available = 0;
 	shared_networks->used = 0;
