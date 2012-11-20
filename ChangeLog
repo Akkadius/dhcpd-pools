@@ -23,7 +23,7 @@ See "git log" for change information.
 
 2009-05-14  Dan Thorson
         * Memory boundary check. Lack of this caused illegal memory
-	  refrences when there was plenty of backup leases.
+	  references when there was plenty of backup leases.
 
 2009-02-18  Sami Kerola  <kerolasa@iki.fi> && Dan Thorson
 	* posix_fadvice to make read-ahead quicker. (SK)
