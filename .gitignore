@@ -13,6 +13,7 @@
 /contrib/Makefile
 /contrib/Makefile.in
 /depcomp
+/gnulib/
 /INSTALL
 /install-sh
 /libtool
