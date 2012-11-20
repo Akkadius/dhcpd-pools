@@ -120,28 +120,28 @@ int parse_leases(void)
 		}
 		if (xstrstr(line, "  binding state free", 20)) {
 			/* remove old entry, if exists */
-			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
+			if ((lease = find_lease(ntohl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(htonl(inp.s_addr), FREE);
+			add_lease(ntohl(inp.s_addr), FREE);
 			continue;
 		}
 		/* Copy IP to correct array */
 		if (xstrstr(line, "  binding state active", 22)) {
 			/* remove old entry, if exists */
-			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
+			if ((lease = find_lease(ntohl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(htonl(inp.s_addr), ACTIVE);
+			add_lease(ntohl(inp.s_addr), ACTIVE);
 			sw_active_lease = 1;
 			continue;
 		}
 		if (xstrstr(line, "  binding state backup", 22)) {
 			/* remove old entry, if exists */
-			if ((lease = find_lease(htonl(inp.s_addr))) != NULL) {
+			if ((lease = find_lease(ntohl(inp.s_addr))) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(htonl(inp.s_addr), BACKUP);
+			add_lease(ntohl(inp.s_addr), BACKUP);
 			continue;
 		}
 		if ((macaddr != NULL)
@@ -358,7 +358,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				range_p = ranges + num_ranges;
 				inet_aton(word, &inp);
 				argument = 0;
-				range_p->last_ip = htonl(inp.s_addr) + 1;
+				range_p->last_ip = ntohl(inp.s_addr) + 1;
 				range_p->count = 0;
 				range_p->touched = 0;
 				range_p->backups = 0;
@@ -383,7 +383,7 @@ void parse_config(int is_include, const char *restrict config_file,
 					 * again */
 					break;
 				}
-				range_p->first_ip = htonl(inp.s_addr) - 1;
+				range_p->first_ip = ntohl(inp.s_addr) - 1;
 				argument = 2;
 				break;
 			case 1:
