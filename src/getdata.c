@@ -358,7 +358,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				range_p = ranges + num_ranges;
 				inet_aton(word, &inp);
 				argument = 0;
-				range_p->last_ip = ntohl(inp.s_addr) + 1;
+				range_p->last_ip = ntohl(inp.s_addr);
 				range_p->count = 0;
 				range_p->touched = 0;
 				range_p->backups = 0;
@@ -383,7 +383,7 @@ void parse_config(int is_include, const char *restrict config_file,
 					 * again */
 					break;
 				}
-				range_p->first_ip = ntohl(inp.s_addr) - 1;
+				range_p->first_ip = ntohl(inp.s_addr);
 				argument = 2;
 				break;
 			case 1:

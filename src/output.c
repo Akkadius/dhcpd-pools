@@ -83,8 +83,8 @@ int output_txt(void)
 	}
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip + 1);
-			last.s_addr = ntohl(range_p->last_ip - 1);
+			first.s_addr = ntohl(range_p->first_ip);
+			last.s_addr = ntohl(range_p->last_ip);
 
 			if (range_p->shared_net) {
 				fprintf(outfile, "%-20s",
@@ -97,23 +97,23 @@ int output_txt(void)
 				" - %-16s %5" PRIu32
 				" %5lu %10.3f  %5lu %5lu %9.3f",
 				inet_ntoa(last),
-				range_p->last_ip - range_p->first_ip - 1,
+				range_p->last_ip - range_p->first_ip + 1,
 				range_p->count,
 				(float)(100 * range_p->count) /
-				(range_p->last_ip - range_p->first_ip - 1),
+				(range_p->last_ip - range_p->first_ip + 1),
 				range_p->touched,
 				range_p->touched + range_p->count,
 				(float)(100 *
 					(range_p->touched +
 					 range_p->count)) / (range_p->last_ip -
-							     range_p->first_ip -
+							     range_p->first_ip +
 							     1));
 			if (0 < num_backups) {
 				fprintf(outfile, "%7lu %8.3f",
 					range_p->backups,
 					(float)(100 * range_p->backups) /
 					(range_p->last_ip -
-					 range_p->first_ip - 1));
+					 range_p->first_ip + 1));
 			}
 			fprintf(outfile, "\n");
 			range_p++;
@@ -242,8 +242,8 @@ int output_xml(void)
 
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip + 1);
-			last.s_addr = ntohl(range_p->last_ip - 1);
+			first.s_addr = ntohl(range_p->first_ip);
+			last.s_addr = ntohl(range_p->last_ip);
 			fprintf(outfile, "<subnet>\n");
 			if (range_p->shared_net) {
 				fprintf(outfile,
@@ -259,11 +259,11 @@ int output_xml(void)
 			fprintf(outfile, "- %s</range>\n", inet_ntoa(last));
 			fprintf(outfile, "\t<gateway></gateway>\n");
 			fprintf(outfile, "\t<defined>%" PRIu32 "</defined>\n",
-				range_p->last_ip - range_p->first_ip - 1);
+				range_p->last_ip - range_p->first_ip + 1);
 			fprintf(outfile, "\t<used>%lu</used>\n",
 				range_p->count);
 			fprintf(outfile, "\t<free>%lu</free>\n",
-				range_p->last_ip - range_p->first_ip - 1 -
+				range_p->last_ip - range_p->first_ip + 1 -
 				range_p->count);
 			range_p++;
 			fprintf(outfile, "</subnet>\n");
@@ -497,8 +497,8 @@ int output_html(void)
 	}
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip + 1);
-			last.s_addr = ntohl(range_p->last_ip - 1);
+			first.s_addr = ntohl(range_p->first_ip);
+			last.s_addr = ntohl(range_p->last_ip);
 			newrow(outfile);
 			if (range_p->shared_net) {
 				output_line(outfile, "td", "calign",
@@ -510,12 +510,12 @@ int output_html(void)
 			output_line(outfile, "td", "calign", inet_ntoa(first));
 			output_line(outfile, "td", "calign", inet_ntoa(last));
 			output_long(outfile, "td",
-				    range_p->last_ip - range_p->first_ip - 1);
+				    range_p->last_ip - range_p->first_ip + 1);
 			output_long(outfile, "td", range_p->count);
 			output_float(outfile, "td",
 				     (float)(100 * range_p->count) /
 				     (range_p->last_ip -
-				      range_p->first_ip - 1));
+				      range_p->first_ip + 1));
 			output_long(outfile, "td", range_p->touched);
 			output_long(outfile, "td",
 				    range_p->touched + range_p->count);
@@ -524,14 +524,14 @@ int output_html(void)
 					     (range_p->touched +
 					      range_p->count)) /
 				     (range_p->last_ip -
-				      range_p->first_ip - 1));
+				      range_p->first_ip + 1));
 			if (0 < num_backups) {
 				output_long(outfile, "td", range_p->backups);
 				output_float(outfile, "td",
 					     (float)(100 *
 						     range_p->backups) /
 					     (range_p->last_ip -
-					      range_p->first_ip - 1));
+					      range_p->first_ip + 1));
 			}
 			endrow(outfile);
 			range_p++;
@@ -675,8 +675,8 @@ int output_csv(void)
 	}
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip + 1);
-			last.s_addr = ntohl(range_p->last_ip - 1);
+			first.s_addr = ntohl(range_p->first_ip);
+			last.s_addr = ntohl(range_p->last_ip);
 			if (range_p->shared_net) {
 				fprintf(outfile, "\"%s\",",
 					range_p->shared_net->name);
@@ -688,23 +688,23 @@ int output_csv(void)
 				"\"%s\",\"%" PRIu32
 				"\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
 				inet_ntoa(last),
-				range_p->last_ip - range_p->first_ip - 1,
+				range_p->last_ip - range_p->first_ip + 1,
 				range_p->count,
 				(float)(100 * range_p->count) /
-				(range_p->last_ip - range_p->first_ip - 1),
+				(range_p->last_ip - range_p->first_ip + 1),
 				range_p->touched,
 				range_p->touched + range_p->count,
 				(float)(100 *
 					(range_p->touched +
 					 range_p->count)) / (range_p->last_ip -
-							     range_p->first_ip -
+							     range_p->first_ip +
 							     1));
 			if (0 < num_backups) {
 				fprintf(outfile, ",\"%lu\",\"%.3f\"",
 					range_p->backups,
 					(float)(100 * range_p->backups) /
 					(range_p->last_ip -
-					 range_p->first_ip - 1));
+					 range_p->first_ip + 1));
 			}
 
 			fprintf(outfile, "\n");
@@ -818,7 +818,7 @@ int output_alarming(void)
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
 			perc = (float)(100 * range_p->count) /
-			    (range_p->last_ip - range_p->first_ip - 1);
+			    (range_p->last_ip - range_p->first_ip + 1);
 			if (config.critical < perc)
 				rc++;
 			else if (config.warning < perc)

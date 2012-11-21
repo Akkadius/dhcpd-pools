@@ -76,6 +76,8 @@ int do_counting(void)
 			/* rewind */ ;
 		if (l == NULL)
 			l = leases;
+		/* last_ip + 1 make comparison to small bit quicker as it results to
+		 * be 'smaller than' not 'smaller or equal to' */
 		r_end = range_p->last_ip + 1;
 		for (; l != NULL && l->ip < r_end; l = l->hh.next) {
 			if (l->ip < range_p->first_ip) {
@@ -112,7 +114,7 @@ int do_counting(void)
 
 		/* Size of range, shared net & all networks */
 		block_size =
-		    (unsigned int)(range_p->last_ip - range_p->first_ip - 1);
+		    (unsigned int)(range_p->last_ip - range_p->first_ip + 1);
 		if (range_p->shared_net) {
 			range_p->shared_net->available += block_size;
 		}
@@ -129,7 +131,7 @@ int do_counting(void)
 	range_p = ranges;
 	for (k = 0; k < num_ranges; k++) {
 		shared_networks->available +=
-		    range_p->last_ip - range_p->first_ip - 1;
+		    range_p->last_ip - range_p->first_ip + 1;
 		shared_networks->used += range_p->count;
 		shared_networks->touched += range_p->touched;
 		shared_networks->backups += range_p->backups;
