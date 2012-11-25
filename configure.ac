@@ -108,6 +108,20 @@ AC_ARG_WITH([output-limit],
 AC_DEFINE_UNQUOTED([OUTPUT_LIMIT], ["$output_limit"], [default output limit])
 AC_SUBST([OUTPUT_LIMIT], [$output_limit])
 
+AC_ARG_WITH([warning],
+	[AC_HELP_STRING([--with-warning=NUM], [monitoring warning default])],
+	[warning_percent="$withval"],
+	[warning_percent="80"])
+AC_DEFINE_UNQUOTED([ALARM_WARN], [$warning_percent], [monitoring warning default])
+AC_SUBST([ALARM_WARN], [$warning_percent])
+
+AC_ARG_WITH([critical],
+	[AC_HELP_STRING([--with-critical=NUM], [monitoring critical default])],
+	[critical_percent="$withval"],
+	[critical_percent="90"])
+AC_DEFINE_UNQUOTED([ALARM_CRIT], [$critical_percent], [monitoring critical default])
+AC_SUBST([ALARM_CRIT], [$critical_percent])
+
 AC_CONFIG_FILES([
 	Makefile
 	lib/Makefile

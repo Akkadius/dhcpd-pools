@@ -45,8 +45,4 @@ static const unsigned int SHARED_NETWORKS = 8192;
 /* Maximum number of ranges */
 unsigned int RANGES;
 
-/* Alarming defaults */
-#define ALARM_WARN 80
-#define ALARM_CRIT 90
-
 #endif				/* DEFAULTS_H */

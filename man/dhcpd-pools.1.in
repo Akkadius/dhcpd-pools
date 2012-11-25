@@ -134,7 +134,7 @@ If only range monitoring is needed one can limit output by using option
 and for shared network monitoring similar is
 .IR \-L20 .
 If critical level is not speficied it defaults to
-.BR 90 .
+.BR @ALARM_WARN@ .
 The
 .I percent
 argument allows fractions to be used.  Alarm output is intended to be
@@ -145,7 +145,7 @@ The option is similar to warning, with exception of return value which
 is
 .BR 2 .
 If warning level is not specified it defaults to
-.BR 80 .
+.BR @ALARM_CRIT@ .
 .TP
 \fB\-v\fR, \fB\-\-version\fR
 Print version information to standard output and exit successfully.
