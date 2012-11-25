@@ -129,22 +129,22 @@ Turn on alarm output format, and specify percentage number which will
 cause an alarm.  If either a range or shared network will exceed
 warning level return value of the command is
 .BR 1 .
-If only range monitoring is needed one can limit output by using option
-.IR \-L10 ,
-and for shared network monitoring similar is
+If only range monitoring is needed one can use limit option for scoping,
+for example
+.IR \-L10 .
+To monitor shared network only the limit would be
 .IR \-L20 .
-If critical level is not speficied it defaults to
+If warning percentage is not speficied it defaults to
 .BR @ALARM_WARN@ .
 The
 .I percent
-argument allows fractions to be used.  Alarm output is intended to be
-used with monitoring, such as Nagios.
+argument allows fractions, e.g., 88.8, to be used.
 .TP
 \fB\-\-critical\fR=\fIpercent\fR
 The option is similar to warning, with exception of return value which
 is
 .BR 2 .
-If warning level is not specified it defaults to
+If critical percentage is not specified it defaults to
 .BR @ALARM_CRIT@ .
 .TP
 \fB\-v\fR, \fB\-\-version\fR
