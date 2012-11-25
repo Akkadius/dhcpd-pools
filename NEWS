@@ -6,6 +6,35 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.20
+$ git shortlog v2.19..v2.20
+Cheer Xiao (3):
+      ignore /gnulib/
+      Replace all htonl in getdata.c with ntohl.
+      Fix spelling mistakes.
+
+Sami Kerola (20):
+      analyze: use simpler comparison
+      analyze: sort ranges before analysis
+      sort: fix if else return statements
+      getdata: fix if else return statements
+      analyze, getdata: write functions in frequency order
+      getdata: stop looking after interesting field
+      getdata: skip strings before nth_field analysis
+      analyze: use gnulib
+      sort: fix get_order() if else return statement
+      (un)likely: use __builtin_expect to inform expected path
+      header: let gnulib do what it is best of
+      xstrstr: add function attributes
+      docs: fix spelling mistakes
+      getdata & analyze: fix first_ip and last_ip arithmetics
+      man: use configured dhcpd.conf and dhcpd.leases paths
+      build-sys: update gitignore
+      build-sys: clean up configure.ac
+      build-sys: make alarm warning & critical default configurable
+      man: fix errors in alarm warning and critical options text
+      release: 2.20
+
 Version 2.19
 $ git shortlog v2.18..v2.19
 Sami Kerola (19):
