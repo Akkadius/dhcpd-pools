@@ -38,18 +38,18 @@ AC_CHECK_HEADERS([\
 ])
 
 AC_ARG_WITH(uthash,
-AC_HELP_STRING([--with-uthash=DIR], [Use uthash from [DIR]/uthash.h)]),
-[ case "$with_uthash" in
-  yes)
-    ;;
-  no)
-    AC_MSG_ERROR([the uthash.h is required])
-    ;;
-  *)
-    CPPFLAGS="$CPPFLAGS -I$with_uthash"
-    ;;
-  esac]
-)
+AC_HELP_STRING([--with-uthash=DIR], [Use uthash from [DIR]/uthash.h)]), [
+	case "$with_uthash" in
+	yes)
+		;;
+	no)
+		AC_MSG_ERROR([the uthash.h is required])
+		;;
+	*)
+		CPPFLAGS="$CPPFLAGS -I$with_uthash"
+		;;
+	esac
+])
 AC_CHECK_HEADER(uthash.h, [], [AC_MSG_ERROR([Unable to find uthash.h])])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -60,45 +60,25 @@ AC_TYPE_UINT32_T
 
 # Checks for library functions.
 AC_FUNC_ERROR_AT_LINE
-AC_FUNC_STRTOD
 AC_CHECK_FUNCS([\
 	__fpending \
-	atexit \
-	inet_ntoa \
-	memset \
 	posix_fadvise \
-	strdup \
-	strrchr \
 ])
 
 AC_MSG_CHECKING([if the compiler supports __builtin_expect])
 AC_TRY_COMPILE(, [
-    return __builtin_expect(1, 1) ? 1 : 0
+	return __builtin_expect(1, 1) ? 1 : 0
 ], [
-    have_builtin_expect=yes
-    AC_MSG_RESULT([yes])
+	have_builtin_expect=yes
+	AC_MSG_RESULT([yes])
 ], [
-    have_builtin_expect=no
-    AC_MSG_RESULT([no])
+	have_builtin_expect=no
+	AC_MSG_RESULT([no])
 ])
-if test x$have_builtin_expect = xyes ; then
-    AC_DEFINE([HAVE_BUILTIN_EXPECT], [1], [Define to 1 if the compiler supports __builtin_expect.])
-fi
-
-AC_MSG_CHECKING(whether program_invocation_short_name is defined)
-AC_TRY_COMPILE([#include <argp.h>],
-		[program_invocation_short_name = "test";],
-		AC_DEFINE(HAVE_PROGRAM_INVOCATION_SHORT_NAME, 1,
-			[Define if program_invocation_short_name is defined])
-		AC_MSG_RESULT(yes),
-		AC_MSG_RESULT(no))
-
-AC_MSG_CHECKING([whether __progname is defined])
-AC_LINK_IFELSE([AC_LANG_PROGRAM([extern char *__progname;],
-	[if (*__progname == 0) return;])],
-	AC_DEFINE(HAVE___PROGNAME, 1, [Define if __progname is defined])
-	AC_MSG_RESULT(yes),
-	AC_MSG_RESULT(no))
+AS_IF([test x$have_builtin_expect = xyes], [
+	AC_DEFINE([HAVE_BUILTIN_EXPECT], [1],
+		[The compiler supports __builtin_expect])
+])
 
 AC_ARG_WITH([dhcpd-conf],
 	[AC_HELP_STRING([--with-dhcpd-conf=FILE], [default path of dhcpd.conf])],
@@ -128,11 +108,13 @@ AC_ARG_WITH([output-limit],
 AC_DEFINE_UNQUOTED([OUTPUT_LIMIT], ["$output_limit"], [default output limit])
 AC_SUBST([OUTPUT_LIMIT], [$output_limit])
 
-AC_CONFIG_FILES([Makefile
-		 lib/Makefile
-		 man/Makefile
-		 man/dhcpd-pools.1
-		 src/Makefile
-		 contrib/Makefile])
+AC_CONFIG_FILES([
+	Makefile
+	lib/Makefile
+	src/Makefile
+	man/Makefile
+	man/dhcpd-pools.1
+	contrib/Makefile
+])
 
 AC_OUTPUT
