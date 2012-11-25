@@ -162,6 +162,7 @@
 /fcntl.in.h
 /langinfo.in.h
 /netinet_in.in.h
+/stdalign.h
 /stdalign.in.h
 /sys_socket.in.h
 /sys_uio.in.h
