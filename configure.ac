@@ -6,6 +6,8 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([dhcpd-pools],
 	m4_esyscmd([build-aux/git-version-gen .tarball-version]),
 	[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
+PACKAGE_MAINTAINER="Sami Kerola"
+AC_SUBST([PACKAGE_MAINTAINER])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall foreign 1.10 tar-pax no-dist-gzip dist-xz -Wextra-portability])
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
@@ -83,12 +85,6 @@ if test x$have_builtin_expect = xyes ; then
     AC_DEFINE([HAVE_BUILTIN_EXPECT], [1], [Define to 1 if the compiler supports __builtin_expect.])
 fi
 
-AC_CONFIG_FILES([Makefile
-		 lib/Makefile
-		 man/Makefile
-		 src/Makefile
-		 contrib/Makefile])
-
 AC_MSG_CHECKING(whether program_invocation_short_name is defined)
 AC_TRY_COMPILE([#include <argp.h>],
 		[program_invocation_short_name = "test";],
@@ -104,21 +100,39 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([extern char *__progname;],
 	AC_MSG_RESULT(yes),
 	AC_MSG_RESULT(no))
 
-AC_ARG_WITH(dhcpd-conf,
-	[AC_HELP_STRING([--with-dhcpd-conf], [default path of dhcpd.conf])],
-	AC_DEFINE_UNQUOTED(DHCPDCONF_FILE,"$withval"),
-	AC_DEFINE(DHCPDCONF_FILE,["/etc/dhcpd.conf"],[default path of dhcpd.conf]))
-AC_ARG_WITH(dhcpd-leases,
-	[AC_HELP_STRING([--with-dhcpd-leases], [default path of dhcpd.leases])],
-	AC_DEFINE_UNQUOTED(DHCPDLEASE_FILE,"$withval"),
-	AC_DEFINE(DHCPDLEASE_FILE,["/var/lib/dhcp/dhcpd.leases"],[default path of dhcpd.leases]))
-AC_ARG_WITH(output-format,
-	[AC_HELP_STRING([--with-output-format], [default output format])],
-	AC_DEFINE_UNQUOTED(OUTPUT_FORMAT,"$withval"),
-	AC_DEFINE(OUTPUT_FORMAT,["text"],[default output format]))
-AC_ARG_WITH(output-limit,
-	[AC_HELP_STRING([--with-output-limit], [default output limitations])],
-	AC_DEFINE_UNQUOTED(OUTPUT_LIMIT,"$withval"),
-	AC_DEFINE(OUTPUT_LIMIT,["77"],[default output limitations]))
+AC_ARG_WITH([dhcpd-conf],
+	[AC_HELP_STRING([--with-dhcpd-conf=FILE], [default path of dhcpd.conf])],
+	[dhcpd_conf_path="$withval"],
+	[dhcpd_conf_path="/etc/dhcpd.conf"])
+AC_DEFINE_UNQUOTED([DHCPDCONF_FILE], ["$dhcpd_conf_path"], [default path of dhcpd.conf])
+AC_SUBST([DHCPDCONF_FILE], [$dhcpd_conf_path])
+
+AC_ARG_WITH([dhcpd-leases],
+	[AC_HELP_STRING([--with-dhcpd-leases=FILE], [default path of dhcpd.leases])],
+	[dhcpd_leases_path="$withval"],
+	[dhcpd_leases_path="/var/lib/dhcp/dhcpd.leases"])
+AC_DEFINE_UNQUOTED([DHCPDLEASE_FILE], ["$dhcpd_leases_path"], [default path of dhcpd.leases])
+AC_SUBST([DHCPDLEASE_FILE], [$dhcpd_leases_path])
+
+AC_ARG_WITH([output-format],
+	[AC_HELP_STRING([--with-output-format=FORMAT], [default output format])],
+	[output_format="$withval"],
+	[output_format="text"])
+AC_DEFINE_UNQUOTED([OUTPUT_FORMAT], ["$output_format"], [default output format])
+AC_SUBST([OUTPUT_FORMAT], [$output_format])
+
+AC_ARG_WITH([output-limit],
+	[AC_HELP_STRING([--with-output-limit=MASK], [default output limit])],
+	[output_limit="$withval"],
+	[output_limit="77"])
+AC_DEFINE_UNQUOTED([OUTPUT_LIMIT], ["$output_limit"], [default output limit])
+AC_SUBST([OUTPUT_LIMIT], [$output_limit])
+
+AC_CONFIG_FILES([Makefile
+		 lib/Makefile
+		 man/Makefile
+		 man/dhcpd-pools.1
+		 src/Makefile
+		 contrib/Makefile])
 
 AC_OUTPUT

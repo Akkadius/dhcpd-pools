@@ -1,11 +1,4 @@
-.\"	Sami Kerola
-.\"	http://www.iki.fi/kerolasa/
-.\"	kerolasa@iki.fi
-.\"
-.\"	Add'l ontributions by:
-.\"		Dan Thorson
-.\"
-.TH DHCPD-POOLS "1" "October 2012" "dhcpd-pools" "User Commands"
+.TH DHCPD-POOLS "1" "2012-11-25" "@PACKAGE_STRING@" "User Commands"
 .SH NAME
 dhcpd-pools \- ISC dhcpd pools usage analysis
 .SH SYNOPSIS
@@ -63,15 +56,15 @@ Path to the dhcpd.leases file.
 .TP
 \fB\-s\fR, \fB\-\-sort\fR=\fI[nimcptTe]\fR
 Sort ranges by chosen fields as a sorting keys.  Maximum of five sort keys
-can be defined.  Keys weight from left to right i.e. if more weighting keys
+can be defined.  Keys weight from left to right, i.e., if more weighting keys
 are equal next one is used.  The IP field is default sort key.
 .TP
 \fB\-r\fR, \fB\-\-reverse\fR
 Sort results in reverse order.
 .TP
 \fB\-f\fR, \fB\-\-format\fR=\fI[thHcxX]\fR
-Output format.  The default is
-text
+Output format.
+Text
 .RI ( t ).
 Standard html
 .RI ( h )
@@ -85,6 +78,9 @@ stands for comma-separated values.  Output format xml
 is similar to the dhcpstatus Perl module output.  The extended xml
 .RI ( X )
 format will print ethernet address details.
+.IP
+The default format is
+.IR @OUTPUT_FORMAT@ .
 .TP
 \fB\-o\fR, \fB\-\-output\fR=\fIFILE\fR
 .I File
@@ -103,7 +99,7 @@ The first digit determines which headers to display, and the second digit
 determines which numeric analysis tables to include in the output.  The
 following values are "OR'd" together to create the desired output.  The
 default is
-.IR 77 .
+.IR @OUTPUT_LIMIT@ .
 .PP
 .RS
 .PD 0
@@ -176,10 +172,10 @@ $ dhcpd-pools -c dhcpd.conf -l dhcpd.leases --critical 80.1 --warning 75
 CRITICAL: dhcpd-pools: Ranges; crit: 14 warn: 22 ok: 220 Shared nets; crit: 1 warn: 0 ok: 4
 .SH FILES
 .TP
-/etc/dhcpd.conf
+@DHCPDCONF_FILE@
 ISC dhcpd configuration file.
 .TP
-/var/lib/dhcp/dhcpd.leases
+@DHCPDLEASE_FILE@
 ISC dhcpd lease file.
 .SH AUTHOR
 Written by Sami Kerola.
@@ -189,11 +185,11 @@ XML support by Dominic Germain, Sogetel inc.
 The software has FreeBSD License.
 .SH "REPORTING BUGS"
 Report bugs to
-.MT kerolasa@iki.fi
-Sami Kerola
+.MT @PACKAGE_BUGREPORT@
+@PACKAGE_MAINTAINER@
 .ME
 .br
-.UR http://dhcpd-pools.sourceforge.net/
+.UR @PACKAGE_URL@
 Home page
 .UE
 .SH "SEE ALSO"
