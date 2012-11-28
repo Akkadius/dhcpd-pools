@@ -1,4 +1,4 @@
-#                                               -*- Autoconf -*-
+# -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.64)
@@ -17,7 +17,6 @@ AC_GNU_SOURCE
 
 # Checks for programs
 AC_PROG_AWK
-AC_PROG_CC_C99
 gl_EARLY
 gl_INIT
 AC_C_RESTRICT
