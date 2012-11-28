@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 	fullhtml = false;
 
 	/* Make sure some output format is selected by default */
-	strncpy(config.output_format, OUTPUT_FORMAT, (size_t) 1);
+	strncpy(config.output_format, OUTPUT_FORMAT, (size_t)1);
 
 	/* Default sort order is by IPs small to big */
 	config.reverse_order = false;
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 			break;
 		case 'f':
 			/* Output format */
-			strncpy(config.output_format, optarg, (size_t) 1);
+			strncpy(config.output_format, optarg, (size_t)1);
 			break;
 		case 's':
 			/* Output sorting option */
@@ -133,10 +133,10 @@ int main(int argc, char **argv)
 			if (5 < sorts) {
 				warnx
 				    ("main: only first 5 sort orders will be used");
-				strncpy(config.sort, optarg, (size_t) 5);
+				strncpy(config.sort, optarg, (size_t)5);
 				sorts = 5;
 			} else {
-				strncpy(config.sort, optarg, (size_t) sorts);
+				strncpy(config.sort, optarg, (size_t)sorts);
 			}
 			for (i = 0; i < sorts; i++) {
 				field_selector(config.sort[i]);
@@ -165,11 +165,13 @@ int main(int argc, char **argv)
 			break;
 		case OPT_WARN:
 			strcpy(config.output_format, "a");
-			config.warning = strtod_or_err(optarg, "illegal argument");
+			config.warning =
+			    strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_CRIT:
 			strcpy(config.output_format, "a");
-			config.critical = strtod_or_err(optarg, "illegal argument");
+			config.critical =
+			    strtod_or_err(optarg, "illegal argument");
 			break;
 		case 'v':
 			/* Print version */

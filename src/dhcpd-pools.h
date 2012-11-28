@@ -36,20 +36,20 @@
 #ifndef DHCPD_POOLS_H
 # define DHCPD_POOLS_H 1
 
-#include <config.h>
-#include <arpa/inet.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-#include <uthash.h>
+# include <config.h>
+# include <arpa/inet.h>
+# include <stddef.h>
+# include <stdio.h>
+# include <string.h>
+# include <uthash.h>
 
-#ifdef HAVE_BUILTIN_EXPECT
-# define likely(x)	__builtin_expect(!!(x), 1)
-# define unlikely(x)	__builtin_expect(!!(x), 0)
-#else
-# define likely(x)	(x)
-# define unlikely(x)	(x)
-#endif
+# ifdef HAVE_BUILTIN_EXPECT
+#  define likely(x)	__builtin_expect(!!(x), 1)
+#  define unlikely(x)	__builtin_expect(!!(x), 0)
+# else
+#  define likely(x)	(x)
+#  define unlikely(x)	(x)
+# endif
 
 /* Structures and unions */
 struct configuration_t {
@@ -89,7 +89,7 @@ enum ltype {
 	BACKUP
 };
 struct leases_t {
-	uint32_t ip;	/* ip as key */
+	uint32_t ip;		/* ip as key */
 	enum ltype type;
 	UT_hash_handle hh;
 };
@@ -113,31 +113,35 @@ struct macaddr_t *macaddr;
 /* Function prototypes */
 int prepare_memory(void);
 int parse_leases(void);
-void parse_config(int, const char *__restrict, struct shared_network_t *__restrict)
+void parse_config(int, const char *__restrict,
+		  struct shared_network_t *__restrict)
     __attribute__ ((nonnull(2, 3)));
 void nth_field(char *__restrict dest, const char *__restrict src)
     __attribute__ ((nonnull(1, 2)))
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((__hot__))
-#endif
+# endif
     ;
 int prepare_data(void);
 int do_counting(void);
-void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
+void flip_ranges(struct range_t *__restrict ranges,
+		 struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
 int xstrstr(const char *__restrict a, const char *__restrict b, int len)
     __attribute__ ((nonnull(1, 2)))
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((__hot__))
-#endif
+# endif
     ;
-double strtod_or_err(const char *__restrict str, const char *__restrict errmesg);
+double strtod_or_err(const char *__restrict str,
+		     const char *__restrict errmesg);
 void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
-int intcomp(const void *__restrict x, const void *__restrict y) __attribute__ ((nonnull(1, 2)));
+int intcomp(const void *__restrict x, const void *__restrict y)
+    __attribute__ ((nonnull(1, 2)));
 int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
@@ -153,7 +157,8 @@ unsigned long int ret_tcperc(struct range_t r);
 void field_selector(char c);
 int get_order(struct range_t *__restrict left, struct range_t *__restrict right)
     __attribute__ ((nonnull(1, 2)));
-void mergesort_ranges(struct range_t *__restrict orig, int size, struct range_t *__restrict temp)
+void mergesort_ranges(struct range_t *__restrict orig, int size,
+		      struct range_t *__restrict temp)
     __attribute__ ((nonnull(1, 3)));
 /* output function pointer and functions */
 int (*output_analysis) (void);
@@ -166,8 +171,8 @@ int output_alarming(void);
 void clean_up(void);
 /* Hash functions */
 void add_lease(int ip, enum ltype type);
-struct leases_t * find_lease(int ip);
-void delete_lease(struct leases_t * lease);
+struct leases_t *find_lease(int ip);
+void delete_lease(struct leases_t *lease);
 void delete_all_leases();
 
 #endif				/* DHCPD_POOLS_H */

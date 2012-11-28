@@ -368,9 +368,8 @@ void parse_config(int is_include, const char *restrict config_file,
 					RANGES *= 2;
 					ranges =
 					    xrealloc(ranges,
-							 sizeof(struct
-								range_t) *
-							 RANGES);
+						     sizeof(struct
+							    range_t) * RANGES);
 					range_p = ranges + num_ranges;
 				}
 				newclause = true;

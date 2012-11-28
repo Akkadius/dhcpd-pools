@@ -59,7 +59,7 @@ int rangecomp(const void *restrict r1, const void *restrict r2)
 	    (((struct range_t *)r2)->first_ip))
 		return -1;
 	if ((((struct range_t *)r2)->first_ip) <
-		 (((struct range_t *)r1)->first_ip))
+	    (((struct range_t *)r1)->first_ip))
 		return 1;
 	return 0;
 }
@@ -174,7 +174,8 @@ int get_order(struct range_t *restrict left, struct range_t *restrict right)
 	return (0);
 }
 
-void mergesort_ranges(struct range_t *restrict orig, int size, struct range_t *restrict temp)
+void mergesort_ranges(struct range_t *restrict orig, int size,
+		      struct range_t *restrict temp)
 {
 	int left, right, i;
 	struct range_t hold;
