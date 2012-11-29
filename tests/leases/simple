@@ -1,0 +1,48 @@
+lease 10.0.0.0 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:00;
+}
+lease 10.0.0.1 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:01;
+}
+lease 10.0.0.2 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:02;
+}
+lease 10.0.0.3 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:03;
+}
+lease 10.0.0.4 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:04;
+}
+lease 10.0.0.5 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:05;
+}
+lease 10.0.0.6 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:06;
+}
+lease 10.0.0.7 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:07;
+}
+lease 10.0.0.8 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:08;
+}
+lease 10.0.0.9 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:09;
+}
+lease 10.0.0.10 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:10;
+}
+lease 10.0.0.11 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:11;
+}

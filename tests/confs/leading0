@@ -1,0 +1,5 @@
+subnet 10.0.0.0  netmask 255.255.255.0 {
+	pool {
+		range dynamic-bootp 10.0.0.001 10.0.0.010;
+	}
+}

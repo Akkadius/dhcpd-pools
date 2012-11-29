@@ -1,0 +1,10 @@
+Ranges:
+shared net name     first ip           last ip            max   cur    percent  touch   t+c  t+c perc
+All networks        10.0.0.1         - 10.0.0.8             8     8    100.000      0     8   100.000
+
+Shared networks:
+name                   max   cur     percent  touch    t+c  t+c perc
+
+Sum of all ranges:
+name                   max   cur     percent  touch    t+c  t+c perc
+All networks             8     8    100.000       0      8   100.000

@@ -4,4 +4,4 @@ AUTOMAKE_OPTIONS = gnu
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = m4/gnulib-cache.m4
-SUBDIRS = lib src man contrib
+SUBDIRS = lib src man tests contrib

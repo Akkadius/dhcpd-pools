@@ -127,6 +127,7 @@ AC_CONFIG_FILES([
 	src/Makefile
 	man/Makefile
 	man/dhcpd-pools.1
+	tests/Makefile
 	contrib/Makefile
 ])
 
