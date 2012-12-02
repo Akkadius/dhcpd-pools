@@ -111,7 +111,6 @@ unsigned long get_range_size(const struct range_t *r)
 			size <<= 8;
 			size += (int)r->last_ip.v6[i] - (int)r->first_ip.v6[i];
 		}
-		fprintf(stderr, "\n");
 		return size + 1;
 	} else {
 		return r->last_ip.v4 - r->first_ip.v4 + 1;
