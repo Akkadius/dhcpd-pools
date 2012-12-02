@@ -1,0 +1,10 @@
+subnet6 dead:abba:1000::/56 {
+        range6 dead:abba:1000::2 dead:abba:1000:00ff:ffff:ffff:ffff:ffff;
+        prefix6 dead:abba:1000:0100:: dead:abba:1000:ff00::/56;
+}
+
+subnet6 dead:abba:40ff::/56 {
+        range6 dead:abba:4000::2 dead:abba:4000::00ff;
+        prefix6 dead:abba:4000:0100:: dead:abba:4000:ff00::/56;
+}
+

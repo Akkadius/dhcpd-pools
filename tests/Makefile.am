@@ -7,7 +7,7 @@ EXTRA_DIST = \
 	simple \
 	test.sh
 
-TESTS = simple bootp leading0
+TESTS = simple bootp leading0 v6
 check_SCRIPTS = test.sh
 
 check-local: $(SHELL) $(top_srcdir)/tests/test.sh

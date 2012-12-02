@@ -1,0 +1,78 @@
+ia-na "sample" {
+  iaaddr dead:abba:1000:b4:a4e4:7b7a:140a:9ab1 {
+    binding state active;
+  }
+}
+
+ia-na "sample" {
+  iaaddr dead:abba:1000:c0:812a:6e4c:cc3:782d {
+    binding state active;
+  }
+}
+
+ia-na "sample" {
+  iaaddr dead:abba:1000:ce:3507:ad74:2645:d041 {
+    binding state expired;
+  }
+}
+
+ia-na "sample" {
+  iaaddr dead:abba:4000::68 {
+    binding state expired;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:1000:fe00::/56 {
+    binding state active;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:4000:ff00::/56 {
+    binding state expired;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:4000:fe00::/56 {
+    binding state expired;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:4000:ff00::/56 {
+    binding state expired;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:1000:ff00::/56 {
+    binding state expired;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:4000:ff00::/56 {
+    binding state expired;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:4000:fe00::/56 {
+    binding state expired;
+  }
+}
+
+ia-pd "sample" {
+  iaprefix dead:abba:1000:fe00::/56 {
+    binding state active;
+  }
+}
+
+ia-na "sample" {
+  iaaddr dead:abba:1000:b4:a4e4:7b7a:140a:9ab1 {
+    binding state active;
+  }
+}
+
