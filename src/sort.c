@@ -53,20 +53,35 @@ int intcomp(const void *restrict x, const void *restrict y)
 	return 0;
 }
 
+int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
+{
+	if (dhcp_version == VERSION_6) {
+		return memcmp(&a->v6, &b->v6, sizeof(a->v6));
+	} else {
+		if (a->v4 < b->v4)
+			return -1;
+		if (a->v4 > b->v4)
+			return 1;
+		return 0;
+	}
+}
+
+int leasecomp(const void *restrict a, const void *restrict b)
+{
+	return ipcomp(&((const struct leases_t *)a)->ip,
+		      &((const struct leases_t *)b)->ip);
+}
+
 int rangecomp(const void *restrict r1, const void *restrict r2)
 {
-	if ((((struct range_t *)r1)->first_ip) <
-	    (((struct range_t *)r2)->first_ip))
-		return -1;
-	if ((((struct range_t *)r2)->first_ip) <
-	    (((struct range_t *)r1)->first_ip))
-		return 1;
-	return 0;
+	return ipcomp(&((const struct range_t *)r1)->first_ip,
+		      &((const struct range_t *)r2)->first_ip);
 }
 
 unsigned long int ret_ip(struct range_t r)
 {
-	return (r.first_ip);
+	/* FIXME: IPv6 */
+	return (r.first_ip.v4);
 }
 
 unsigned long int ret_cur(struct range_t r)
@@ -76,13 +91,13 @@ unsigned long int ret_cur(struct range_t r)
 
 unsigned long int ret_max(struct range_t r)
 {
-	return (r.last_ip - r.first_ip);
+	return get_range_size(&r);
 }
 
 unsigned long int ret_percent(struct range_t r)
 {
 	float f;
-	f = (float)r.count / (r.last_ip - r.first_ip - 1);
+	f = (float)r.count / get_range_size(&r);
 	return ((unsigned long int)(f * 100000));
 }
 
@@ -99,7 +114,7 @@ unsigned long int ret_tc(struct range_t r)
 unsigned long int ret_tcperc(struct range_t r)
 {
 	float f;
-	f = (float)(r.count + r.touched) / (r.last_ip - r.first_ip - 1);
+	f = (float)(r.count + r.touched) / get_range_size(&r);
 	return ((unsigned long int)(f * 10000));
 }
 

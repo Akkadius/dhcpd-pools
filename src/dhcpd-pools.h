@@ -52,7 +52,26 @@
 # endif
 
 /* Structures and unions */
+union ipaddr_t {
+	uint32_t v4;
+	unsigned char v6[16];
+};
+enum dhcp_version {
+	VERSION_4,
+	VERSION_6,
+	VERSION_UNKNOWN,
+};
+enum prefix_t {
+	PREFIX_LEASE,
+	PREFIX_BINDING_STATE_FREE,
+	PREFIX_BINDING_STATE_ACTIVE,
+	PREFIX_BINDING_STATE_BACKUP,
+	PREFIX_HARDWARE_ETHERNET,
+	NUM_OF_PREFIX
+};
+
 struct configuration_t {
+	char dhcpv6;
 	char *dhcpdconf_file;
 	char *dhcpdlease_file;
 	char output_format[2];
@@ -72,8 +91,8 @@ struct shared_network_t {
 };
 struct range_t {
 	struct shared_network_t *shared_net;
-	uint32_t first_ip;
-	uint32_t last_ip;
+	union ipaddr_t first_ip;
+	union ipaddr_t last_ip;
 	unsigned long int count;
 	unsigned long int touched;
 	unsigned long int backups;
@@ -89,13 +108,16 @@ enum ltype {
 	BACKUP
 };
 struct leases_t {
-	uint32_t ip;		/* ip as key */
+	union ipaddr_t ip;	/* ip as key */
 	enum ltype type;
 	UT_hash_handle hh;
 };
 
 /* Global variables */
+const char *prefixes[2][NUM_OF_PREFIX];
+int prefix_length[2][NUM_OF_PREFIX];
 struct configuration_t config;
+enum dhcp_version dhcp_version;
 static int const output_limit_bit_1 = 1;
 static int const output_limit_bit_2 = 2;
 static int const output_limit_bit_3 = 4;
@@ -128,6 +150,11 @@ void flip_ranges(struct range_t *__restrict ranges,
 		 struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
+int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst);
+void copy_ipaddr(union ipaddr_t *restrict dst,
+		 const union ipaddr_t *restrict src);
+const char *ntop_ipaddr(const union ipaddr_t *ip);
+unsigned long get_range_size(const struct range_t *r);
 int xstrstr(const char *__restrict a, const char *__restrict b, int len)
     __attribute__ ((nonnull(1, 2)))
 # if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
@@ -142,6 +169,8 @@ void usage(int status) __attribute__ ((noreturn));
 /* ...for ranges and... */
 int intcomp(const void *__restrict x, const void *__restrict y)
     __attribute__ ((nonnull(1, 2)));
+int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int leasecomp(const void *restrict a, const void *restrict b);
 int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
@@ -170,8 +199,8 @@ int output_alarming(void);
 /* Memory release, file closing etc */
 void clean_up(void);
 /* Hash functions */
-void add_lease(int ip, enum ltype type);
-struct leases_t *find_lease(int ip);
+void add_lease(union ipaddr_t *ip, enum ltype type);
+struct leases_t *find_lease(union ipaddr_t *ip);
 void delete_lease(struct leases_t *lease);
 void delete_all_leases();
 

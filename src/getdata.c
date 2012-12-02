@@ -53,13 +53,34 @@
 #include "dhcpd-pools.h"
 #include "xalloc.h"
 
+/* The .indent.pro in use will mess formatting of array below.  Please do
+ * not commit less readable indentation.  */
+const char *prefixes[2][NUM_OF_PREFIX] = {
+	[VERSION_4] = {
+		       [PREFIX_LEASE]                = "lease ",
+		       [PREFIX_BINDING_STATE_FREE]   = "  binding state free",
+		       [PREFIX_BINDING_STATE_ACTIVE] = "  binding state active",
+		       [PREFIX_BINDING_STATE_BACKUP] = "  binding state backup",
+		       [PREFIX_HARDWARE_ETHERNET]    = "  hardware ethernet"
+	},
+	[VERSION_6] = {
+		       [PREFIX_LEASE]                = "  iaaddr ",
+		       [PREFIX_BINDING_STATE_FREE]   = "    binding state free",
+		       [PREFIX_BINDING_STATE_ACTIVE] = "    binding state active",
+		       [PREFIX_BINDING_STATE_BACKUP] = "    binding state backup",
+		       [PREFIX_HARDWARE_ETHERNET]    = "    hardware ethernet"
+	}
+};
+
+int prefix_length[2][NUM_OF_PREFIX] = { };
+
 /* Parse dhcpd.leases file. All performance boosts for this function are
  * welcome */
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
 	char *line, *ipstring, *macstring = NULL;
-	struct in_addr inp;
+	union ipaddr_t addr;
 	struct stat lease_file_stats;
 	struct macaddr_t *macaddr_p = NULL;
 	int sw_active_lease = 0;
@@ -105,43 +126,46 @@ int parse_leases(void)
 		macaddr_p->next = NULL;
 	}
 
+	const char **p = prefixes[dhcp_version];
+	int *l = prefix_length[dhcp_version];
+#define HAS_PREFIX(line, type) xstrstr((line), p[type], l[type])
+
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases)) {
 			err(EXIT_FAILURE, "parse_leases: %s",
 			    config.dhcpdlease_file);
 		}
 		/* It's a lease, save IP */
-		if (xstrstr(line, "lease", 5)) {
-			memcpy(ipstring, line + 6, 16);
-			nth_field(ipstring, ipstring);
-			inet_aton(ipstring, &inp);
+		if (HAS_PREFIX(line, PREFIX_LEASE)) {
+			nth_field(ipstring, line + l[PREFIX_LEASE]);
+			parse_ipaddr(ipstring, &addr);
 			sw_active_lease = 0;
 			continue;
 		}
-		if (xstrstr(line, "  binding state free", 20)) {
+		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_FREE)) {
 			/* remove old entry, if exists */
-			if ((lease = find_lease(ntohl(inp.s_addr))) != NULL) {
+			if ((lease = find_lease(&addr)) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(ntohl(inp.s_addr), FREE);
+			add_lease(&addr, FREE);
 			continue;
 		}
 		/* Copy IP to correct array */
-		if (xstrstr(line, "  binding state active", 22)) {
+		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_ACTIVE)) {
 			/* remove old entry, if exists */
-			if ((lease = find_lease(ntohl(inp.s_addr))) != NULL) {
+			if ((lease = find_lease(&addr)) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(ntohl(inp.s_addr), ACTIVE);
+			add_lease(&addr, ACTIVE);
 			sw_active_lease = 1;
 			continue;
 		}
-		if (xstrstr(line, "  binding state backup", 22)) {
+		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_BACKUP)) {
 			/* remove old entry, if exists */
-			if ((lease = find_lease(ntohl(inp.s_addr))) != NULL) {
+			if ((lease = find_lease(&addr)) != NULL) {
 				delete_lease(lease);
 			}
-			add_lease(ntohl(inp.s_addr), BACKUP);
+			add_lease(&addr, BACKUP);
 			continue;
 		}
 		if ((macaddr != NULL)
@@ -159,6 +183,7 @@ int parse_leases(void)
 			}
 		}
 	}
+#undef HAS_PREFIX
 	free(line);
 	free(ipstring);
 	if (macaddr != NULL) {
@@ -204,7 +229,7 @@ void parse_config(int is_include, const char *restrict config_file,
 	size_t i = 0;
 	char *word, c;
 	int braces_shared = 1000;
-	struct in_addr inp;
+	union ipaddr_t addr;
 	struct range_t *range_p;
 
 	word = xmalloc(sizeof(char) * MAXLEN);
@@ -356,9 +381,9 @@ void parse_config(int is_include, const char *restrict config_file,
 			case 2:
 				/* printf ("range 2nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
-				inet_aton(word, &inp);
+				parse_ipaddr(word, &addr);
 				argument = 0;
-				range_p->last_ip = ntohl(inp.s_addr);
+				copy_ipaddr(&range_p->last_ip, &addr);
 				range_p->count = 0;
 				range_p->touched = 0;
 				range_p->backups = 0;
@@ -377,12 +402,12 @@ void parse_config(int is_include, const char *restrict config_file,
 			case 3:
 				/* printf ("range 1nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
-				if (!(inet_aton(word, &inp))) {
+				if (!(parse_ipaddr(word, &addr))) {
 					/* word was not ip, try
 					 * again */
 					break;
 				}
-				range_p->first_ip = ntohl(inp.s_addr);
+				copy_ipaddr(&range_p->first_ip, &addr);
 				argument = 2;
 				break;
 			case 1:

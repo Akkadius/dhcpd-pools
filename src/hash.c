@@ -36,20 +36,31 @@
 #include "dhcpd-pools.h"
 #include "xalloc.h"
 
-void add_lease(int ip, enum ltype type)
+#define HASH_FIND_V6(head, findv6, out) HASH_FIND(hh, head, findv6, 16, out)
+#define HASH_ADD_V6(head, v6field, add) HASH_ADD(hh, head, v6field, 16, add)
+
+void add_lease(union ipaddr_t *addr, enum ltype type)
 {
 	struct leases_t *l;
 	l = xmalloc(sizeof(struct leases_t));
-	l->ip = ip;
+	copy_ipaddr(&l->ip, addr);
 	l->type = type;
-	HASH_ADD_INT(leases, ip, l);
+	if (dhcp_version == VERSION_6) {
+		HASH_ADD_V6(leases, ip.v6, l);
+	} else {
+		HASH_ADD_INT(leases, ip.v4, l);
+	}
 }
 
-struct leases_t *find_lease(int ip)
+struct leases_t *find_lease(union ipaddr_t *addr)
 {
 	struct leases_t *l;
 
-	HASH_FIND_INT(leases, &ip, l);
+	if (dhcp_version == VERSION_6) {
+		HASH_FIND_V6(leases, &addr->v6, l);
+	} else {
+		HASH_FIND_INT(leases, &addr->v4, l);
+	}
 	return l;
 }
 

@@ -42,20 +42,10 @@
 #include "dhcpd-pools.h"
 
 /* Clean up data */
-static int ip_sort(const struct leases_t *restrict a,
-		   const struct leases_t *restrict b)
-{
-	if (a->ip < b->ip)
-		return -1;
-	if (a->ip > b->ip)
-		return 1;
-	return 0;
-}
-
 int prepare_data(void)
 {
 	/* Sort leases */
-	HASH_SORT(leases, ip_sort);
+	HASH_SORT(leases, leasecomp);
 	/* Sort ranges */
 	qsort(ranges, (size_t)num_ranges, sizeof(struct range_t), &rangecomp);
 	return 0;
@@ -68,20 +58,18 @@ int do_counting(void)
 	const struct leases_t *restrict l = leases;
 	unsigned long i, k, block_size;
 
-	unsigned long r_end;
 	range_p = ranges;
 
 	/* Walk through ranges */
 	for (i = 0; i < num_ranges; i++) {
-		for (; l != NULL && range_p->first_ip < l->ip; l = l->hh.prev)
+		for (; l != NULL && ipcomp(&range_p->first_ip, &l->ip) < 0;
+		     l = l->hh.prev)
 			/* rewind */ ;
 		if (l == NULL)
 			l = leases;
-		/* last_ip + 1 make comparison to small bit quicker as it results to
-		 * be 'smaller than' not 'smaller or equal to' */
-		r_end = range_p->last_ip + 1;
-		for (; l != NULL && l->ip < r_end; l = l->hh.next) {
-			if (l->ip < range_p->first_ip) {
+		for (; l != NULL && ipcomp(&l->ip, &range_p->last_ip) <= 0;
+		     l = l->hh.next) {
+			if (ipcomp(&l->ip, &range_p->first_ip) < 0) {
 				/* should not be necessary */
 				continue;
 			}
@@ -114,8 +102,7 @@ int do_counting(void)
 		}
 
 		/* Size of range, shared net & all networks */
-		block_size =
-		    (unsigned int)(range_p->last_ip - range_p->first_ip + 1);
+		block_size = get_range_size(range_p);
 		if (range_p->shared_net) {
 			range_p->shared_net->available += block_size;
 		}
@@ -131,8 +118,7 @@ int do_counting(void)
 	shared_networks->touched = 0;
 	range_p = ranges;
 	for (k = 0; k < num_ranges; k++) {
-		shared_networks->available +=
-		    range_p->last_ip - range_p->first_ip + 1;
+		shared_networks->available += get_range_size(range_p);
 		shared_networks->used += range_p->count;
 		shared_networks->touched += range_p->touched;
 		shared_networks->backups += range_p->backups;

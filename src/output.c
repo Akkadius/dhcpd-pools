@@ -53,11 +53,12 @@
 int output_txt(void)
 {
 	unsigned int i;
-	struct in_addr first, last;
 	struct range_t *range_p;
+	unsigned long range_size;
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
+	int max_ipaddr_length = dhcp_version == VERSION_6 ? 39 : 16;
 
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
@@ -69,13 +70,20 @@ int output_txt(void)
 	}
 
 	range_p = ranges;
+	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
 
 	if (config.output_limit[0] & output_limit_bit_1) {
 		fprintf(outfile, "Ranges:\n");
 		fprintf
 		    (outfile,
-		     "shared net name     first ip           last ip            max   cur    percent  touch   t+c  t+c perc");
+		     "%-20s%-*s   %-*s %5s %5s %10s  %5s %5s %9s",
+		     "shared net name",
+		     max_ipaddr_length,
+		     "first ip",
+		     max_ipaddr_length,
+		     "last ip",
+		     "max", "cur", "percent", "touch", "t+c", "t+c perc");
 		if (0 < num_backups) {
 			fprintf(outfile, "     bu  bu perc");
 		}
@@ -83,40 +91,39 @@ int output_txt(void)
 	}
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip);
-			last.s_addr = ntohl(range_p->last_ip);
-
 			if (range_p->shared_net) {
 				fprintf(outfile, "%-20s",
 					range_p->shared_net->name);
 			} else {
 				fprintf(outfile, "not_defined         ");
 			}
-			fprintf(outfile, "%-16s", inet_ntoa(first));
+			/* Outputting of first_ip and last_ip need to be
+			 * separate since ntop_ipaddr always returns the
+			 * same buffer */
+			fprintf(outfile, "%-*s",
+				max_ipaddr_length,
+				ntop_ipaddr(&range_p->first_ip));
 			fprintf(outfile,
-				" - %-16s %5" PRIu32
-				" %5lu %10.3f  %5lu %5lu %9.3f",
-				inet_ntoa(last),
-				range_p->last_ip - range_p->first_ip + 1,
+				" - %-*s %5lu %5lu %10.3f  %5lu %5lu %9.3f",
+				max_ipaddr_length,
+				ntop_ipaddr(&range_p->last_ip),
+				range_size,
 				range_p->count,
-				(float)(100 * range_p->count) /
-				(range_p->last_ip - range_p->first_ip + 1),
+				(float)(100 * range_p->count) / range_size,
 				range_p->touched,
 				range_p->touched + range_p->count,
 				(float)(100 *
 					(range_p->touched +
-					 range_p->count)) / (range_p->last_ip -
-							     range_p->first_ip +
-							     1));
+					 range_p->count)) / range_size);
 			if (0 < num_backups) {
 				fprintf(outfile, "%7lu %8.3f",
 					range_p->backups,
 					(float)(100 * range_p->backups) /
-					(range_p->last_ip -
-					 range_p->first_ip + 1));
+					range_size);
 			}
 			fprintf(outfile, "\n");
 			range_p++;
+			range_size = get_range_size(range_p);
 		}
 	}
 	if (config.output_limit[1] & output_limit_bit_1
@@ -210,8 +217,8 @@ int output_txt(void)
 int output_xml(void)
 {
 	unsigned int i;
-	struct in_addr first, last;
 	struct range_t *range_p;
+	unsigned long range_size;
 	struct shared_network_t *shared_p;
 	struct macaddr_t *macaddr_p;
 	int ret;
@@ -227,6 +234,7 @@ int output_xml(void)
 	}
 
 	range_p = ranges;
+	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
 
 	fprintf(outfile, "<dhcpstatus>\n");
@@ -242,8 +250,6 @@ int output_xml(void)
 
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip);
-			last.s_addr = ntohl(range_p->last_ip);
 			fprintf(outfile, "<subnet>\n");
 			if (range_p->shared_net) {
 				fprintf(outfile,
@@ -255,17 +261,19 @@ int output_xml(void)
 
 			fprintf(outfile, "\t<network></network>\n");
 			fprintf(outfile, "\t<netmask></netmask>\n");
-			fprintf(outfile, "\t<range>%s ", inet_ntoa(first));
-			fprintf(outfile, "- %s</range>\n", inet_ntoa(last));
+			fprintf(outfile, "\t<range>%s ",
+				ntop_ipaddr(&range_p->first_ip));
+			fprintf(outfile, "- %s</range>\n",
+				ntop_ipaddr(&range_p->last_ip));
 			fprintf(outfile, "\t<gateway></gateway>\n");
-			fprintf(outfile, "\t<defined>%" PRIu32 "</defined>\n",
-				range_p->last_ip - range_p->first_ip + 1);
+			fprintf(outfile, "\t<defined>%lu</defined>\n",
+				range_size);
 			fprintf(outfile, "\t<used>%lu</used>\n",
 				range_p->count);
 			fprintf(outfile, "\t<free>%lu</free>\n",
-				range_p->last_ip - range_p->first_ip + 1 -
-				range_p->count);
+				range_size - range_p->count);
 			range_p++;
+			range_size = get_range_size(range_p);
 			fprintf(outfile, "</subnet>\n");
 		}
 	}
@@ -456,8 +464,8 @@ static void newsection(FILE *restrict f, char const *restrict title)
 int output_html(void)
 {
 	unsigned int i;
-	struct in_addr first, last;
 	struct range_t *range_p;
+	unsigned long range_size;
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
@@ -472,6 +480,7 @@ int output_html(void)
 	}
 
 	range_p = ranges;
+	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
 	if (fullhtml) {
 		html_header(outfile);
@@ -497,8 +506,6 @@ int output_html(void)
 	}
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip);
-			last.s_addr = ntohl(range_p->last_ip);
 			newrow(outfile);
 			if (range_p->shared_net) {
 				output_line(outfile, "td", "calign",
@@ -507,34 +514,32 @@ int output_html(void)
 				output_line(outfile, "td", "calign",
 					    "not_defined");
 			}
-			output_line(outfile, "td", "calign", inet_ntoa(first));
-			output_line(outfile, "td", "calign", inet_ntoa(last));
-			output_long(outfile, "td",
-				    range_p->last_ip - range_p->first_ip + 1);
+			output_line(outfile, "td", "calign",
+				    ntop_ipaddr(&range_p->first_ip));
+			output_line(outfile, "td", "calign",
+				    ntop_ipaddr(&range_p->last_ip));
+			output_long(outfile, "td", range_size);
 			output_long(outfile, "td", range_p->count);
 			output_float(outfile, "td",
 				     (float)(100 * range_p->count) /
-				     (range_p->last_ip -
-				      range_p->first_ip + 1));
+				     range_size);
 			output_long(outfile, "td", range_p->touched);
 			output_long(outfile, "td",
 				    range_p->touched + range_p->count);
 			output_float(outfile, "td",
 				     (float)(100 *
 					     (range_p->touched +
-					      range_p->count)) /
-				     (range_p->last_ip -
-				      range_p->first_ip + 1));
+					      range_p->count)) / range_size);
 			if (0 < num_backups) {
 				output_long(outfile, "td", range_p->backups);
 				output_float(outfile, "td",
 					     (float)(100 *
 						     range_p->backups) /
-					     (range_p->last_ip -
-					      range_p->first_ip + 1));
+					     range_size);
 			}
 			endrow(outfile);
 			range_p++;
+			range_size = get_range_size(range_p);
 		}
 	}
 	table_end(outfile);
@@ -647,8 +652,8 @@ int output_html(void)
 int output_csv(void)
 {
 	unsigned int i;
-	struct in_addr first, last;
 	struct range_t *range_p;
+	unsigned long range_size;
 	struct shared_network_t *shared_p;
 	FILE *outfile;
 	int ret;
@@ -662,6 +667,7 @@ int output_csv(void)
 	}
 
 	range_p = ranges;
+	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
 	if (config.output_limit[0] & output_limit_bit_1) {
 		fprintf(outfile, "\"Ranges:\"\n");
@@ -675,40 +681,34 @@ int output_csv(void)
 	}
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			first.s_addr = ntohl(range_p->first_ip);
-			last.s_addr = ntohl(range_p->last_ip);
 			if (range_p->shared_net) {
 				fprintf(outfile, "\"%s\",",
 					range_p->shared_net->name);
 			} else {
 				fprintf(outfile, "\"not_defined\",");
 			}
-			fprintf(outfile, "\"%s\",", inet_ntoa(first));
+			fprintf(outfile, "\"%s\",",
+				ntop_ipaddr(&range_p->first_ip));
 			fprintf(outfile,
-				"\"%s\",\"%" PRIu32
-				"\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
-				inet_ntoa(last),
-				range_p->last_ip - range_p->first_ip + 1,
+				"\"%s\",\"%lu\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
+				ntop_ipaddr(&range_p->last_ip), range_size,
 				range_p->count,
-				(float)(100 * range_p->count) /
-				(range_p->last_ip - range_p->first_ip + 1),
+				(float)(100 * range_p->count) / range_size,
 				range_p->touched,
 				range_p->touched + range_p->count,
 				(float)(100 *
 					(range_p->touched +
-					 range_p->count)) / (range_p->last_ip -
-							     range_p->first_ip +
-							     1));
+					 range_p->count)) / range_size);
 			if (0 < num_backups) {
 				fprintf(outfile, ",\"%lu\",\"%.3f\"",
 					range_p->backups,
 					(float)(100 * range_p->backups) /
-					(range_p->last_ip -
-					 range_p->first_ip + 1));
+					range_size);
 			}
 
 			fprintf(outfile, "\n");
 			range_p++;
+			range_size = get_range_size(range_p);
 		}
 		fprintf(outfile, "\n");
 	}
@@ -796,6 +796,7 @@ int output_alarming(void)
 {
 	FILE *outfile;
 	struct range_t *range_p;
+	unsigned long range_size;
 	struct shared_network_t *shared_p;
 	unsigned int i;
 	float perc;
@@ -803,6 +804,7 @@ int output_alarming(void)
 	int ret_val, ret;
 
 	range_p = ranges;
+	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
 
 	if (config.output_file[0]) {
@@ -817,8 +819,7 @@ int output_alarming(void)
 
 	if (config.output_limit[1] & output_limit_bit_1) {
 		for (i = 0; i < num_ranges; i++) {
-			perc = (float)(100 * range_p->count) /
-			    (range_p->last_ip - range_p->first_ip + 1);
+			perc = (float)(100 * range_p->count) / range_size;
 			if (config.critical < perc)
 				rc++;
 			else if (config.warning < perc)
@@ -826,6 +827,7 @@ int output_alarming(void)
 			else
 				ro++;
 			range_p++;
+			range_size = get_range_size(range_p);
 		}
 	}
 	if (config.output_limit[1] & output_limit_bit_2) {
