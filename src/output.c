@@ -322,6 +322,142 @@ int output_xml(void)
 	return 0;
 }
 
+int output_json(void)
+{
+	unsigned int i;
+	struct range_t *range_p;
+	unsigned long range_size;
+	struct shared_network_t *shared_p;
+	struct macaddr_t *macaddr_p;
+	int ret;
+	FILE *outfile;
+	char sep;
+
+	if (config.output_file[0]) {
+		outfile = fopen(config.output_file, "w+");
+		if (outfile == NULL) {
+			err(EXIT_FAILURE, "output_json: %s",
+			    config.output_file);
+		}
+	} else {
+		outfile = stdout;
+	}
+
+	range_p = ranges;
+	range_size = get_range_size(range_p);
+	shared_p = shared_networks;
+	sep = ' ';
+
+	fprintf(outfile, "{\n");
+
+	if (macaddr != NULL) {
+		fprintf(outfile, "   %c\"active_leases\": [\n", sep);
+		for (i = 0, macaddr_p = macaddr; macaddr_p->next != NULL;
+		     macaddr_p = macaddr_p->next) {
+			if (0 != i) {
+				fprintf(outfile, ",\n         ");
+			} else {
+				fprintf(outfile, "\n         ");
+			}
+			fprintf(outfile,
+				"{ \"ip\":\"%s\", \"macaddress\":\"%s\" }",
+				macaddr_p->ip, macaddr_p->ethernet);
+			i++;
+		}
+		fprintf(outfile, "\n   ]");	/* end of active_leases */
+		sep = ',';
+	}
+
+	if (config.output_limit[1] & output_limit_bit_1) {
+		if (sep == ',')
+			printf(",\n");
+		fprintf(outfile, "   \"subnets\": [\n");
+		for (i = 0; i < num_ranges; i++) {
+			fprintf(outfile, "         ");
+			fprintf(outfile, "{ ");
+			if (range_p->shared_net) {
+				fprintf(outfile,
+					"\"location\":\"%s\", ",
+					range_p->shared_net->name);
+			} else {
+				fprintf(outfile, "\"location\":\"\", ");
+			}
+
+			fprintf(outfile, "\"network\":\"\", ");
+			fprintf(outfile, "\"netmask\":\"\", ");
+			fprintf(outfile, "\"range\":\"%s\", ",
+				ntop_ipaddr(&range_p->first_ip));
+			fprintf(outfile, "\"gateway\":\"\", ");
+			fprintf(outfile, "\"defined\":%lu, ", range_size);
+			fprintf(outfile, "\"used\":%lu, ", range_p->count);
+			fprintf(outfile, "\"free\":%lu ",
+				range_size - range_p->count);
+			range_p++;
+			range_size = get_range_size(range_p);
+			if (i + 1 < num_ranges)
+				fprintf(outfile, "},\n");
+			else
+				fprintf(outfile, "}\n");
+		}
+		fprintf(outfile, "   ]");	/* end of subnets */
+		sep = ',';
+	}
+
+	if (config.output_limit[1] & output_limit_bit_2) {
+		if (sep == ',')
+			printf(",\n");
+		fprintf(outfile, "   \"shared-networks\": [\n");
+		for (i = 0; i < num_shared_networks; i++) {
+			fprintf(outfile, "         ");
+			shared_p++;
+			fprintf(outfile, "{ ");
+			fprintf(outfile, "\"location\":\"%s\", ",
+				shared_p->name);
+			fprintf(outfile, "\"defined\":%lu, ",
+				shared_p->available);
+			fprintf(outfile, "\"used\":%lu, ", shared_p->used);
+			fprintf(outfile, "\"free\":%lu ",
+				shared_p->available - shared_p->used);
+			if (i + 1 < num_shared_networks)
+				fprintf(outfile, "},\n");
+			else
+				fprintf(outfile, "}\n");
+		}
+		fprintf(outfile, "   ]");	/* end of shared-networks */
+		sep = ',';
+	}
+
+	if (config.output_limit[0] & output_limit_bit_3) {
+		if (sep == ',')
+			printf(",\n");
+		fprintf(outfile, "   \"summary\": {\n");
+		fprintf(outfile, "         \"location\":\"%s\",\n",
+			shared_networks->name);
+		fprintf(outfile, "         \"defined\":%lu,\n",
+			shared_networks->available);
+		fprintf(outfile, "         \"used\":%lu,\n",
+			shared_networks->used);
+		fprintf(outfile, "         \"free\":%lu\n",
+			shared_networks->available - shared_networks->used);
+		fprintf(outfile, "   }");	/* end of summary */
+	}
+
+	fprintf(outfile, "\n}");
+	if (outfile == stdout) {
+		ret = fflush(stdout);
+		if (ret) {
+			warn("output_json: fflush");
+		}
+	} else {
+		ret = close_stream(outfile);
+		if (ret) {
+			warn("output_json: fclose");
+		}
+	}
+
+	return 0;
+}
+
 static void html_header(FILE *restrict f)
 {
 	char outstr[200];

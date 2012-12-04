@@ -119,7 +119,7 @@ int parse_leases(void)
 
 	line = xmalloc(sizeof(char) * MAXLEN);
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
-	if (config.output_format[0] == 'X') {
+	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
 		macstring = xmalloc(sizeof(char) * 18);
 		macaddr = xmalloc(sizeof(struct macaddr_t));
 		macaddr_p = macaddr;

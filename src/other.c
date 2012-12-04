@@ -219,13 +219,16 @@ This is ISC dhcpd pools usage analyzer.\n\
 \n", program_invocation_short_name);
 	fprintf(out, "\
   -c, --config=FILE      path to the dhcpd.conf file\n\
-  -l, --leases=FILE      path to the dhcpd.leases file\n\
-  -f, --format=[thHcxX]  output format\n\
+  -l, --leases=FILE      path to the dhcpd.leases file\n");
+	fprintf(out, "\
+  -f, --format=[thHcxXjJ] output format\n\
                            t for text\n\
                            h for html table\n\
                            H for full html page\n\
                            x for xml\n\
                            X for xml with active lease details\n\
+                           j for json\n\
+                           J for json with active lease details\n\
                            c for comma separated values\n");
 	fprintf(out, "\
   -s, --sort=[nimcptTe]  sort ranges by\n\

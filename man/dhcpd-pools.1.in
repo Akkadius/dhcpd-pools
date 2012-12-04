@@ -62,7 +62,7 @@ are equal next one is used.  The IP field is default sort key.
 \fB\-r\fR, \fB\-\-reverse\fR
 Sort results in reverse order.
 .TP
-\fB\-f\fR, \fB\-\-format\fR=\fI[thHcxX]\fR
+\fB\-f\fR, \fB\-\-format\fR=\fI[thHcxXjJ]\fR
 Output format.
 Text
 .RI ( t ).
@@ -77,7 +77,11 @@ stands for comma-separated values.  Output format xml
 .RI ( x )
 is similar to the dhcpstatus Perl module output.  The extended xml
 .RI ( X )
-format will print ethernet address details.
+format will print ethernet address details.  The
+.RI ( j )
+will output in json format, which can be extended with
+.RI ( J )
+to include ethernet address.
 .IP
 The default format is
 .IR @OUTPUT_FORMAT@ .

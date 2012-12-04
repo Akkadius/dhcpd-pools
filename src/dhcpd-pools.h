@@ -194,6 +194,7 @@ int (*output_analysis) (void);
 int output_txt(void);
 int output_html(void);
 int output_xml(void);
+int output_json(void);
 int output_csv(void);
 int output_alarming(void);
 /* Memory release, file closing etc */

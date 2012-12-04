@@ -207,6 +207,12 @@ int main(int argc, char **argv)
 	case 'X':
 		output_analysis = output_xml;
 		break;
+	case 'j':
+		output_analysis = output_json;
+		break;
+	case 'J':
+		output_analysis = output_json;
+		break;
 	case 'c':
 		output_analysis = output_csv;
 		break;
