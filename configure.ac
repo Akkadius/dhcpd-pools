@@ -13,14 +13,11 @@ AM_INIT_AUTOMAKE([-Wall foreign 1.10 tar-pax no-dist-gzip dist-xz -Wextra-portab
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
-AC_GNU_SOURCE
-
 # Checks for programs
-AC_PROG_AWK
 gl_EARLY
 gl_INIT
 AC_C_RESTRICT
-AC_PROG_CXX
+AC_PROG_CC_C99
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
 
