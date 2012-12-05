@@ -384,8 +384,10 @@ int output_json(void)
 				fprintf(outfile, "\"location\":\"\", ");
 			}
 
-			fprintf(outfile, "\"range\":\"%s\", ",
+			fprintf(outfile, "\"range\":\"%s",
 				ntop_ipaddr(&range_p->first_ip));
+			fprintf(outfile, " - %s\", ",
+				ntop_ipaddr(&range_p->last_ip));
 			fprintf(outfile, "\"defined\":%lu, ", range_size);
 			fprintf(outfile, "\"used\":%lu, ", range_p->count);
 			fprintf(outfile, "\"free\":%lu ",
