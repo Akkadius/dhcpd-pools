@@ -331,7 +331,7 @@ int output_json(void)
 	struct macaddr_t *macaddr_p;
 	int ret;
 	FILE *outfile;
-	char sep;
+	unsigned int sep;
 
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
@@ -346,12 +346,12 @@ int output_json(void)
 	range_p = ranges;
 	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
-	sep = ' ';
+	sep = 0;
 
 	fprintf(outfile, "{\n");
 
 	if (macaddr != NULL) {
-		fprintf(outfile, "   %c\"active_leases\": [\n", sep);
+		fprintf(outfile, "   \"active_leases\": [");
 		for (i = 0, macaddr_p = macaddr; macaddr_p->next != NULL;
 		     macaddr_p = macaddr_p->next) {
 			if (0 != i) {
@@ -365,12 +365,13 @@ int output_json(void)
 			i++;
 		}
 		fprintf(outfile, "\n   ]");	/* end of active_leases */
-		sep = ',';
+		sep++;
 	}
 
 	if (config.output_limit[1] & output_limit_bit_1) {
-		if (sep == ',')
+		if (sep) {
 			printf(",\n");
+		}
 		fprintf(outfile, "   \"subnets\": [\n");
 		for (i = 0; i < num_ranges; i++) {
 			fprintf(outfile, "         ");
@@ -400,12 +401,13 @@ int output_json(void)
 				fprintf(outfile, "}\n");
 		}
 		fprintf(outfile, "   ]");	/* end of subnets */
-		sep = ',';
+		sep++;
 	}
 
 	if (config.output_limit[1] & output_limit_bit_2) {
-		if (sep == ',')
+		if (sep) {
 			printf(",\n");
+		}
 		fprintf(outfile, "   \"shared-networks\": [\n");
 		for (i = 0; i < num_shared_networks; i++) {
 			fprintf(outfile, "         ");
@@ -424,12 +426,13 @@ int output_json(void)
 				fprintf(outfile, "}\n");
 		}
 		fprintf(outfile, "   ]");	/* end of shared-networks */
-		sep = ',';
+		sep++;
 	}
 
 	if (config.output_limit[0] & output_limit_bit_3) {
-		if (sep == ',')
+		if (sep) {
 			printf(",\n");
+		}
 		fprintf(outfile, "   \"summary\": {\n");
 		fprintf(outfile, "         \"location\":\"%s\",\n",
 			shared_networks->name);
@@ -440,9 +443,10 @@ int output_json(void)
 		fprintf(outfile, "         \"free\":%lu\n",
 			shared_networks->available - shared_networks->used);
 		fprintf(outfile, "   }");	/* end of summary */
+		sep++;
 	}
 
-	fprintf(outfile, "\n}");
+	fprintf(outfile, "\n}\n");
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
