@@ -384,11 +384,8 @@ int output_json(void)
 				fprintf(outfile, "\"location\":\"\", ");
 			}
 
-			fprintf(outfile, "\"network\":\"\", ");
-			fprintf(outfile, "\"netmask\":\"\", ");
 			fprintf(outfile, "\"range\":\"%s\", ",
 				ntop_ipaddr(&range_p->first_ip));
-			fprintf(outfile, "\"gateway\":\"\", ");
 			fprintf(outfile, "\"defined\":%lu, ", range_size);
 			fprintf(outfile, "\"used\":%lu, ", range_p->count);
 			fprintf(outfile, "\"free\":%lu ",
