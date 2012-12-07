@@ -245,7 +245,9 @@ int output_xml(void)
 				fputs("<active_lease>\n\t<ip>", outfile);
 				fputs(ntop_ipaddr(&l->ip), outfile);
 				fputs("</ip>\n\t<macaddress>", outfile);
-				fputs(l->ethernet, outfile);
+				if (l->ethernet != NULL) {
+					fputs(l->ethernet, outfile);
+				}
 				fputs("</macaddress>\n</active_lease>\n",
 				      outfile);
 			}
@@ -366,7 +368,9 @@ int output_json(void)
 				fputs("\n         { \"ip\":\"", outfile);
 				fputs(ntop_ipaddr(&l->ip), outfile);
 				fputs("\", \"macaddress\":\"", outfile);
-				fputs(l->ethernet, outfile);
+				if (l->ethernet != NULL) {
+					fputs(l->ethernet, outfile);
+				}
 				fputs("\" }", outfile);
 			}
 		}
