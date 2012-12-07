@@ -50,6 +50,7 @@ void add_lease(union ipaddr_t *addr, enum ltype type)
 	} else {
 		HASH_ADD_INT(leases, ip.v4, l);
 	}
+	l->ethernet = NULL;
 }
 
 struct leases_t *find_lease(union ipaddr_t *addr)
@@ -66,6 +67,8 @@ struct leases_t *find_lease(union ipaddr_t *addr)
 
 void delete_lease(struct leases_t *lease)
 {
+	if (lease->ethernet != NULL)
+		free(lease->ethernet);
 	HASH_DEL(leases, lease);
 	free(lease);
 }
@@ -86,6 +89,7 @@ void delete_all_leases()
 	struct leases_t *l;
 	while (leases) {
 		l = leases;
+		free(l->ethernet);
 		HASH_DEL(leases, l);	/* leases advances to next on delete */
 		free(l);
 	}

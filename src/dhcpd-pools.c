@@ -259,7 +259,6 @@ int prepare_memory(void)
 	    xmalloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);
 
 	ranges = xmalloc(sizeof(struct range_t) * RANGES);
-	macaddr = NULL;
 
 	/* First shared network entry is all networks */
 	shared_networks->name = xstrdup("All networks");

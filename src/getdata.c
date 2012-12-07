@@ -79,11 +79,10 @@ int prefix_length[2][NUM_OF_PREFIX] = { };
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
-	char *line, *ipstring, *macstring = NULL;
+	char *line, *ipstring, macstring[20];
 	union ipaddr_t addr;
 	struct stat lease_file_stats;
-	struct macaddr_t *macaddr_p = NULL;
-	int sw_active_lease = 0;
+	int ethernets = false;
 	struct leases_t *lease;
 
 	num_touches = num_leases = num_backups = 0;
@@ -120,10 +119,7 @@ int parse_leases(void)
 	line = xmalloc(sizeof(char) * MAXLEN);
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
 	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
-		macstring = xmalloc(sizeof(char) * 18);
-		macaddr = xmalloc(sizeof(struct macaddr_t));
-		macaddr_p = macaddr;
-		macaddr_p->next = NULL;
+		ethernets = true;
 	}
 
 	const char **p = prefixes[dhcp_version];
@@ -139,7 +135,6 @@ int parse_leases(void)
 		if (HAS_PREFIX(line, PREFIX_LEASE)) {
 			nth_field(ipstring, line + l[PREFIX_LEASE]);
 			parse_ipaddr(ipstring, &addr);
-			sw_active_lease = 0;
 			continue;
 		}
 		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_FREE)) {
@@ -157,7 +152,6 @@ int parse_leases(void)
 				delete_lease(lease);
 			}
 			add_lease(&addr, ACTIVE);
-			sw_active_lease = 1;
 			continue;
 		}
 		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_BACKUP)) {
@@ -168,27 +162,17 @@ int parse_leases(void)
 			add_lease(&addr, BACKUP);
 			continue;
 		}
-		if ((macaddr != NULL)
-		    && (sw_active_lease == 1)
-		    && (xstrstr(line, "  hardware ethernet", 19))) {
+		if (ethernets && (xstrstr(line, "  hardware ethernet", 19))) {
 			nth_field(macstring, line + 20);
-			if (macstring) {
-				macstring[17] = '\0';
-				macaddr_p->ethernet = xstrdup(macstring);
-				macaddr_p->ip = xstrdup(ipstring);
-				macaddr_p->next =
-				    xmalloc(sizeof(struct macaddr_t));
-				macaddr_p = macaddr_p->next;
-				macaddr_p->next = NULL;
+			macstring[17] = '\0';
+			if ((lease = find_lease(&addr)) != NULL) {
+				lease->ethernet = xstrdup(macstring);
 			}
 		}
 	}
 #undef HAS_PREFIX
 	free(line);
 	free(ipstring);
-	if (macaddr != NULL) {
-		free(macstring);
-	}
 	fclose(dhcpd_leases);
 	return 0;
 }

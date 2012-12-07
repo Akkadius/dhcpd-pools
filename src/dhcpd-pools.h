@@ -97,11 +97,6 @@ struct range_t {
 	unsigned long int touched;
 	unsigned long int backups;
 };
-struct macaddr_t {
-	char *ethernet;
-	char *ip;
-	struct macaddr_t *next;
-};
 enum ltype {
 	ACTIVE,
 	FREE,
@@ -110,6 +105,7 @@ enum ltype {
 struct leases_t {
 	union ipaddr_t ip;	/* ip as key */
 	enum ltype type;
+	char *ethernet;
 	UT_hash_handle hh;
 };
 
@@ -130,7 +126,6 @@ struct leases_t *leases;
 unsigned long int num_leases;
 unsigned long int num_touches;
 unsigned long int num_backups;
-struct macaddr_t *macaddr;
 
 /* Function prototypes */
 int prepare_memory(void);

@@ -220,7 +220,6 @@ int output_xml(void)
 	struct range_t *range_p;
 	unsigned long range_size;
 	struct shared_network_t *shared_p;
-	struct macaddr_t *macaddr_p;
 	int ret;
 	FILE *outfile;
 
@@ -239,12 +238,17 @@ int output_xml(void)
 
 	fprintf(outfile, "<dhcpstatus>\n");
 
-	if (macaddr != NULL) {
-		for (macaddr_p = macaddr; macaddr_p->next != NULL;
-		     macaddr_p = macaddr_p->next) {
-			fprintf(outfile,
-				"<active_lease>\n\t<ip>%s</ip>\n\t<macaddress>%s</macaddress>\n</active_lease>\n",
-				macaddr_p->ip, macaddr_p->ethernet);
+	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
+		struct leases_t *l;
+		for (l = leases; l != NULL; l = l->hh.next) {
+			if (l->type == ACTIVE) {
+				fputs("<active_lease>\n\t<ip>", outfile);
+				fputs(ntop_ipaddr(&l->ip), outfile);
+				fputs("</ip>\n\t<macaddress>", outfile);
+				fputs(l->ethernet, outfile);
+				fputs("</macaddress>\n</active_lease>\n",
+				      outfile);
+			}
 		}
 	}
 
@@ -324,11 +328,10 @@ int output_xml(void)
 
 int output_json(void)
 {
-	unsigned int i;
+	unsigned int i = 0;
 	struct range_t *range_p;
 	unsigned long range_size;
 	struct shared_network_t *shared_p;
-	struct macaddr_t *macaddr_p;
 	int ret;
 	FILE *outfile;
 	unsigned int sep;
@@ -350,19 +353,22 @@ int output_json(void)
 
 	fprintf(outfile, "{\n");
 
-	if (macaddr != NULL) {
+	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
+		struct leases_t *l;
 		fprintf(outfile, "   \"active_leases\": [");
-		for (i = 0, macaddr_p = macaddr; macaddr_p->next != NULL;
-		     macaddr_p = macaddr_p->next) {
-			if (0 != i) {
-				fprintf(outfile, ",\n         ");
-			} else {
-				fprintf(outfile, "\n         ");
+		for (l = leases; l != NULL; l = l->hh.next) {
+			if (l->type == ACTIVE) {
+				if (i == 0) {
+					i = 1;
+				} else {
+					fputc(',', outfile);
+				}
+				fputs("\n         { \"ip\":\"", outfile);
+				fputs(ntop_ipaddr(&l->ip), outfile);
+				fputs("\", \"macaddress\":\"", outfile);
+				fputs(l->ethernet, outfile);
+				fputs("\" }", outfile);
 			}
-			fprintf(outfile,
-				"{ \"ip\":\"%s\", \"macaddress\":\"%s\" }",
-				macaddr_p->ip, macaddr_p->ethernet);
-			i++;
 		}
 		fprintf(outfile, "\n   ]");	/* end of active_leases */
 		sep++;
