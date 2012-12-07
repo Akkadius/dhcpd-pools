@@ -1,0 +1,10 @@
+lease 10.0.0.5 {
+  binding state active;
+  next binding state free;
+  hardware ethernet be:ef:00:00:co:de;
+}
+lease 10.0.0.5 {
+  binding state active;
+  next binding state free;
+  hardware ethernet 00:00:00:00:00:00;
+}

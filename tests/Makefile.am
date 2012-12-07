@@ -1,14 +1,20 @@
 EXTRA_DIST = \
 	bootp \
+	full-json \
 	confs \
 	expected \
 	leading0 \
 	leases \
-	simple \
-	test.sh
+	same-twice \
+	simple
 
-TESTS = simple bootp leading0 v6
-check_SCRIPTS = test.sh
+TESTS = \
+	bootp \
+	full-json \
+	leading0 \
+	same-twice \
+	simple \
+	v6
 
 check-local: $(SHELL) $(top_srcdir)/tests/test.sh
 
