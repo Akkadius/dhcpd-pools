@@ -370,7 +370,7 @@ int output_json(void)
 
 	if (config.output_limit[1] & output_limit_bit_1) {
 		if (sep) {
-			printf(",\n");
+			fprintf(outfile, ",\n");
 		}
 		fprintf(outfile, "   \"subnets\": [\n");
 		for (i = 0; i < num_ranges; i++) {
@@ -405,7 +405,7 @@ int output_json(void)
 
 	if (config.output_limit[1] & output_limit_bit_2) {
 		if (sep) {
-			printf(",\n");
+			fprintf(outfile, ",\n");
 		}
 		fprintf(outfile, "   \"shared-networks\": [\n");
 		for (i = 0; i < num_shared_networks; i++) {
@@ -430,7 +430,7 @@ int output_json(void)
 
 	if (config.output_limit[0] & output_limit_bit_3) {
 		if (sep) {
-			printf(",\n");
+			fprintf(outfile, ",\n");
 		}
 		fprintf(outfile, "   \"summary\": {\n");
 		fprintf(outfile, "         \"location\":\"%s\",\n",
