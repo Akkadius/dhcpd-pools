@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 	config.output_limit[0] = (*tmp - '0');
 	tmp++;
 	config.output_limit[1] = (*tmp - '0');
-	fullhtml = false;
+	config.fullhtml = false;
 
 	/* Make sure some output format is selected by default */
 	strncpy(config.output_format, OUTPUT_FORMAT, (size_t)1);
@@ -215,7 +215,7 @@ int main(int argc, char **argv)
 		break;
 	case 'H':
 		output_analysis = output_html;
-		fullhtml = true;
+		config.fullhtml = true;
 		break;
 	case 'x':
 		output_analysis = output_xml;
@@ -270,7 +270,7 @@ int prepare_memory(void)
 			prefix_length[i][j] = strlen(prefixes[i][j]);
 		}
 	}
-	dhcp_version = VERSION_UNKNOWN;
+	config.dhcp_version = VERSION_UNKNOWN;
 	RANGES = 64;
 	num_ranges = num_shared_networks = 0;
 	shared_networks =

@@ -95,11 +95,13 @@ enum prefix_t {
  */
 struct configuration_t {
 	char dhcpv6;
+	enum dhcp_version dhcp_version;
 	char *dhcpdconf_file;
 	char *dhcpdlease_file;
 	char output_format[2];
+	bool fullhtml;
 	char sort[6];
-	int reverse_order;
+	bool reverse_order;
 	char *output_file;
 	int output_limit[2];
 	bool backups_found;
@@ -150,9 +152,6 @@ struct leases_t {
 int prefix_length[2][NUM_OF_PREFIX];
 /* \var config Runtime configuration. */
 struct configuration_t config;
-/* \var dhcp_version Version of IP in use.
- * FIXME: move to runtime configuration. */
-enum dhcp_version dhcp_version;
 /* \var output_limit_bit_1 Bit mask what is printed.
  * FIXME: These should probably be enum with hex assignments. */
 static int const output_limit_bit_1 = 1;
@@ -160,9 +159,6 @@ static int const output_limit_bit_1 = 1;
 static int const output_limit_bit_2 = 2;
 /* \var output_limit_bit_3 see output_limit_bit_1 */
 static int const output_limit_bit_3 = 4;
-/* \var fullhtml Setting if full html is been requested by user.
- * FIXME: move to config. */
-unsigned int fullhtml;
 /* \var shared_networks Pointer holding shared network count results. */
 struct shared_network_t *shared_networks;
 /* \var num_shared_networks Number of shared networks found. */

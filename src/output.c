@@ -65,7 +65,7 @@ int output_txt(void)
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
-	int max_ipaddr_length = dhcp_version == VERSION_6 ? 39 : 16;
+	int max_ipaddr_length = config.dhcp_version == VERSION_6 ? 39 : 16;
 
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
@@ -695,7 +695,7 @@ int output_html(void)
 	range_p = ranges;
 	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
-	if (fullhtml) {
+	if (config.fullhtml) {
 		html_header(outfile);
 	}
 	table_start(outfile);
@@ -845,7 +845,7 @@ int output_html(void)
 		endrow(outfile);
 	}
 	table_end(outfile);
-	if (fullhtml) {
+	if (config.fullhtml) {
 		html_footer(outfile);
 	}
 	if (outfile == stdout) {

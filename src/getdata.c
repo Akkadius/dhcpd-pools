@@ -103,8 +103,8 @@ int parse_leases(void)
 		ethernets = true;
 	}
 
-	const char **p = prefixes[dhcp_version];
-	int *l = prefix_length[dhcp_version];
+	const char **p = prefixes[config.dhcp_version];
+	int *l = prefix_length[config.dhcp_version];
 
 /*! \def HAS_PREFIX(line, type)
  * \brief A macro to match IPv4 and IPv6 lease lines.

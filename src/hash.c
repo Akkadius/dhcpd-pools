@@ -53,7 +53,7 @@ void add_lease(union ipaddr_t *addr, enum ltype type)
 	l = xmalloc(sizeof(struct leases_t));
 	copy_ipaddr(&l->ip, addr);
 	l->type = type;
-	if (dhcp_version == VERSION_6) {
+	if (config.dhcp_version == VERSION_6) {
 		HASH_ADD_V6(leases, ip.v6, l);
 	} else {
 		HASH_ADD_INT(leases, ip.v4, l);
@@ -69,7 +69,7 @@ struct leases_t *find_lease(union ipaddr_t *addr)
 {
 	struct leases_t *l;
 
-	if (dhcp_version == VERSION_6) {
+	if (config.dhcp_version == VERSION_6) {
 		HASH_FIND_V6(leases, &addr->v6, l);
 	} else {
 		HASH_FIND_INT(leases, &addr->v4, l);

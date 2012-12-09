@@ -59,18 +59,18 @@
 int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst)
 {
 	int rv;
-	if (dhcp_version == VERSION_UNKNOWN) {
+	if (config.dhcp_version == VERSION_UNKNOWN) {
 		struct in_addr addr;
 		struct in6_addr addr6;
 		if (inet_aton(src, &addr) == 1) {
-			dhcp_version = VERSION_4;
+			config.dhcp_version = VERSION_4;
 		} else if (inet_pton(AF_INET6, src, &addr6) == 1) {
-			dhcp_version = VERSION_6;
+			config.dhcp_version = VERSION_6;
 		} else {
 			return 0;
 		}
 	}
-	if (dhcp_version == VERSION_6) {
+	if (config.dhcp_version == VERSION_6) {
 		struct in6_addr addr;
 		rv = inet_pton(AF_INET6, src, &addr);
 		memcpy(&dst->v6, addr.s6_addr, sizeof(addr.s6_addr));
@@ -89,7 +89,7 @@ int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst)
 void copy_ipaddr(union ipaddr_t *restrict dst,
 		 const union ipaddr_t *restrict src)
 {
-	if (dhcp_version == VERSION_6) {
+	if (config.dhcp_version == VERSION_6) {
 		memcpy(&dst->v6, &src->v6, sizeof(src->v6));
 	} else {
 		dst->v4 = src->v4;
@@ -108,7 +108,7 @@ const char *ntop_ipaddr(const union ipaddr_t *ip)
 {
 	static char
 	    buffer[sizeof("ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255")];
-	if (dhcp_version == VERSION_6) {
+	if (config.dhcp_version == VERSION_6) {
 		struct in6_addr addr;
 		memcpy(addr.s6_addr, ip->v6, sizeof(addr.s6_addr));
 		return inet_ntop(AF_INET6, &addr, buffer, sizeof(buffer));
@@ -127,7 +127,7 @@ const char *ntop_ipaddr(const union ipaddr_t *ip)
  */
 unsigned long get_range_size(const struct range_t *r)
 {
-	if (dhcp_version == VERSION_6) {
+	if (config.dhcp_version == VERSION_6) {
 		unsigned long size = 0;
 		int i;
 		/* When calculating the size of an IPv6 range overflow may

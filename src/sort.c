@@ -54,7 +54,7 @@
  */
 int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
 {
-	if (dhcp_version == VERSION_6) {
+	if (config.dhcp_version == VERSION_6) {
 		return memcmp(&a->v6, &b->v6, sizeof(a->v6));
 	} else {
 		if (a->v4 < b->v4)
