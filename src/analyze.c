@@ -48,7 +48,8 @@
 /*! \brief Prepare data for analysis. The function will sort leases and
  * ranges.
  * FIXME: This function should return void. */
-int prepare_data(void) {
+int prepare_data(void)
+{
 	/* Sort leases */
 	HASH_SORT(leases, leasecomp);
 	/* Sort ranges */
@@ -115,7 +116,6 @@ int do_counting(void)
 
 		range_p++;
 	}
-
 
 	/* FIXME: During count of other shared networks default network
 	 * and all networks got mixed together semantically.  The below
