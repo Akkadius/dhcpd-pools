@@ -211,14 +211,11 @@ void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
-int intcomp(const void *__restrict x, const void *__restrict y)
-    __attribute__ ((nonnull(1, 2)));
 int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
 int leasecomp(const void *restrict a, const void *restrict b);
 int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
-int sort_name(void);
 unsigned long int (*returner) (struct range_t r);
 unsigned long int ret_ip(struct range_t r);
 unsigned long int ret_cur(struct range_t r);

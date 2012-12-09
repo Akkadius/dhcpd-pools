@@ -47,20 +47,6 @@
 
 #include "dhcpd-pools.h"
 
-/*! \brief Compare unsigned 32 bit integers. Suitable for IPv4 sorting.
- * \param x Binary IPv4 address.
- * \param y Binary IPv4 address.
- * \return If x < y return -1, if y < x return 1, when they are equal return 0.
- */
-int intcomp(const void *restrict x, const void *restrict y)
-{
-	if (*(uint32_t *) x < *(uint32_t *) y)
-		return -1;
-	if (*(uint32_t *) y < *(uint32_t *) x)
-		return 1;
-	return 0;
-}
-
 /*! \brief Compare IP address, with IPv4/v6 determination.
  * \param a Binary IP address.
  * \param b Binary IP address.
