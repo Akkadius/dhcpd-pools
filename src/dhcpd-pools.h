@@ -33,6 +33,12 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file dhcpd-pools.h
+ * \brief Global definitions of structures, enums, and function prototypes.
+ * FIXME: The file has too many global variables. Most of them should be
+ * removed, if not all.
+ */
+
 #ifndef DHCPD_POOLS_H
 # define DHCPD_POOLS_H 1
 
@@ -43,6 +49,12 @@
 # include <string.h>
 # include <uthash.h>
 
+/*! \def likely(x)
+ * \brief Symbolic call to __builtin_expect'ed branch.
+ */
+/*! \def unlikely(x)
+ * \brief Symbolic call to not-__builtin_expect'ed branch.
+ */
 # ifdef HAVE_BUILTIN_EXPECT
 #  define likely(x)	__builtin_expect(!!(x), 1)
 #  define unlikely(x)	__builtin_expect(!!(x), 0)
@@ -51,16 +63,24 @@
 #  define unlikely(x)	(x)
 # endif
 
-/* Structures and unions */
+/*! \union ipaddr_t
+ * \brief Memory space for a binary IP address saving. */
 union ipaddr_t {
 	uint32_t v4;
 	unsigned char v6[16];
 };
+/*! \enum dhcp_version
+ * \brief Indicator which IP version is in use.
+ */
 enum dhcp_version {
 	VERSION_4,
 	VERSION_6,
 	VERSION_UNKNOWN,
 };
+/*! \enum prefix_t
+ * \brief Enumeration of interesting data in dhcpd.leases file, that has
+ * to be further examined, and saved.
+ */
 enum prefix_t {
 	PREFIX_LEASE,
 	PREFIX_BINDING_STATE_FREE,
@@ -69,7 +89,9 @@ enum prefix_t {
 	PREFIX_HARDWARE_ETHERNET,
 	NUM_OF_PREFIX
 };
-
+/*! \struct configuration_t
+ * \brief Runtime configuration.
+ */
 struct configuration_t {
 	char dhcpv6;
 	char *dhcpdconf_file;
@@ -82,6 +104,9 @@ struct configuration_t {
 	double warning;
 	double critical;
 };
+/*! \struct shared_network_t
+ * \brief Counters for an individual shared network.
+ */
 struct shared_network_t {
 	char *name;
 	unsigned long int available;
@@ -89,6 +114,9 @@ struct shared_network_t {
 	unsigned long int touched;
 	unsigned long int backups;
 };
+/*! \struct range_t
+ * \brief Counters for an individual range.
+ */
 struct range_t {
 	struct shared_network_t *shared_net;
 	union ipaddr_t first_ip;
@@ -97,11 +125,17 @@ struct range_t {
 	unsigned long int touched;
 	unsigned long int backups;
 };
+/*! \enum ltype
+ * \brief Lease state types.
+ */
 enum ltype {
 	ACTIVE,
 	FREE,
 	BACKUP
 };
+/*! \struct leases_t
+ * \brief An individual lease. The leaases are hashed.
+ */
 struct leases_t {
 	union ipaddr_t ip;	/* ip as key */
 	enum ltype type;
@@ -110,21 +144,40 @@ struct leases_t {
 };
 
 /* Global variables */
+/* \var prefixes An array holding dhcpd.leases lines that are wanted to examine.*/
 const char *prefixes[2][NUM_OF_PREFIX];
+/* \var prefix_length Length of each prefix.  */
 int prefix_length[2][NUM_OF_PREFIX];
+/* \var config Runtime configuration. */
 struct configuration_t config;
+/* \var dhcp_version Version of IP in use.
+ * FIXME: move to runtime configuration. */
 enum dhcp_version dhcp_version;
+/* \var output_limit_bit_1 Bit mask what is printed.
+ * FIXME: These should probably be enum with hex assignments. */
 static int const output_limit_bit_1 = 1;
+/* \var output_limit_bit_2 See output_limit_bit_1 */
 static int const output_limit_bit_2 = 2;
+/* \var output_limit_bit_3 see output_limit_bit_1 */
 static int const output_limit_bit_3 = 4;
+/* \var fullhtml Setting if full html is been requested by user.
+ * FIXME: move to config. */
 unsigned int fullhtml;
+/* \var shared_networks Pointer holding shared network count results. */
 struct shared_network_t *shared_networks;
+/* \var num_shared_networks Number of shared networks found. */
 unsigned int num_shared_networks;
+/* \var ranges Pointer holding range count results. */
 struct range_t *ranges;
+/* \var num_ranges Number of ranges found. */
 unsigned int num_ranges;
+/* \var leases Pointer holding all leases. */
 struct leases_t *leases;
+/* \var num_leases FIXME: not in use, remove */
 unsigned long int num_leases;
+/* \var num_touches FIXME: not in use, remove */
 unsigned long int num_touches;
+/* \var num_backups FIXME: not in use, remove */
 unsigned long int num_backups;
 
 /* Function prototypes */

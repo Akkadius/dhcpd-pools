@@ -118,6 +118,26 @@ AC_ARG_WITH([critical],
 AC_DEFINE_UNQUOTED([ALARM_CRIT], [$critical_percent], [monitoring critical default])
 AC_SUBST([ALARM_CRIT], [$critical_percent])
 
+AC_ARG_ENABLE([doxygen],
+	AC_HELP_STRING([--enable-doxygen], [build internal api documentation @<:@default=disabled@:>@]),
+	[], [enable_doxygen=no])
+AM_CONDITIONAL([ENABLE_DOXYGEN],  [test "x$enable_doxygen" = "xyes"])
+
+AS_IF([test x$enable_doxygen = xyes], [
+	AC_CHECK_PROGS([DOXYGEN], [doxygen])
+	AS_IF([test "x$DOXYGEN" = "x"],
+		AC_MSG_ERROR([doxygen not in path]),
+		AC_CONFIG_FILES([doc/Makefile doc/doxy.conf])
+	)
+
+	AC_CHECK_PROGS([DOXYGEN_DOT], [dot])
+		AS_IF([test "x$DOXYGEN" = "x"],
+		AC_MSG_WARN([dot not in path, internal documentation graphs are not generated])
+	)
+])
+AM_CONDITIONAL([HAVE_DOXYGEN], [test "x$DOXYGEN" != "x"])
+AM_CONDITIONAL([HAVE_DOXYGEN_DOT], [test "x$DOXYGEN_DOT" != "x"])
+
 AC_CONFIG_FILES([
 	Makefile
 	lib/Makefile

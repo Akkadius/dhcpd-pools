@@ -33,6 +33,10 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file dhcpd-pools.c
+ * \brief The main(), and core initialization.
+ */
+
 #include <config.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,6 +53,16 @@
 #include "dhcpd-pools.h"
 #include "xalloc.h"
 
+/*! \brief Start of execution.  Parse options, and call other other
+ * functions one after another.  At the moment adding threading support
+ * would be difficult, but there does not seem to be valid reason to
+ * consider that.  Overall the analysis already quick enough even without
+ * making it parallel.
+ *
+ * \return Return value indicates success or fail or analysis, unless
+ * either --warning or --critical options are in use, which makes the
+ * return value in some cases to match with Nagios expectations about
+ * alarming. */
 int main(int argc, char **argv)
 {
 	int i, c, sorts = 0;
@@ -79,7 +93,8 @@ int main(int argc, char **argv)
 
 	atexit(close_stdout);
 
-	/* FIXME: make these allocations dynamic up on need. */
+	/* FIXME: These allocations should be fully dynamic, e.g., grow
+	 * if needed.  */
 	config.dhcpdconf_file = xmalloc(sizeof(char) * MAXLEN);
 	config.dhcpdlease_file = xmalloc(sizeof(char) * MAXLEN);
 	config.output_file = xmalloc(sizeof(char) * MAXLEN);
@@ -242,7 +257,9 @@ int main(int argc, char **argv)
 	return (ret_val);
 }
 
-/* Global allocations, counter resets etc */
+/*! \brief Run time initialization. Global allocations, counter
+ * initializations, etc are here.
+ * FIXME: This function should return void. */
 int prepare_memory(void)
 {
 	/* Fill in prefix length cache */

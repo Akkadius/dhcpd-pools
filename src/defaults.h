@@ -33,16 +33,26 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file defaults.h
+ * \brief Default settings which cannot be changed without recompiling
+ * the software.
+ */
+
 #ifndef DEFAULTS_H
 # define DEFAULTS_H 1
 
-/* Maximum line length in dhcpd.conf and dhcpd.leases */
+/*! \var MAXLEN
+ * \brief Maximum expected line length in dhcpd.conf and dhcpd.leases
+ * files.  */
 static const size_t MAXLEN = 1024;
 
-/* Maximum number of shared networks */
+/*! \var SHARED_NETWORKS
+ * \brief Maximum number of different shared networks in dhcpd.conf file. */
 static const unsigned int SHARED_NETWORKS = 8192;
 
-/* Maximum number of ranges */
+/*! \var RANGES
+ * \brief Maximum number of ranges
+ * \xrefitem FIXME RANGES "Move this variable to dhcpd-pools.h"*/
 unsigned int RANGES;
 
 #endif				/* DEFAULTS_H */

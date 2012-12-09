@@ -33,6 +33,10 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file other.c
+ * \brief Collection of various functions.
+ */
+
 #include <config.h>
 
 #include "dhcpd-pools.h"
@@ -47,6 +51,11 @@
 #include <unistd.h>
 #include <limits.h>
 
+/*! \brief Convert text string IP address from either IPv4 or IPv6 to an integer.
+ * \param src An IP string in either format.
+ * \param dst An union which will hold conversion result.
+ * \return Was parsing successful.
+ */
 int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst)
 {
 	int rv;
@@ -73,6 +82,10 @@ int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst)
 	return rv == 1;
 }
 
+/*! \brief Copy IP address to union.
+ *
+ * \param dst Destination for a binary IP address.
+ * \param src Sourse of an IP address. */
 void copy_ipaddr(union ipaddr_t *restrict dst,
 		 const union ipaddr_t *restrict src)
 {
@@ -83,6 +96,14 @@ void copy_ipaddr(union ipaddr_t *restrict dst,
 	}
 }
 
+/*! \brief Convert an address to string. This function will convert the
+ * IPv4 addresses to 123.45.65.78 format, and the IPv6 addresses to it's
+ * native format depending on which version of the addressing is found to
+ * be in use.
+ *
+ * \param ip Binary IP address.
+ * \return Printable address.
+ */
 const char *ntop_ipaddr(const union ipaddr_t *ip)
 {
 	static char
@@ -98,6 +119,12 @@ const char *ntop_ipaddr(const union ipaddr_t *ip)
 	}
 }
 
+/*! \brief Calculate how many addresses there are in a range.
+ *
+ * \param r Pointer to range structure, which has information about first
+ * and last IP in the range.
+ * \return Size of a range.
+ */
 unsigned long get_range_size(const struct range_t *r)
 {
 	if (dhcp_version == VERSION_6) {
@@ -117,6 +144,15 @@ unsigned long get_range_size(const struct range_t *r)
 	}
 }
 
+/*! \fn xstrstr(const char *restrict a, const char *restrict b, const int len)
+ * \brief Compare two strings.  Similar to strcmp, but tuned to be
+ * quicker which is possible because input data is known to have certain
+ * structure.
+ *
+ * \param a String which is been compared, e.g., a haystack.
+ * \param b Constant string which is hoped to found, e.g., a needle.
+ * \param len Stop point in characters when comparison must be ended.
+ * \return Zero if strings differ, one if they are the same. */
 int
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((hot))
@@ -143,7 +179,12 @@ int
 	return true;
 }
 
-/* Return percentage value */
+/*! \brief Return a double floating point value.
+ *
+ * \param str String to be converted to a double.
+ * \param errmesg Exit error message if conversion fails.
+ * \return Binary result of string to double conversion.
+ */
 double strtod_or_err(const char *restrict str, const char *restrict errmesg)
 {
 	double num;
@@ -165,6 +206,13 @@ double strtod_or_err(const char *restrict str, const char *restrict errmesg)
 	errx(EXIT_FAILURE, "%s: '%s'", errmesg, str);
 }
 
+/*! \brief Reverse range.
+ * Used before output, if a caller has requested reverse sorting.
+ * FIXME: The temporary memory area handling should be internal to this
+ * function, not a parameter.
+ *
+ * \param flip_me The range that needs to be inverted.
+ * \param tmp_ranges Temporary memory area for the flip. */
 void flip_ranges(struct range_t *restrict flip_me,
 		 struct range_t *restrict tmp_ranges)
 {
@@ -178,7 +226,7 @@ void flip_ranges(struct range_t *restrict flip_me,
 	memcpy(flip_me, tmp_ranges, num_ranges * sizeof(struct range_t));
 }
 
-/* Free memory, flush buffers etc */
+/*! \brief Free memory, flush buffers etc. */
 void clean_up(void)
 {
 	unsigned int i;
@@ -199,6 +247,7 @@ void clean_up(void)
 	free(shared_networks);
 }
 
+/*! \brief A version printing. */
 void __attribute__ ((__noreturn__)) print_version(void)
 {
 	fprintf(stdout, "%s\n"
@@ -208,6 +257,7 @@ void __attribute__ ((__noreturn__)) print_version(void)
 	exit(EXIT_SUCCESS);
 }
 
+/*! \brief Command line help screen. */
 void __attribute__ ((__noreturn__)) usage(int status)
 {
 	FILE *out;

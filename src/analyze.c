@@ -33,6 +33,10 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file analyze.c
+ * \brief Data analysis functions.
+ */
+
 #include <config.h>
 
 #include <stddef.h>
@@ -41,9 +45,10 @@
 
 #include "dhcpd-pools.h"
 
-/* Clean up data */
-int prepare_data(void)
-{
+/*! \brief Prepare data for analysis. The function will sort leases and
+ * ranges.
+ * FIXME: This function should return void. */
+int prepare_data(void) {
 	/* Sort leases */
 	HASH_SORT(leases, leasecomp);
 	/* Sort ranges */
@@ -51,7 +56,8 @@ int prepare_data(void)
 	return 0;
 }
 
-/* Join leases and ranges into counter structs */
+/*! \brief Perform counting.  Join leases with ranges, and update counters.
+ * FIXME: This function should return void. */
 int do_counting(void)
 {
 	struct range_t *restrict range_p;
@@ -110,9 +116,10 @@ int do_counting(void)
 		range_p++;
 	}
 
-	/* FIXME: During count of other shared networks default network and
-	 * all networks got mixed together semantically. This fixes the
-	 * problem, but is not elegant. */
+
+	/* FIXME: During count of other shared networks default network
+	 * and all networks got mixed together semantically.  The below
+	 * fixes the problem, but is not elegant.  */
 	shared_networks->available = 0;
 	shared_networks->used = 0;
 	shared_networks->touched = 0;

@@ -33,6 +33,10 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file output.c
+ * \brief All about output formats.
+ */
+
 #include <config.h>
 
 #include <arpa/inet.h>
@@ -50,6 +54,8 @@
 #include "dhcpd-pools.h"
 #include "strftime.h"
 
+/*! \brief Text output format, which is the default.
+ * FIXME: This function should return void. */
 int output_txt(void)
 {
 	unsigned int i;
@@ -214,6 +220,9 @@ int output_txt(void)
 	return 0;
 }
 
+/*! \brief The xml output formats.
+ * FIXME: This function should return void.
+ */
 int output_xml(void)
 {
 	unsigned int i;
@@ -328,6 +337,9 @@ int output_xml(void)
 	return 0;
 }
 
+/*! \brief The json output formats.
+ * FIXME: This function should return void.
+ */
 int output_json(void)
 {
 	unsigned int i = 0;
@@ -471,6 +483,10 @@ int output_json(void)
 	return 0;
 }
 
+/*! \brief Header for full html output format.
+ *
+ * \param f Output file descriptor.
+ */
 static void html_header(FILE *restrict f)
 {
 	char outstr[200];
@@ -545,6 +561,10 @@ static void html_header(FILE *restrict f)
 	fprintf(f, "<a name=\"ranges\">The lease file mtime: %s</a>", outstr);
 }
 
+/*! \brief Footer for full html output format.
+ *
+ * \param f Output file descriptor.
+ */
 static void html_footer(FILE *restrict f)
 {
 	fprintf(f, "<p><br></p>\n");
@@ -561,33 +581,64 @@ static void html_footer(FILE *restrict f)
 	fprintf(f, "</html>\n");
 }
 
+/*! \brief A new row for html output format.
+ *
+ * \param f Output file descriptor.
+ */
 static void newrow(FILE *restrict f)
 {
 	fprintf(f, "<tr>\n");
 }
 
+/*! \brief End a row for html output format.
+ *
+ * \param f Output file descriptor.
+ */
 static void endrow(FILE *restrict f)
 {
 	fprintf(f, "</tr>\n\n");
 }
 
+/*! \brief Line with text in html output format.
+ *
+ * \param f Output file descriptor.
+ * \param type HTML tag name.
+ * \param class How the data is aligned.
+ * \param text Actual payload of the printout.
+ */
 static void output_line(FILE *restrict f, char const *restrict type,
 			char const *restrict class, char const *restrict text)
 {
 	fprintf(f, "  <%s class=%s>%s</%s>\n", type, class, text, type);
 }
 
+/*! \brief Line with digit in html output format.
+ *
+ * \param f Output file descriptor.
+ * \param type HMTL tag name.
+ * \param unlong Actual payload of the printout.
+ */
 static void output_long(FILE *restrict f, char const *restrict type,
 			unsigned long unlong)
 {
 	fprintf(f, "  <%s class=ralign>%lu</%s>\n", type, unlong, type);
 }
 
+/*! \brief Line with float in html output format.
+ *
+ * \param f Output file descriptor.
+ * \param type HTML tag name.
+ * \param fl Actual payload of the printout.
+ */
 static void output_float(FILE *f, char const *restrict type, float fl)
 {
 	fprintf(f, "  <%s class=ralign>%.3f</%s>\n", type, fl, type);
 }
 
+/*! \brief Begin table in html output format.
+ *
+ * \param f Output file descriptor.
+ */
 static void table_start(FILE *restrict f)
 {
 	fprintf(f, "<table width=\"75%%\" ");
@@ -595,11 +646,20 @@ static void table_start(FILE *restrict f)
 	fprintf(f, "summary=\"ISC dhcpd pool usage report\">\n");
 }
 
+/*! \brief End table in html output format.
+ *
+ * \param f Output file descriptor.
+ */
 static void table_end(FILE *restrict f)
 {
 	fprintf(f, "</table>\n");
 }
 
+/*! \brief New section in html output format.
+ *
+ * \param f Output file descriptor.
+ * \param title Table title.
+ */
 static void newsection(FILE *restrict f, char const *restrict title)
 {
 	newrow(f);
@@ -610,6 +670,9 @@ static void newsection(FILE *restrict f, char const *restrict title)
 	endrow(f);
 }
 
+/*! \brief Output html format.
+ * FIXME: This function should return void.
+ */
 int output_html(void)
 {
 	unsigned int i;
@@ -798,6 +861,9 @@ int output_html(void)
 	return 0;
 }
 
+/*! \brief Output cvs format.
+ * FIXME: This function should return void.
+ */
 int output_csv(void)
 {
 	unsigned int i;
@@ -941,6 +1007,9 @@ int output_csv(void)
 	return 0;
 }
 
+/*! \brief Output alarm text, and return program exit value.
+ * FIXME: This function should return void.
+ */
 int output_alarming(void)
 {
 	FILE *outfile;

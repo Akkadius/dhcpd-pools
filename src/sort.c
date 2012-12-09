@@ -33,6 +33,10 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file sort.c
+ * \brief Functions to sort output.
+ */
+
 #include <config.h>
 
 #include <err.h>
@@ -43,7 +47,11 @@
 
 #include "dhcpd-pools.h"
 
-/* Sort functions for range sorting */
+/*! \brief Compare unsigned 32 bit integers. Suitable for IPv4 sorting.
+ * \param x Binary IPv4 address.
+ * \param y Binary IPv4 address.
+ * \return If x < y return -1, if y < x return 1, when they are equal return 0.
+ */
 int intcomp(const void *restrict x, const void *restrict y)
 {
 	if (*(uint32_t *) x < *(uint32_t *) y)
@@ -53,6 +61,11 @@ int intcomp(const void *restrict x, const void *restrict y)
 	return 0;
 }
 
+/*! \brief Compare IP address, with IPv4/v6 determination.
+ * \param a Binary IP address.
+ * \param b Binary IP address.
+ * \return If a < b return -1, if a < b return 1, when they are equal return 0.
+ */
 int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
 {
 	if (dhcp_version == VERSION_6) {
@@ -66,34 +79,60 @@ int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
 	}
 }
 
+/*! \brief Compare IP address in leases. Suitable for sorting leases.
+ * \param a A lease structure.
+ * \param b A lease structure.
+ * \return Return pas through from ipcomp.
+ */
 int leasecomp(const void *restrict a, const void *restrict b)
 {
 	return ipcomp(&((const struct leases_t *)a)->ip,
 		      &((const struct leases_t *)b)->ip);
 }
 
+/*! \brief Compare IP address in leases. Suitable for sorting range table.
+ * \param r1 A range structure.
+ * \param r2 A range structure.
+ * \return Return pas through from ipcomp.
+ */
 int rangecomp(const void *restrict r1, const void *restrict r2)
 {
 	return ipcomp(&((const struct range_t *)r1)->first_ip,
 		      &((const struct range_t *)r2)->first_ip);
 }
 
+/*! \brief Return IP.
+ * \param r A range structure.
+ * \return First IP in the range, perhaps?? maybe?
+ * FIXME: This function is not implemented, yet.
+ */
 unsigned long int ret_ip(struct range_t r)
 {
-	/* FIXME: IPv6 */
 	return (r.first_ip.v4);
 }
 
+/*! \brief In use in range.
+ * \param r A range structure.
+ * \return Number of addresses that are in use in the given range.
+ */
 unsigned long int ret_cur(struct range_t r)
 {
 	return (r.count);
 }
 
+/*! \brief Range maximum.
+ * \param r A range structure.
+ * \return Maximum number of addresses that can be in the given range.
+ */
 unsigned long int ret_max(struct range_t r)
 {
 	return get_range_size(&r);
 }
 
+/*! \brief Percentage in use in range.
+ * \param r A range structure.
+ * \return Usage percentage of the given range.
+ */
 unsigned long int ret_percent(struct range_t r)
 {
 	float f;
@@ -101,16 +140,28 @@ unsigned long int ret_percent(struct range_t r)
 	return ((unsigned long int)(f * 100000));
 }
 
+/*! \brief Touched in range.
+ * \param r A range structure.
+ * \return Number of touched addresses in the given range.
+ */
 unsigned long int ret_touched(struct range_t r)
 {
 	return (r.touched);
 }
 
+/*! \brief Touched and in use in range
+ * \param r A range structure.
+ * \return Number of touched or in use addresses in the given range.
+ */
 unsigned long int ret_tc(struct range_t r)
 {
 	return (r.count + r.touched);
 }
 
+/*! \brief Return percentage of addresses touched and in use in range.
+ * \param r A range structure.
+ * \return Percentage of touched or in use addresses in the given range.
+ */
 unsigned long int ret_tcperc(struct range_t r)
 {
 	float f;
@@ -118,6 +169,12 @@ unsigned long int ret_tcperc(struct range_t r)
 	return ((unsigned long int)(f * 10000));
 }
 
+/*! \brief Sort field selector.
+ * \param c Symbolic name of a sort by character.
+ * The sort algorithms are stabile, which means multiple sorts can be
+ * specified and they do not mess the result of previous sort.  The sort
+ * algorithms are used via function pointer, that gets to be reassigned.
+ */
 void field_selector(char c)
 {
 	switch (c) {
@@ -151,7 +208,13 @@ void field_selector(char c)
 	}
 }
 
-/* Needed to support multiple key sorting. */
+/*! \brief Perform requested sorting.
+ * \param left The left side of the merge sort.
+ * \param right The right side of the merge sort.
+ * FIXME: This function should be marked as static.
+ * FIXME: Really horribly named indirection about which function is in use.
+ * \return Relevant for merge sort decision.
+ */
 int get_order(struct range_t *restrict left, struct range_t *restrict right)
 {
 	int i, len, ret;
@@ -189,6 +252,12 @@ int get_order(struct range_t *restrict left, struct range_t *restrict right)
 	return (0);
 }
 
+/*! \brief Mergesort for range table.
+ * \param orig Pointer to range that is requested to be sorted.
+ * \param size Number of ranges to be sorted.
+ * \param temp Temporary memory space, needed when a values has to be
+ * flipped.
+ */
 void mergesort_ranges(struct range_t *restrict orig, int size,
 		      struct range_t *restrict temp)
 {

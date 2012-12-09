@@ -33,12 +33,20 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file hash.c
+ * \brief The leases hash functions. The hash sorting is key to make
+ * analysis happen as quick as possible..
+ */
+
 #include "dhcpd-pools.h"
 #include "xalloc.h"
 
 #define HASH_FIND_V6(head, findv6, out) HASH_FIND(hh, head, findv6, 16, out)
 #define HASH_ADD_V6(head, v6field, add) HASH_ADD(hh, head, v6field, 16, add)
 
+/*! \brief Add a lease to hash array.
+ * \param addr Binary IP to be added in leases hash.
+ * \param type Lease state of the IP. */
 void add_lease(union ipaddr_t *addr, enum ltype type)
 {
 	struct leases_t *l;
@@ -53,6 +61,10 @@ void add_lease(union ipaddr_t *addr, enum ltype type)
 	l->ethernet = NULL;
 }
 
+/*! \brief Find pointer to lease from hash array.
+ * \param addr Binary IP searched from leases hash.
+ * \return A lease structure about requested IP, or NULL.
+ */
 struct leases_t *find_lease(union ipaddr_t *addr)
 {
 	struct leases_t *l;
@@ -65,6 +77,8 @@ struct leases_t *find_lease(union ipaddr_t *addr)
 	return l;
 }
 
+/*! \brief Delete a lease from hash array.
+ * \param lease Pointer to lease hash. */
 void delete_lease(struct leases_t *lease)
 {
 	if (lease->ethernet != NULL)
@@ -84,6 +98,11 @@ void delete_all_leases()
 }
 */
 
+/*! \brief Delete all leases from hash array.
+ * FIXME: The prototype should have (void) as an argument.
+ * FIXME: Take the HASH_ITER + HASH_DEL in use by if uthash version
+ * allows it.
+ */
 void delete_all_leases()
 {
 	struct leases_t *l;

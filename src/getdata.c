@@ -33,6 +33,10 @@
  * official policies, either expressed or implied, of Sami Kerola.
  */
 
+/*! \file getdata.c
+ * \brief Functions to read data from dhcpd.conf and dhcdp.leases files.
+ */
+
 #include <config.h>
 
 #include <arpa/inet.h>
@@ -53,8 +57,13 @@
 #include "dhcpd-pools.h"
 #include "xalloc.h"
 
-/* The .indent.pro in use will mess formatting of array below.  Please do
- * not commit less readable indentation.  */
+/*! \var prefixes[2][NUM_OF_PREFIX]
+ * \brief ISC lease file formats for IPv4 and IPv6.
+ *
+ * The .indent.pro in use will mess formatting of array below.
+ * Please do not commit less readable indentation.
+ *
+ * FIXME: The prefixes should be moved to defaults.h */
 const char *prefixes[2][NUM_OF_PREFIX] = {
 	[VERSION_4] = {
 		       [PREFIX_LEASE]                = "lease ",
@@ -72,10 +81,15 @@ const char *prefixes[2][NUM_OF_PREFIX] = {
 	}
 };
 
+/*! \var prefix_length[2][NUM_OF_PREFIX]
+ * \brief Expected configuration string length, that varies for IPv4 and
+ * IPv6.  See also prefixes.
+ *
+ * FIXME: The prefix_length should be moved to dhcpd-pools.h */
 int prefix_length[2][NUM_OF_PREFIX] = { };
 
-/* Parse dhcpd.leases file. All performance boosts for this function are
- * welcome */
+/*! \brief Lease file parser.  The parser can only read ISC DHCPD
+ * dhcpd.leases file format.  */
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
@@ -124,6 +138,12 @@ int parse_leases(void)
 
 	const char **p = prefixes[dhcp_version];
 	int *l = prefix_length[dhcp_version];
+
+/*! \def HAS_PREFIX(line, type)
+ * \brief A macro to match IPv4 and IPv6 lease lines.
+ *
+ * FIXME: This macro should have better name. The HAS_PREFIX sounds like
+ * some sort of prefix length test. */
 #define HAS_PREFIX(line, type) xstrstr((line), p[type], l[type])
 
 	while (!feof(dhcpd_leases)) {
@@ -177,7 +197,10 @@ int parse_leases(void)
 	return 0;
 }
 
-/* Like strcpy but for field which is separated by white spaces. */
+/*! \brief A version of strcpy, but for a white space separated field.
+ * \param dest String copy destination.
+ * \param src String copy source.
+ */
 void nth_field(char *restrict dest, const char *restrict src)
 {
 	size_t i, len;
@@ -191,7 +214,11 @@ void nth_field(char *restrict dest, const char *restrict src)
 	}
 }
 
-/* dhcpd.conf interesting words */
+/*! \brief Keyword search in dhcpd.conf file.
+ * \param s A line from the dhcpd.conf file.
+ * \return Indicator what configuration was found.
+ * FIXME: This function should return enum type.
+ */
 static int is_interesting_config_clause(char const *restrict s)
 {
 	if (strstr(s, "range"))
@@ -203,7 +230,10 @@ static int is_interesting_config_clause(char const *restrict s)
 	return 0;
 }
 
-/* FIXME: This spaghetti monster function need to be rewrote at least ones. */
+/*! \brief The dhcpd.conf file parser.
+ * FIXME: This spaghetti monster function need to be rewrote at least
+ * ones.
+ */
 void parse_config(int is_include, const char *restrict config_file,
 		  struct shared_network_t *restrict shared_p)
 {
