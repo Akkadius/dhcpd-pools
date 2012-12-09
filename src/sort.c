@@ -197,11 +197,9 @@ void field_selector(char c)
 /*! \brief Perform requested sorting.
  * \param left The left side of the merge sort.
  * \param right The right side of the merge sort.
- * FIXME: This function should be marked as static.
- * FIXME: Really horribly named indirection about which function is in use.
  * \return Relevant for merge sort decision.
  */
-int get_order(struct range_t *restrict left, struct range_t *restrict right)
+static int merge(struct range_t *restrict left, struct range_t *restrict right)
 {
 	int i, len, ret;
 	unsigned long int lint, rint;
@@ -256,7 +254,7 @@ void mergesort_ranges(struct range_t *restrict orig, int size,
 		for (left = 0; left < size; left++) {
 			hold = *(orig + left);
 			for (right = left - 1; 0 <= right; right--) {
-				if (get_order((orig + right), &hold)) {
+				if (merge((orig + right), &hold)) {
 					break;
 				}
 				*(orig + right + 1) = *(orig + right);
@@ -274,7 +272,7 @@ void mergesort_ranges(struct range_t *restrict orig, int size,
 	i = 0;
 
 	while (left < size / 2 && right < size) {
-		if (get_order((orig + left), (orig + right))) {
+		if (merge((orig + left), (orig + right))) {
 			*(temp + i) = *(orig + left);
 			left++;
 		} else {

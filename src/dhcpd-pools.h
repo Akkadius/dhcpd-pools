@@ -232,8 +232,6 @@ unsigned long int ret_touched(struct range_t r);
 unsigned long int ret_tc(struct range_t r);
 unsigned long int ret_tcperc(struct range_t r);
 void field_selector(char c);
-int get_order(struct range_t *__restrict left, struct range_t *__restrict right)
-    __attribute__ ((nonnull(1, 2)));
 void mergesort_ranges(struct range_t *__restrict orig, int size,
 		      struct range_t *__restrict temp)
     __attribute__ ((nonnull(1, 3)));
