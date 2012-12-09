@@ -99,8 +99,6 @@ int parse_leases(void)
 	int ethernets = false;
 	struct leases_t *lease;
 
-	num_touches = num_leases = num_backups = 0;
-
 	dhcpd_leases = fopen(config.dhcpdlease_file, "r");
 	if (dhcpd_leases == NULL) {
 		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
@@ -180,6 +178,7 @@ int parse_leases(void)
 				delete_lease(lease);
 			}
 			add_lease(&addr, BACKUP);
+			config.backups_found = true;
 			continue;
 		}
 		if (ethernets && (xstrstr(line, "  hardware ethernet", 19))) {

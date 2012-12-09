@@ -120,6 +120,7 @@ int main(int argc, char **argv)
 
 	/* Default sort order is by IPs small to big */
 	config.reverse_order = false;
+	config.backups_found = false;
 
 	/* Parse command line options */
 	while (1) {

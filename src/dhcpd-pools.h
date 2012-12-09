@@ -44,6 +44,7 @@
 
 # include <config.h>
 # include <arpa/inet.h>
+# include <stdbool.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <string.h>
@@ -101,6 +102,7 @@ struct configuration_t {
 	int reverse_order;
 	char *output_file;
 	int output_limit[2];
+	bool backups_found;
 	double warning;
 	double critical;
 };
@@ -173,12 +175,6 @@ struct range_t *ranges;
 unsigned int num_ranges;
 /* \var leases Pointer holding all leases. */
 struct leases_t *leases;
-/* \var num_leases FIXME: not in use, remove */
-unsigned long int num_leases;
-/* \var num_touches FIXME: not in use, remove */
-unsigned long int num_touches;
-/* \var num_backups FIXME: not in use, remove */
-unsigned long int num_backups;
 
 /* Function prototypes */
 int prepare_memory(void);
