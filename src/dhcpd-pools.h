@@ -244,6 +244,6 @@ void clean_up(void);
 void add_lease(union ipaddr_t *ip, enum ltype type);
 struct leases_t *find_lease(union ipaddr_t *ip);
 void delete_lease(struct leases_t *lease);
-void delete_all_leases();
+void delete_all_leases(void);
 
 #endif				/* DHCPD_POOLS_H */

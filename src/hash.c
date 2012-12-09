@@ -87,8 +87,9 @@ void delete_lease(struct leases_t *lease)
 	free(lease);
 }
 
-/* uthash >= 1.9.2
-void delete_all_leases()
+/*! \brief Delete all leases from hash array. */
+#ifdef HASH_ITER
+void delete_all_leases(void)
 {
 	struct leases_t *l, *tmp;
 	HASH_ITER(hh, leases, l, tmp) {
@@ -96,14 +97,8 @@ void delete_all_leases()
 		free(l);
 	}
 }
-*/
-
-/*! \brief Delete all leases from hash array.
- * FIXME: The prototype should have (void) as an argument.
- * FIXME: Take the HASH_ITER + HASH_DEL in use by if uthash version
- * allows it.
- */
-void delete_all_leases()
+#else
+void delete_all_leases(void)
 {
 	struct leases_t *l;
 	while (leases) {
@@ -113,3 +108,4 @@ void delete_all_leases()
 		free(l);
 	}
 }
+#endif
