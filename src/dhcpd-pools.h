@@ -146,8 +146,6 @@ struct leases_t {
 };
 
 /* Global variables */
-/* \var prefixes An array holding dhcpd.leases lines that are wanted to examine.*/
-const char *prefixes[2][NUM_OF_PREFIX];
 /* \var prefix_length Length of each prefix.  */
 int prefix_length[2][NUM_OF_PREFIX];
 /* \var config Runtime configuration. */
@@ -175,6 +173,8 @@ struct range_t *ranges;
 unsigned int num_ranges;
 /* \var leases Pointer holding all leases. */
 struct leases_t *leases;
+/*! \var RANGES Maximum number of ranges. */
+unsigned int RANGES;
 
 /* Function prototypes */
 int prepare_memory(void);

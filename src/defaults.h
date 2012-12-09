@@ -41,6 +41,8 @@
 #ifndef DEFAULTS_H
 # define DEFAULTS_H 1
 
+#include "dhcpd-pools.h"
+
 /*! \var MAXLEN
  * \brief Maximum expected line length in dhcpd.conf and dhcpd.leases
  * files.  */
@@ -50,9 +52,26 @@ static const size_t MAXLEN = 1024;
  * \brief Maximum number of different shared networks in dhcpd.conf file. */
 static const unsigned int SHARED_NETWORKS = 8192;
 
-/*! \var RANGES
- * \brief Maximum number of ranges
- * \xrefitem FIXME RANGES "Move this variable to dhcpd-pools.h"*/
-unsigned int RANGES;
+/*! \var prefixes[2][NUM_OF_PREFIX]
+ * \brief ISC lease file formats for IPv4 and IPv6.
+ *
+ * The .indent.pro in use will mess formatting of array below.
+ * Please do not commit less readable indentation. */
+static const char *prefixes[2][NUM_OF_PREFIX] = {
+	[VERSION_4] = {
+		       [PREFIX_LEASE]                = "lease ",
+		       [PREFIX_BINDING_STATE_FREE]   = "  binding state free",
+		       [PREFIX_BINDING_STATE_ACTIVE] = "  binding state active",
+		       [PREFIX_BINDING_STATE_BACKUP] = "  binding state backup",
+		       [PREFIX_HARDWARE_ETHERNET]    = "  hardware ethernet"
+	},
+	[VERSION_6] = {
+		       [PREFIX_LEASE]                = "  iaaddr ",
+		       [PREFIX_BINDING_STATE_FREE]   = "    binding state free",
+		       [PREFIX_BINDING_STATE_ACTIVE] = "    binding state active",
+		       [PREFIX_BINDING_STATE_BACKUP] = "    binding state backup",
+		       [PREFIX_HARDWARE_ETHERNET]    = "    hardware ethernet"
+	}
+};
 
 #endif				/* DEFAULTS_H */

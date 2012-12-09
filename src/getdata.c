@@ -57,37 +57,6 @@
 #include "dhcpd-pools.h"
 #include "xalloc.h"
 
-/*! \var prefixes[2][NUM_OF_PREFIX]
- * \brief ISC lease file formats for IPv4 and IPv6.
- *
- * The .indent.pro in use will mess formatting of array below.
- * Please do not commit less readable indentation.
- *
- * FIXME: The prefixes should be moved to defaults.h */
-const char *prefixes[2][NUM_OF_PREFIX] = {
-	[VERSION_4] = {
-		       [PREFIX_LEASE]                = "lease ",
-		       [PREFIX_BINDING_STATE_FREE]   = "  binding state free",
-		       [PREFIX_BINDING_STATE_ACTIVE] = "  binding state active",
-		       [PREFIX_BINDING_STATE_BACKUP] = "  binding state backup",
-		       [PREFIX_HARDWARE_ETHERNET]    = "  hardware ethernet"
-	},
-	[VERSION_6] = {
-		       [PREFIX_LEASE]                = "  iaaddr ",
-		       [PREFIX_BINDING_STATE_FREE]   = "    binding state free",
-		       [PREFIX_BINDING_STATE_ACTIVE] = "    binding state active",
-		       [PREFIX_BINDING_STATE_BACKUP] = "    binding state backup",
-		       [PREFIX_HARDWARE_ETHERNET]    = "    hardware ethernet"
-	}
-};
-
-/*! \var prefix_length[2][NUM_OF_PREFIX]
- * \brief Expected configuration string length, that varies for IPv4 and
- * IPv6.  See also prefixes.
- *
- * FIXME: The prefix_length should be moved to dhcpd-pools.h */
-int prefix_length[2][NUM_OF_PREFIX] = { };
-
 /*! \brief Lease file parser.  The parser can only read ISC DHCPD
  * dhcpd.leases file format.  */
 int parse_leases(void)
