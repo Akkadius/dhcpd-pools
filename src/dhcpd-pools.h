@@ -146,19 +146,20 @@ struct leases_t {
 	char *ethernet;
 	UT_hash_handle hh;
 };
+/*! \enum limbits
+ * \brief Output limit bits
+ */
+enum limbits {
+	BIT1 = 0x1,
+	BIT2 = 0x2,
+	BIT3 = 0x4
+};
 
 /* Global variables */
 /* \var prefix_length Length of each prefix.  */
 int prefix_length[2][NUM_OF_PREFIX];
 /* \var config Runtime configuration. */
 struct configuration_t config;
-/* \var output_limit_bit_1 Bit mask what is printed.
- * FIXME: These should probably be enum with hex assignments. */
-static int const output_limit_bit_1 = 1;
-/* \var output_limit_bit_2 See output_limit_bit_1 */
-static int const output_limit_bit_2 = 2;
-/* \var output_limit_bit_3 see output_limit_bit_1 */
-static int const output_limit_bit_3 = 4;
 /* \var shared_networks Pointer holding shared network count results. */
 struct shared_network_t *shared_networks;
 /* \var num_shared_networks Number of shared networks found. */
