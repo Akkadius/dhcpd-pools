@@ -65,7 +65,7 @@ int parse_leases(void)
 	char *line, *ipstring, macstring[20];
 	union ipaddr_t addr;
 	struct stat lease_file_stats;
-	int ethernets = false;
+	bool ethernets = false;
 	struct leases_t *lease;
 
 	dhcpd_leases = fopen(config.dhcpdlease_file, "r");
@@ -244,7 +244,7 @@ void parse_config(int is_include, const char *restrict config_file,
 		switch (c) {
 			/* Handle comments if they are not quoted */
 		case '#':
-			if (quote == false) {
+			if (quote == 0) {
 				comment = true;
 			}
 			continue;
@@ -258,7 +258,7 @@ void parse_config(int is_include, const char *restrict config_file,
 		case '\n':
 			/* New line resets comment section, but
 			 * not if quoted */
-			if (quote == false) {
+			if (quote == 0) {
 				comment = false;
 			}
 			break;
@@ -269,7 +269,7 @@ void parse_config(int is_include, const char *restrict config_file,
 			}
 			if (comment == false
 			    && argument != ITS_A_RANGE_SECOND_IP
-			    && argument != 4) {
+			    && argument != ITS_AN_INCLUCE) {
 				newclause = true;
 				i = 0;
 			} else if (argument == ITS_A_RANGE_SECOND_IP) {
