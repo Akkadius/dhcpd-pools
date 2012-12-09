@@ -184,18 +184,16 @@ void nth_field(char *restrict dest, const char *restrict src)
 
 /*! \brief Keyword search in dhcpd.conf file.
  * \param s A line from the dhcpd.conf file.
- * \return Indicator what configuration was found.
- * FIXME: This function should return enum type.
- */
+ * \return Indicator what configuration was found. */
 static int is_interesting_config_clause(char const *restrict s)
 {
 	if (strstr(s, "range"))
-		return 3;
+		return ITS_A_RANGE_FIRST_IP;
 	if (strstr(s, "shared-network"))
-		return 1;
+		return ITS_A_SHAREDNET;
 	if (strstr(s, "include"))
-		return 4;
-	return 0;
+		return ITS_AN_INCLUCE;
+	return ITS_NOTHING_INTERESTING;
 }
 
 /*! \brief The dhcpd.conf file parser.
@@ -207,7 +205,7 @@ void parse_config(int is_include, const char *restrict config_file,
 {
 	FILE *dhcpd_config;
 	bool newclause = true, comment = false;
-	int quote = 0, braces = 0, argument = 0;
+	int quote = 0, braces = 0, argument = ITS_NOTHING_INTERESTING;
 	size_t i = 0;
 	char *word, c;
 	int braces_shared = 1000;
@@ -269,10 +267,12 @@ void parse_config(int is_include, const char *restrict config_file,
 			if (0 < quote) {
 				break;
 			}
-			if (comment == false && argument != 2 && argument != 4) {
+			if (comment == false
+			    && argument != ITS_A_RANGE_SECOND_IP
+			    && argument != 4) {
 				newclause = true;
 				i = 0;
-			} else if (argument == 2) {
+			} else if (argument == ITS_A_RANGE_SECOND_IP) {
 				/* Range ends to ; and this hair in code
 				 * make two ranges wrote together like...
 				 *
@@ -321,16 +321,19 @@ void parse_config(int is_include, const char *restrict config_file,
 		}
 
 		/* Either inside comment or Nth word of clause. */
-		if (comment == true || (newclause == false && argument == 0)) {
+		if (comment == true
+		    || (newclause == false
+			&& argument == ITS_NOTHING_INTERESTING)) {
 			continue;
 		}
 		/* Strip white spaces before new clause word. */
-		if ((newclause == true || argument != 0) && isspace(c)
+		if ((newclause == true || argument != ITS_NOTHING_INTERESTING)
+		    && isspace(c)
 		    && i == 0) {
 			continue;
 		}
 		/* Save to word which clause this is. */
-		if ((newclause == true || argument != 0)
+		if ((newclause == true || argument != ITS_NOTHING_INTERESTING)
 		    && (!isspace(c) || 0 < quote)) {
 			word[i] = c;
 			i++;
@@ -354,17 +357,17 @@ void parse_config(int is_include, const char *restrict config_file,
 			argument = is_interesting_config_clause(word);
 		}
 		/* words after range, shared-network or include */
-		else if (argument != 0) {
+		else if (argument != ITS_NOTHING_INTERESTING) {
 			word[i] = '\0';
 			newclause = false;
 			i = 0;
 
 			switch (argument) {
-			case 2:
+			case ITS_A_RANGE_SECOND_IP:
 				/* printf ("range 2nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
 				parse_ipaddr(word, &addr);
-				argument = 0;
+				argument = ITS_NOTHING_INTERESTING;
 				copy_ipaddr(&range_p->last_ip, &addr);
 				range_p->count = 0;
 				range_p->touched = 0;
@@ -381,7 +384,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				}
 				newclause = true;
 				break;
-			case 3:
+			case ITS_A_RANGE_FIRST_IP:
 				/* printf ("range 1nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
 				if (!(parse_ipaddr(word, &addr))) {
@@ -390,9 +393,9 @@ void parse_config(int is_include, const char *restrict config_file,
 					break;
 				}
 				copy_ipaddr(&range_p->first_ip, &addr);
-				argument = 2;
+				argument = ITS_A_RANGE_SECOND_IP;
 				break;
-			case 1:
+			case ITS_A_SHAREDNET:
 				/* printf ("shared-network named: %s\n", word); */
 				num_shared_networks++;
 				shared_p =
@@ -409,18 +412,18 @@ void parse_config(int is_include, const char *restrict config_file,
 					errx(EXIT_FAILURE,
 					     "parse_config: increase default.h SHARED_NETWORKS and recompile");
 				}
-				argument = 0;
+				argument = ITS_NOTHING_INTERESTING;
 				braces_shared = braces;
 				break;
-			case 4:
+			case ITS_AN_INCLUCE:
 				/* printf ("include file: %s\n", word); */
-				argument = 0;
+				argument = ITS_NOTHING_INTERESTING;
 				parse_config(false, word, shared_p);
 				newclause = true;
 				break;
-			case 0:
+			case ITS_NOTHING_INTERESTING:
 				/* printf ("nothing interesting: %s\n", word); */
-				argument = 0;
+				argument = ITS_NOTHING_INTERESTING;
 				break;
 			default:
 				warnx("impossible occurred, report a bug");

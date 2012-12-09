@@ -129,6 +129,16 @@ struct range_t {
 	unsigned long int touched;
 	unsigned long int backups;
 };
+/*! \enum isc_conf_parser
+ * \brief Configuration file parsing state flags.
+ */
+enum isc_conf_parser {
+	ITS_NOTHING_INTERESTING,
+	ITS_A_RANGE_FIRST_IP,
+	ITS_A_RANGE_SECOND_IP,
+	ITS_A_SHAREDNET,
+	ITS_AN_INCLUCE
+};
 /*! \enum ltype
  * \brief Lease state types.
  */
