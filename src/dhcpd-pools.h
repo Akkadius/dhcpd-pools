@@ -76,7 +76,7 @@ union ipaddr_t {
 enum dhcp_version {
 	VERSION_4,
 	VERSION_6,
-	VERSION_UNKNOWN,
+	VERSION_UNKNOWN
 };
 /*! \enum prefix_t
  * \brief Enumeration of interesting data in dhcpd.leases file, that has

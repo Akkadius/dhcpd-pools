@@ -81,8 +81,7 @@ struct leases_t *find_lease(union ipaddr_t *addr)
  * \param lease Pointer to lease hash. */
 void delete_lease(struct leases_t *lease)
 {
-	if (lease->ethernet != NULL)
-		free(lease->ethernet);
+	free(lease->ethernet);
 	HASH_DEL(leases, lease);
 	free(lease);
 }
