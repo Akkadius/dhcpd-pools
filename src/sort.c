@@ -3,6 +3,7 @@
  * BSD License" or "FreeBSD License".
  *
  * Copyright 2006- Sami Kerola. All rights reserved.
+ * Copyright 2012 Cheer Xiao.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -87,32 +88,76 @@ int rangecomp(const void *restrict r1, const void *restrict r2)
 		      &((const struct range_t *)r2)->first_ip);
 }
 
-/*! \brief Return IP.
- * \param r A range structure.
- * \return First IP in the range, perhaps?? maybe?
- * FIXME: This function is not implemented, yet.
+/*! \brief Compare two unsigned long.
+ * \param u1,u2 Data to compare.
+ * \return Like strcmp.
  */
-unsigned long int ret_ip(struct range_t r)
+int comp_ulong(unsigned long u1, unsigned long u2)
 {
-	return (r.first_ip.v4);
+	return u1 < u2 ? -1 : u1 > u2 ? 1 : 0;
 }
 
-/*! \brief In use in range.
- * \param r A range structure.
- * \return Number of addresses that are in use in the given range.
+/*! \brief Compare two range_t by their first_ip.
+ * \param r1,r2 Pointers to data to compare.
+ * \return Like strcmp.
  */
-unsigned long int ret_cur(struct range_t r)
+int comp_ip(struct range_t *r1, struct range_t *r2)
 {
-	return (r.count);
+	return ipcomp(&r1->first_ip, &r2->first_ip);
 }
 
-/*! \brief Range maximum.
- * \param r A range structure.
- * \return Maximum number of addresses that can be in the given range.
+/*! \brief Compare two range_t by their capacity.
+ * \param r1,r2 Pointers to data to compare.
+ * \return Like strcmp.
  */
-unsigned long int ret_max(struct range_t r)
+int comp_max(struct range_t *r1, struct range_t *r2)
 {
-	return get_range_size(&r);
+	return comp_ulong(get_range_size(r1), get_range_size(r2));
+}
+
+/*! \brief Compare two range_t by their current usage.
+ * \param r1,r2 Pointers to data to compare.
+ * \return Like strcmp.
+ */
+int comp_cur(struct range_t *r1, struct range_t *r2)
+{
+	return comp_ulong(r1->count, r2->count);
+}
+
+/*! \brief Compare two range_t by their current usage percentage.
+ * \param r1,r2 Pointers to data to compare.
+ * \return Like strcmp.
+ */
+int comp_percent(struct range_t *r1, struct range_t *r2)
+{
+	return comp_ulong(ret_percent(*r1), ret_percent(*r2));
+}
+
+/*! \brief Compare two range_t by their touched addresses.
+ * \param r1,r2 Pointers to data to compare.
+ * \return Like strcmp.
+ */
+int comp_touched(struct range_t *r1, struct range_t *r2)
+{
+	return comp_ulong(r1->touched, r2->touched);
+}
+
+/*! \brief Compare two range_t by their touched and in use addresses.
+ * \param r1,r2 Pointers to data to compare.
+ * \return Like strcmp.
+ */
+int comp_tc(struct range_t *r1, struct range_t *r2)
+{
+	return comp_ulong(ret_tc(*r1), ret_tc(*r2));
+}
+
+/*! \brief Compare two range_t by their touched and in use percentage.
+ * \param r1,r2 Pointers to data to compare.
+ * \return Like strcmp.
+ */
+int comp_tcperc(struct range_t *r1, struct range_t *r2)
+{
+	return comp_ulong(ret_tcperc(*r1), ret_tcperc(*r2));
 }
 
 /*! \brief Percentage in use in range.
@@ -124,15 +169,6 @@ unsigned long int ret_percent(struct range_t r)
 	float f;
 	f = (float)r.count / get_range_size(&r);
 	return ((unsigned long int)(f * 100000));
-}
-
-/*! \brief Touched in range.
- * \param r A range structure.
- * \return Number of touched addresses in the given range.
- */
-unsigned long int ret_touched(struct range_t r)
-{
-	return (r.touched);
 }
 
 /*! \brief Touched and in use in range
@@ -167,25 +203,25 @@ void field_selector(char c)
 	case 'n':
 		break;
 	case 'i':
-		returner = ret_ip;
+		comparer = comp_ip;
 		break;
 	case 'm':
-		returner = ret_max;
+		comparer = comp_max;
 		break;
 	case 'c':
-		returner = ret_cur;
+		comparer = comp_cur;
 		break;
 	case 'p':
-		returner = ret_percent;
+		comparer = comp_percent;
 		break;
 	case 't':
-		returner = ret_touched;
+		comparer = comp_touched;
 		break;
 	case 'T':
-		returner = ret_tc;
+		comparer = comp_tc;
 		break;
 	case 'e':
-		returner = ret_tcperc;
+		comparer = comp_tcperc;
 		break;
 	default:
 		warnx("field_selector: unknown sort order `%c'", c);
@@ -202,7 +238,7 @@ void field_selector(char c)
 static int merge(struct range_t *restrict left, struct range_t *restrict right)
 {
 	int i, len, ret;
-	unsigned long int lint, rint;
+	int cmp;
 
 	len = strlen(config.sort);
 	for (i = 0; i < len; i++) {
@@ -218,21 +254,20 @@ static int merge(struct range_t *restrict left, struct range_t *restrict right)
 			continue;
 		}
 
-		/* Select which function is pointed by returner */
+		/* Select which function is pointed by comparer */
 		field_selector(config.sort[i]);
-		lint = returner(*left);
-		rint = returner(*right);
+		cmp = comparer(left, right);
 		/* If fields are equal use next sort method */
-		if (lint == rint) {
+		if (cmp == 0) {
 			continue;
 		}
-		if (lint < rint) {
+		if (cmp < 0) {
 			return (1);
 		}
 		return (0);
 	}
 
-	/* If all returners where equal */
+	/* If all comparers where equal */
 	return (0);
 }
 
