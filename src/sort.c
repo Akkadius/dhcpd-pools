@@ -218,6 +218,7 @@ comparer_t field_selector(char c)
 		errx(EXIT_FAILURE, "Try `%s --help' for more information.",
 		     program_invocation_short_name);
 	}
+	return NULL;
 }
 
 /*! \brief Perform requested sorting.
