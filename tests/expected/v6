@@ -1,6 +1,6 @@
 Ranges:
 shared net name     first ip                                  last ip                                   max   cur    percent  touch   t+c  t+c perc
-All networks        dead:abba:1000::2                       - dead:abba:1000:ff:ffff:ffff:ffff:ffff   18446744073709551614     2      0.000      0     2     0.000
+All networks        dead:abba:1000::2                       - dead:abba:1000:ff:ffff:ffff:ffff:ffff   4.72237e+21     2      0.000      0     2     0.000
 All networks        dead:abba:4000::2                       - dead:abba:4000::ff                        254     1      0.394      0     1     0.394
 
 Shared networks:
@@ -8,4 +8,4 @@ name                   max   cur     percent  touch    t+c  t+c perc
 
 Sum of all ranges:
 name                   max   cur     percent  touch    t+c  t+c perc
-All networks         18446744073709551868     3      1.190       0      3     1.190  # FIXME: this line is mocked up
+All networks         4.72237e+21     3      0.000       0      3     0.000
