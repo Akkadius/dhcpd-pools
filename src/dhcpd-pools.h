@@ -224,6 +224,7 @@ int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
 typedef int (*comparer_t) (struct range_t *r1, struct range_t *r2);
+comparer_t field_selector(char c);
 double ret_percent(struct range_t r);
 double ret_tc(struct range_t r);
 double ret_tcperc(struct range_t r);
