@@ -88,13 +88,13 @@ int rangecomp(const void *restrict r1, const void *restrict r2)
 		      &((const struct range_t *)r2)->first_ip);
 }
 
-/*! \brief Compare two unsigned long.
- * \param u1,u2 Data to compare.
+/*! \brief Compare two doubles.
+ * \param f1,f2 Data to compare.
  * \return Like strcmp.
  */
-int comp_ulong(unsigned long u1, unsigned long u2)
+int comp_double(double f1, double f2)
 {
-	return u1 < u2 ? -1 : u1 > u2 ? 1 : 0;
+	return f1 < f2 ? -1 : f1 > f2 ? 1 : 0;
 }
 
 /*! \brief Compare two range_t by their first_ip.
@@ -112,7 +112,7 @@ int comp_ip(struct range_t *r1, struct range_t *r2)
  */
 int comp_max(struct range_t *r1, struct range_t *r2)
 {
-	return comp_ulong(get_range_size(r1), get_range_size(r2));
+	return comp_double(get_range_size(r1), get_range_size(r2));
 }
 
 /*! \brief Compare two range_t by their current usage.
@@ -121,7 +121,7 @@ int comp_max(struct range_t *r1, struct range_t *r2)
  */
 int comp_cur(struct range_t *r1, struct range_t *r2)
 {
-	return comp_ulong(r1->count, r2->count);
+	return comp_double(r1->count, r2->count);
 }
 
 /*! \brief Compare two range_t by their current usage percentage.
@@ -130,7 +130,7 @@ int comp_cur(struct range_t *r1, struct range_t *r2)
  */
 int comp_percent(struct range_t *r1, struct range_t *r2)
 {
-	return comp_ulong(ret_percent(*r1), ret_percent(*r2));
+	return comp_double(ret_percent(*r1), ret_percent(*r2));
 }
 
 /*! \brief Compare two range_t by their touched addresses.
@@ -139,7 +139,7 @@ int comp_percent(struct range_t *r1, struct range_t *r2)
  */
 int comp_touched(struct range_t *r1, struct range_t *r2)
 {
-	return comp_ulong(r1->touched, r2->touched);
+	return comp_double(r1->touched, r2->touched);
 }
 
 /*! \brief Compare two range_t by their touched and in use addresses.
@@ -148,7 +148,7 @@ int comp_touched(struct range_t *r1, struct range_t *r2)
  */
 int comp_tc(struct range_t *r1, struct range_t *r2)
 {
-	return comp_ulong(ret_tc(*r1), ret_tc(*r2));
+	return comp_double(ret_tc(*r1), ret_tc(*r2));
 }
 
 /*! \brief Compare two range_t by their touched and in use percentage.
@@ -157,7 +157,7 @@ int comp_tc(struct range_t *r1, struct range_t *r2)
  */
 int comp_tcperc(struct range_t *r1, struct range_t *r2)
 {
-	return comp_ulong(ret_tcperc(*r1), ret_tcperc(*r2));
+	return comp_double(ret_tcperc(*r1), ret_tcperc(*r2));
 }
 
 /*! \brief Percentage in use in range.
