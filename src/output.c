@@ -61,7 +61,7 @@ int output_txt(void)
 {
 	unsigned int i;
 	struct range_t *range_p;
-	unsigned long range_size;
+	double range_size;
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
@@ -111,7 +111,7 @@ int output_txt(void)
 				max_ipaddr_length,
 				ntop_ipaddr(&range_p->first_ip));
 			fprintf(outfile,
-				" - %-*s %5lu %5lu %10.3f  %5lu %5lu %9.3f",
+				" - %-*s %5g %5g %10.3f  %5g %5g %9.3f",
 				max_ipaddr_length,
 				ntop_ipaddr(&range_p->last_ip),
 				range_size,
@@ -123,7 +123,7 @@ int output_txt(void)
 					(range_p->touched +
 					 range_p->count)) / range_size);
 			if (config.backups_found == true) {
-				fprintf(outfile, "%7lu %8.3f",
+				fprintf(outfile, "%7g %8.3f",
 					range_p->backups,
 					(float)(100 * range_p->backups) /
 					range_size);
@@ -149,7 +149,7 @@ int output_txt(void)
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			fprintf(outfile,
-				"%-20s %5lu %5lu %10.3f %7lu %6lu %9.3f",
+				"%-20s %5g %5g %10.3f %7g %6g %9.3f",
 				shared_p->name, shared_p->available,
 				shared_p->used,
 				(float)(100 * shared_p->used) /
@@ -160,7 +160,7 @@ int output_txt(void)
 					 shared_p->used)) /
 				shared_p->available);
 			if (config.backups_found == true) {
-				fprintf(outfile, "%7lu %8.3f",
+				fprintf(outfile, "%7g %8.3f",
 					shared_p->backups,
 					(float)(100 * shared_p->backups) /
 					shared_p->available);
@@ -183,7 +183,7 @@ int output_txt(void)
 		fprintf(outfile, "\n");
 	}
 	if (config.output_limit[1] & BIT3) {
-		fprintf(outfile, "%-20s %5lu %5lu %10.3f %7lu %6lu %9.3f",
+		fprintf(outfile, "%-20s %5g %5g %10.3f %7g %6g %9.3f",
 			shared_networks->name,
 			shared_networks->available,
 			shared_networks->used,
@@ -197,7 +197,7 @@ int output_txt(void)
 			shared_networks->available);
 
 		if (config.backups_found == true) {
-			fprintf(outfile, "%7lu %8.3f",
+			fprintf(outfile, "%7g %8.3f",
 				shared_networks->backups,
 				(float)(100 * shared_networks->backups) /
 				shared_networks->available);
@@ -226,7 +226,7 @@ int output_xml(void)
 {
 	unsigned int i;
 	struct range_t *range_p;
-	unsigned long range_size;
+	double range_size;
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
@@ -280,11 +280,11 @@ int output_xml(void)
 			fprintf(outfile, "- %s</range>\n",
 				ntop_ipaddr(&range_p->last_ip));
 			fprintf(outfile, "\t<gateway></gateway>\n");
-			fprintf(outfile, "\t<defined>%lu</defined>\n",
+			fprintf(outfile, "\t<defined>%g</defined>\n",
 				range_size);
-			fprintf(outfile, "\t<used>%lu</used>\n",
+			fprintf(outfile, "\t<used>%g</used>\n",
 				range_p->count);
-			fprintf(outfile, "\t<free>%lu</free>\n",
+			fprintf(outfile, "\t<free>%g</free>\n",
 				range_size - range_p->count);
 			range_p++;
 			range_size = get_range_size(range_p);
@@ -298,11 +298,11 @@ int output_xml(void)
 			fprintf(outfile, "<shared-network>\n");
 			fprintf(outfile, "\t<location>%s</location>\n",
 				shared_p->name);
-			fprintf(outfile, "\t<defined>%lu</defined>\n",
+			fprintf(outfile, "\t<defined>%g</defined>\n",
 				shared_p->available);
-			fprintf(outfile, "\t<used>%lu</used>\n",
+			fprintf(outfile, "\t<used>%g</used>\n",
 				shared_p->used);
-			fprintf(outfile, "\t<free>%lu</free>\n",
+			fprintf(outfile, "\t<free>%g</free>\n",
 				shared_p->available - shared_p->used);
 			fprintf(outfile, "</shared-network>\n");
 		}
@@ -312,10 +312,10 @@ int output_xml(void)
 		fprintf(outfile, "<summary>\n");
 		fprintf(outfile, "\t<location>%s</location>\n",
 			shared_networks->name);
-		fprintf(outfile, "\t<defined>%lu</defined>\n",
+		fprintf(outfile, "\t<defined>%g</defined>\n",
 			shared_networks->available);
-		fprintf(outfile, "\t<used>%lu</used>\n", shared_networks->used);
-		fprintf(outfile, "\t<free>%lu</free>\n",
+		fprintf(outfile, "\t<used>%g</used>\n", shared_networks->used);
+		fprintf(outfile, "\t<free>%g</free>\n",
 			shared_networks->available - shared_networks->used);
 		fprintf(outfile, "</summary>\n");
 	}
@@ -343,7 +343,7 @@ int output_json(void)
 {
 	unsigned int i = 0;
 	struct range_t *range_p;
-	unsigned long range_size;
+	double range_size;
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
@@ -409,9 +409,9 @@ int output_json(void)
 				ntop_ipaddr(&range_p->first_ip));
 			fprintf(outfile, " - %s\", ",
 				ntop_ipaddr(&range_p->last_ip));
-			fprintf(outfile, "\"defined\":%lu, ", range_size);
-			fprintf(outfile, "\"used\":%lu, ", range_p->count);
-			fprintf(outfile, "\"free\":%lu ",
+			fprintf(outfile, "\"defined\":%g, ", range_size);
+			fprintf(outfile, "\"used\":%g, ", range_p->count);
+			fprintf(outfile, "\"free\":%g ",
 				range_size - range_p->count);
 			range_p++;
 			range_size = get_range_size(range_p);
@@ -435,10 +435,10 @@ int output_json(void)
 			fprintf(outfile, "{ ");
 			fprintf(outfile, "\"location\":\"%s\", ",
 				shared_p->name);
-			fprintf(outfile, "\"defined\":%lu, ",
+			fprintf(outfile, "\"defined\":%g, ",
 				shared_p->available);
-			fprintf(outfile, "\"used\":%lu, ", shared_p->used);
-			fprintf(outfile, "\"free\":%lu ",
+			fprintf(outfile, "\"used\":%g, ", shared_p->used);
+			fprintf(outfile, "\"free\":%g ",
 				shared_p->available - shared_p->used);
 			if (i + 1 < num_shared_networks)
 				fprintf(outfile, "},\n");
@@ -456,11 +456,11 @@ int output_json(void)
 		fprintf(outfile, "   \"summary\": {\n");
 		fprintf(outfile, "         \"location\":\"%s\",\n",
 			shared_networks->name);
-		fprintf(outfile, "         \"defined\":%lu,\n",
+		fprintf(outfile, "         \"defined\":%g,\n",
 			shared_networks->available);
-		fprintf(outfile, "         \"used\":%lu,\n",
+		fprintf(outfile, "         \"used\":%g,\n",
 			shared_networks->used);
-		fprintf(outfile, "         \"free\":%lu\n",
+		fprintf(outfile, "         \"free\":%g\n",
 			shared_networks->available - shared_networks->used);
 		fprintf(outfile, "   }");	/* end of summary */
 		sep++;
@@ -617,10 +617,10 @@ static void output_line(FILE *restrict f, char const *restrict type,
  * \param type HMTL tag name.
  * \param unlong Actual payload of the printout.
  */
-static void output_long(FILE *restrict f, char const *restrict type,
-			unsigned long unlong)
+static void output_double(FILE *restrict f, char const *restrict type,
+			double d)
 {
-	fprintf(f, "  <%s class=ralign>%lu</%s>\n", type, unlong, type);
+	fprintf(f, "  <%s class=ralign>%g</%s>\n", type, d, type);
 }
 
 /*! \brief Line with float in html output format.
@@ -676,7 +676,7 @@ int output_html(void)
 {
 	unsigned int i;
 	struct range_t *range_p;
-	unsigned long range_size;
+	double range_size;
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
@@ -729,20 +729,20 @@ int output_html(void)
 				    ntop_ipaddr(&range_p->first_ip));
 			output_line(outfile, "td", "calign",
 				    ntop_ipaddr(&range_p->last_ip));
-			output_long(outfile, "td", range_size);
-			output_long(outfile, "td", range_p->count);
+			output_double(outfile, "td", range_size);
+			output_double(outfile, "td", range_p->count);
 			output_float(outfile, "td",
 				     (float)(100 * range_p->count) /
 				     range_size);
-			output_long(outfile, "td", range_p->touched);
-			output_long(outfile, "td",
+			output_double(outfile, "td", range_p->touched);
+			output_double(outfile, "td",
 				    range_p->touched + range_p->count);
 			output_float(outfile, "td",
 				     (float)(100 *
 					     (range_p->touched +
 					      range_p->count)) / range_size);
 			if (config.backups_found == true) {
-				output_long(outfile, "td", range_p->backups);
+				output_double(outfile, "td", range_p->backups);
 				output_float(outfile, "td",
 					     (float)(100 *
 						     range_p->backups) /
@@ -776,13 +776,13 @@ int output_html(void)
 			shared_p++;
 			newrow(outfile);
 			output_line(outfile, "td", "calign", shared_p->name);
-			output_long(outfile, "td", shared_p->available);
-			output_long(outfile, "td", shared_p->used);
+			output_double(outfile, "td", shared_p->available);
+			output_double(outfile, "td", shared_p->used);
 			output_float(outfile, "td",
 				     (float)(100 * shared_p->used) /
 				     shared_p->available);
-			output_long(outfile, "td", shared_p->touched);
-			output_long(outfile, "td",
+			output_double(outfile, "td", shared_p->touched);
+			output_double(outfile, "td",
 				    shared_p->touched + shared_p->used);
 			output_float(outfile, "td",
 				     (float)(100 *
@@ -790,7 +790,7 @@ int output_html(void)
 					      shared_p->used)) /
 				     shared_p->available);
 			if (config.backups_found == true) {
-				output_long(outfile, "td", shared_p->backups);
+				output_double(outfile, "td", shared_p->backups);
 				output_float(outfile, "td",
 					     (float)(100 *
 						     shared_p->backups) /
@@ -820,13 +820,13 @@ int output_html(void)
 	if (config.output_limit[1] & BIT3) {
 		newrow(outfile);
 		output_line(outfile, "td", "calign", shared_networks->name);
-		output_long(outfile, "td", shared_networks->available);
-		output_long(outfile, "td", shared_networks->used);
+		output_double(outfile, "td", shared_networks->available);
+		output_double(outfile, "td", shared_networks->used);
 		output_float(outfile, "td",
 			     (float)(100 * shared_networks->used) /
 			     shared_networks->available);
-		output_long(outfile, "td", shared_networks->touched);
-		output_long(outfile, "td",
+		output_double(outfile, "td", shared_networks->touched);
+		output_double(outfile, "td",
 			    shared_networks->touched + shared_networks->used);
 		output_float(outfile, "td",
 			     (float)(100 *
@@ -834,7 +834,7 @@ int output_html(void)
 				      shared_networks->used)) /
 			     shared_networks->available);
 		if (config.backups_found == true) {
-			output_long(outfile, "td", shared_networks->backups);
+			output_double(outfile, "td", shared_networks->backups);
 			output_float(outfile, "td",
 				     (float)(100 *
 					     shared_networks->backups) /
@@ -867,7 +867,7 @@ int output_csv(void)
 {
 	unsigned int i;
 	struct range_t *range_p;
-	unsigned long range_size;
+	double range_size;
 	struct shared_network_t *shared_p;
 	FILE *outfile;
 	int ret;
@@ -904,7 +904,7 @@ int output_csv(void)
 			fprintf(outfile, "\"%s\",",
 				ntop_ipaddr(&range_p->first_ip));
 			fprintf(outfile,
-				"\"%s\",\"%lu\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
+				"\"%s\",\"%g\",\"%g\",\"%.3f\",\"%g\",\"%g\",\"%.3f\"",
 				ntop_ipaddr(&range_p->last_ip), range_size,
 				range_p->count,
 				(float)(100 * range_p->count) / range_size,
@@ -914,7 +914,7 @@ int output_csv(void)
 					(range_p->touched +
 					 range_p->count)) / range_size);
 			if (config.backups_found == true) {
-				fprintf(outfile, ",\"%lu\",\"%.3f\"",
+				fprintf(outfile, ",\"%g\",\"%.3f\"",
 					range_p->backups,
 					(float)(100 * range_p->backups) /
 					range_size);
@@ -940,7 +940,7 @@ int output_csv(void)
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			fprintf(outfile,
-				"\"%s\",\"%lu\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
+				"\"%s\",\"%g\",\"%g\",\"%.3f\",\"%g\",\"%g\",\"%.3f\"",
 				shared_p->name, shared_p->available,
 				shared_p->used,
 				(float)(100 * shared_p->used) /
@@ -951,7 +951,7 @@ int output_csv(void)
 					 shared_p->used)) /
 				shared_p->available);
 			if (config.backups_found == true) {
-				fprintf(outfile, ",\"%lu\",\"%.3f\"",
+				fprintf(outfile, ",\"%g\",\"%.3f\"",
 					shared_p->backups,
 					(float)(100 * shared_p->backups) /
 					shared_p->available);
@@ -973,7 +973,7 @@ int output_csv(void)
 	if (config.output_limit[1] & BIT3) {
 
 		fprintf(outfile,
-			"\"%s\",\"%lu\",\"%lu\",\"%.3f\",\"%lu\",\"%lu\",\"%.3f\"",
+			"\"%s\",\"%g\",\"%g\",\"%.3f\",\"%g\",\"%g\",\"%.3f\"",
 			shared_networks->name, shared_networks->available,
 			shared_networks->used,
 			(float)(100 * shared_networks->used) /
@@ -985,7 +985,7 @@ int output_csv(void)
 				 shared_networks->used)) /
 			shared_networks->available);
 		if (config.backups_found == true) {
-			fprintf(outfile, "%7lu %8.3f",
+			fprintf(outfile, "%7g %8.3f",
 				shared_networks->backups,
 				(float)(100 * shared_networks->backups) /
 				shared_networks->available);
@@ -1013,7 +1013,7 @@ int output_alarming(void)
 {
 	FILE *outfile;
 	struct range_t *range_p;
-	unsigned long range_size;
+	double range_size;
 	struct shared_network_t *shared_p;
 	unsigned int i;
 	float perc;

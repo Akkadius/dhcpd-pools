@@ -164,18 +164,16 @@ int comp_tcperc(struct range_t *r1, struct range_t *r2)
  * \param r A range structure.
  * \return Usage percentage of the given range.
  */
-unsigned long int ret_percent(struct range_t r)
+double ret_percent(struct range_t r)
 {
-	float f;
-	f = (float)r.count / get_range_size(&r);
-	return ((unsigned long int)(f * 100000));
+	return r.count / get_range_size(&r);
 }
 
 /*! \brief Touched and in use in range
  * \param r A range structure.
  * \return Number of touched or in use addresses in the given range.
  */
-unsigned long int ret_tc(struct range_t r)
+double ret_tc(struct range_t r)
 {
 	return (r.count + r.touched);
 }
@@ -184,11 +182,9 @@ unsigned long int ret_tc(struct range_t r)
  * \param r A range structure.
  * \return Percentage of touched or in use addresses in the given range.
  */
-unsigned long int ret_tcperc(struct range_t r)
+double ret_tcperc(struct range_t r)
 {
-	float f;
-	f = (float)(r.count + r.touched) / get_range_size(&r);
-	return ((unsigned long int)(f * 10000));
+	return ret_tc(r) / get_range_size(&r);
 }
 
 /*! \brief Sort field selector.

@@ -113,10 +113,10 @@ struct configuration_t {
  */
 struct shared_network_t {
 	char *name;
-	unsigned long int available;
-	unsigned long int used;
-	unsigned long int touched;
-	unsigned long int backups;
+	double available;
+	double used;
+	double touched;
+	double backups;
 };
 /*! \struct range_t
  * \brief Counters for an individual range.
@@ -125,9 +125,9 @@ struct range_t {
 	struct shared_network_t *shared_net;
 	union ipaddr_t first_ip;
 	union ipaddr_t last_ip;
-	unsigned long int count;
-	unsigned long int touched;
-	unsigned long int backups;
+	double count;
+	double touched;
+	double backups;
 };
 /*! \enum isc_conf_parser
  * \brief Configuration file parsing state flags.
@@ -224,9 +224,9 @@ int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
 typedef int (*comparer_t) (struct range_t *r1, struct range_t *r2);
-unsigned long int ret_percent(struct range_t r);
-unsigned long int ret_tc(struct range_t r);
-unsigned long int ret_tcperc(struct range_t r);
+double ret_percent(struct range_t r);
+double ret_tc(struct range_t r);
+double ret_tcperc(struct range_t r);
 void mergesort_ranges(struct range_t *__restrict orig, int size,
 		      struct range_t *__restrict temp)
     __attribute__ ((nonnull(1, 3)));
