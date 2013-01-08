@@ -125,17 +125,17 @@ const char *ntop_ipaddr(const union ipaddr_t *ip)
  * and last IP in the range.
  * \return Size of a range.
  */
-unsigned long get_range_size(const struct range_t *r)
+double get_range_size(const struct range_t *r)
 {
 	if (config.dhcp_version == VERSION_6) {
-		unsigned long size = 0;
+		double size = 0;
 		int i;
 		/* When calculating the size of an IPv6 range overflow may
 		 * occur.  In that case only the last LONG_BIT bits are
 		 * preserved, thus we just skip the first (16 - LONG_BIT)
 		 * bits...  */
-		for (i = LONG_BIT / 8 < 16 ? 16 - LONG_BIT / 8 : 0; i < 16; i++) {
-			size <<= 8;
+		for (i = 0; i < 16; i++) {
+			size *= 256;
 			size += (int)r->last_ip.v6[i] - (int)r->first_ip.v6[i];
 		}
 		return size + 1;

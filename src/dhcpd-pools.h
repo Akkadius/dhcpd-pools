@@ -205,7 +205,7 @@ int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst);
 void copy_ipaddr(union ipaddr_t *restrict dst,
 		 const union ipaddr_t *restrict src);
 const char *ntop_ipaddr(const union ipaddr_t *ip);
-unsigned long get_range_size(const struct range_t *r);
+double get_range_size(const struct range_t *r);
 int xstrstr(const char *__restrict a, const char *__restrict b, int len)
     __attribute__ ((nonnull(1, 2)))
 # if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
