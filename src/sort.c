@@ -196,33 +196,27 @@ unsigned long int ret_tcperc(struct range_t r)
  * The sort algorithms are stabile, which means multiple sorts can be
  * specified and they do not mess the result of previous sort.  The sort
  * algorithms are used via function pointer, that gets to be reassigned.
+ * \return Return the selected compare function.
  */
-void field_selector(char c)
+comparer_t field_selector(char c)
 {
 	switch (c) {
 	case 'n':
 		break;
 	case 'i':
-		comparer = comp_ip;
-		break;
+		return comp_ip;
 	case 'm':
-		comparer = comp_max;
-		break;
+		return comp_max;
 	case 'c':
-		comparer = comp_cur;
-		break;
+		return comp_cur;
 	case 'p':
-		comparer = comp_percent;
-		break;
+		return comp_percent;
 	case 't':
-		comparer = comp_touched;
-		break;
+		return comp_touched;
 	case 'T':
-		comparer = comp_tc;
-		break;
+		return comp_tc;
 	case 'e':
-		comparer = comp_tcperc;
-		break;
+		return comp_tcperc;
 	default:
 		warnx("field_selector: unknown sort order `%c'", c);
 		errx(EXIT_FAILURE, "Try `%s --help' for more information.",
@@ -238,6 +232,7 @@ void field_selector(char c)
 static int merge(struct range_t *restrict left, struct range_t *restrict right)
 {
 	int i, len, ret;
+	comparer_t comparer;
 	int cmp;
 
 	len = strlen(config.sort);
@@ -255,7 +250,7 @@ static int merge(struct range_t *restrict left, struct range_t *restrict right)
 		}
 
 		/* Select which function is pointed by comparer */
-		field_selector(config.sort[i]);
+		comparer = field_selector(config.sort[i]);
 		cmp = comparer(left, right);
 		/* If fields are equal use next sort method */
 		if (cmp == 0) {

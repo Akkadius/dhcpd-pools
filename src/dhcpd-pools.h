@@ -223,11 +223,10 @@ int leasecomp(const void *restrict a, const void *restrict b);
 int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
-int (*comparer) (struct range_t *r1, struct range_t *r2);
+typedef int (*comparer_t) (struct range_t *r1, struct range_t *r2);
 unsigned long int ret_percent(struct range_t r);
 unsigned long int ret_tc(struct range_t r);
 unsigned long int ret_tcperc(struct range_t r);
-void field_selector(char c);
 void mergesort_ranges(struct range_t *__restrict orig, int size,
 		      struct range_t *__restrict temp)
     __attribute__ ((nonnull(1, 3)));
