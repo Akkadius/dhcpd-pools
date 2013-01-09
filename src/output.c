@@ -615,7 +615,7 @@ static void output_line(FILE *restrict f, char const *restrict type,
  *
  * \param f Output file descriptor.
  * \param type HMTL tag name.
- * \param unlong Actual payload of the printout.
+ * \param d Actual payload of the printout.
  */
 static void output_double(FILE *restrict f, char const *restrict type,
 			double d)
