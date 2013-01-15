@@ -181,10 +181,12 @@ ISC dhcpd configuration file.
 .TP
 @DHCPDLEASE_FILE@
 ISC dhcpd lease file.
-.SH AUTHOR
-Written by Sami Kerola.
+.SH AUTHORS
+Original design by Sami Kerola.
 .br
 XML support by Dominic Germain, Sogetel inc.
+.br
+IPv6 support by Cheer Xiao.
 .PP
 The software has FreeBSD License.
 .SH "REPORTING BUGS"

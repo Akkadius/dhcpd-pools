@@ -251,8 +251,9 @@ void clean_up(void)
 void __attribute__ ((__noreturn__)) print_version(void)
 {
 	fprintf(stdout, "%s\n"
-		"Written by Sami Kerola.\n"
-		"XML support by Dominic Germain, Sogetel inc.\n\n"
+		"Original design by Sami Kerola.\n"
+		"XML support by Dominic Germain, Sogetel inc.\n"
+		"IPv6 support by Cheer Xiao.\n\n"
 		"The software has FreeBSD License.\n", PACKAGE_STRING);
 	exit(EXIT_SUCCESS);
 }
