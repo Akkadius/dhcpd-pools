@@ -128,7 +128,7 @@ AS_IF([test x$enable_doxygen = xyes], [
 	AC_CHECK_PROGS([DOXYGEN], [doxygen])
 	AS_IF([test "x$DOXYGEN" = "x"],
 		AC_MSG_ERROR([doxygen not in path]),
-		AC_CONFIG_FILES([doc/Makefile doc/doxy.conf])
+		AC_CONFIG_FILES([doc/doxy.conf])
 	)
 
 	AC_CHECK_PROGS([DOXYGEN_DOT], [dot])
@@ -146,6 +146,7 @@ AC_CONFIG_FILES([
 	man/Makefile
 	man/dhcpd-pools.1
 	tests/Makefile
+	doc/Makefile
 	contrib/Makefile
 ])
 
