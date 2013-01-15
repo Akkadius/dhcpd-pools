@@ -2,13 +2,12 @@
 #
 # Minimal regression test suite.
 
-TEST_TOPDIR=$(cd $(dirname $0) && pwd)
-DHCPD_POOLS=$(readlink -f $TEST_TOPDIR/../src/dhcpd-pools)
-
 if [ ! -d outputs ]; then
 	mkdir outputs
 fi
 
-$DHCPD_POOLS -f J -c confs/same-twice -l leases/same-twice -o outputs/same-twice-json
-diff -u expected/same-twice-json outputs/same-twice-json
+dhcpd-pools -f J -c $top_srcdir/tests/confs/same-twice \
+		 -l $top_srcdir/tests/leases/same-twice \
+		 -o outputs/same-twice-json
+diff -u $top_srcdir/tests/expected/same-twice-json outputs/same-twice-json
 exit $?
