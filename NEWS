@@ -6,6 +6,58 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.21
+$ git shortlog v2.20..v2.21
+Cheer Xiao (10):
+      IPv6: add DHCPv6 support
+      sort: Use a comparer instead of returner
+      sort: Get rid of global comparer
+      counting & output: Convert all counters to double
+      fix: Put prototype of field_selector back to dhcpd-pools.h
+      sort: let field_selector return NULL at the end
+      counting: Let get_range_size return double
+      sort: let comp_* functions compare double
+      tests: update expected/v6
+      output: fix doc of output_double
+
+Gilles Bouthenot (5):
+      output: add json format support
+      json output: add newline at end
+      json output: remove useless, empty fields
+      json output: bugfix: correct range specify only first ip
+      contrib: add munin plugins
+
+Sami Kerola (29):
+      build-sys: remove c++ compiler check
+      tools: add indent command configuration file
+      tests: add basic tests
+      build-sys: update .gitignore
+      tests: add v6 check
+      output: remove unnecessary new line printing
+      build-sys: more clean ups
+      json output: use defined output file for all printing
+      tests: add json tests, and make fail output loud
+      ouput format: fix active lease printing
+      output ethernet: do not crash if ethernet is missing
+      docs: add doxygen tags, configuration file, and autotooling
+      backup counting: fix output regression
+      clean up: remove unused functions
+      clean up: move code to more proper location
+      hash: make delete to use HASH_ITER if it is available
+      clean up: move global variables to config structure
+      clean up: use enum as symbolic bit masks
+      clean up: convert parsing magic numbers to symbolic values
+      clean up: rename get_order() to merge() and mark static
+      clean up: fix few indentation slips
+      getdata: be consistant with symbolic numbers
+      smatch scan: fix few warnings
+      build-sys: allow tests run parallel
+      build-sys: update .gitignore files
+      docs: thanks to Cheer Xiao this software has IPv6 support
+      tests: fix make distcheck
+      docs: fix doxygen make distcheck breakage
+      release: 2.21
+
 Version 2.20
 $ git shortlog v2.19..v2.20
 Cheer Xiao (3):
