@@ -9,7 +9,8 @@ AC_INIT([dhcpd-pools],
 PACKAGE_MAINTAINER="Sami Kerola"
 AC_SUBST([PACKAGE_MAINTAINER])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([-Wall foreign 1.10 tar-pax no-dist-gzip dist-xz -Wextra-portability])
+AM_INIT_AUTOMAKE([-Wall -Wextra-portability foreign 1.10 tar-pax no-dist-gzip dist-xz
+		  parallel-tests])
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
