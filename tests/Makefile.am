@@ -1,5 +1,6 @@
 TESTS = \
 	bootp \
+	complete \
 	full-json \
 	leading0 \
 	same-twice \

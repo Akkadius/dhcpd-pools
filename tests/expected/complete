@@ -1,0 +1,16 @@
+Ranges:
+shared net name     first ip           last ip            max   cur    percent  touch   t+c  t+c perc
+example1            10.0.0.1         - 10.0.0.20           20    11     55.000      0    11    55.000
+example1            10.1.0.1         - 10.1.0.20           20    10     50.000      0    10    50.000
+example2            10.2.0.1         - 10.2.0.20           20     8     40.000      0     8    40.000
+example2            10.3.0.1         - 10.3.0.20           20     9     45.000      0     9    45.000
+All networks        10.4.0.1         - 10.4.0.20           20     5     25.000      0     5    25.000
+
+Shared networks:
+name                   max   cur     percent  touch    t+c  t+c perc
+example1                40    21     52.500       0     21    52.500
+example2                40    17     42.500       0     17    42.500
+
+Sum of all ranges:
+name                   max   cur     percent  touch    t+c  t+c perc
+All networks           100    43     43.000       0     43    43.000
