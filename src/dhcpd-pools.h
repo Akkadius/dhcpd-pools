@@ -219,6 +219,14 @@ void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
 int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int comp_cur(struct range_t *r1, struct range_t *r2);
+int comp_double(double f1, double f2);
+int comp_ip(struct range_t *r1, struct range_t *r2);
+int comp_max(struct range_t *r1, struct range_t *r2);
+int comp_percent(struct range_t *r1, struct range_t *r2);
+int comp_tc(struct range_t *r1, struct range_t *r2);
+int comp_tcperc(struct range_t *r1, struct range_t *r2);
+int comp_touched(struct range_t *r1, struct range_t *r2);
 int leasecomp(const void *restrict a, const void *restrict b);
 int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
