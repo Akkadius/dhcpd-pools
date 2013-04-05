@@ -65,7 +65,7 @@
  * alarming. */
 int main(int argc, char **argv)
 {
-	int i, c, sorts = 0;
+	int i, sorts = 0;
 	int option_index = 0;
 	char const *tmp;
 	struct range_t *tmp_ranges;
@@ -124,6 +124,7 @@ int main(int argc, char **argv)
 
 	/* Parse command line options */
 	while (1) {
+		int c;
 		c = getopt_long(argc, argv, "c:l:f:o:s:rL:vh",
 				long_options, &option_index);
 

@@ -207,7 +207,7 @@ void parse_config(int is_include, const char *restrict config_file,
 	bool newclause = true, comment = false;
 	int quote = 0, braces = 0, argument = ITS_NOTHING_INTERESTING;
 	size_t i = 0;
-	char *word, c;
+	char *word;
 	int braces_shared = 1000;
 	union ipaddr_t addr;
 	struct range_t *range_p;
@@ -239,6 +239,7 @@ void parse_config(int is_include, const char *restrict config_file,
 
 	/* Very hairy stuff begins. */
 	while (unlikely(!feof(dhcpd_config))) {
+		char c;
 		c = fgetc(dhcpd_config);
 		/* Certain characters are magical */
 		switch (c) {

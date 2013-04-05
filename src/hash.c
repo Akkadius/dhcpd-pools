@@ -99,8 +99,8 @@ void delete_all_leases(void)
 #else
 void delete_all_leases(void)
 {
-	struct leases_t *l;
 	while (leases) {
+		struct leases_t *l;
 		l = leases;
 		free(l->ethernet);
 		HASH_DEL(leases, l);	/* leases advances to next on delete */
