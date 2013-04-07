@@ -59,18 +59,24 @@ static const unsigned int SHARED_NETWORKS = 8192;
  * Please do not commit less readable indentation. */
 static const char *prefixes[2][NUM_OF_PREFIX] = {
 	[VERSION_4] = {
-		       [PREFIX_LEASE]                = "lease ",
-		       [PREFIX_BINDING_STATE_FREE]   = "  binding state free",
-		       [PREFIX_BINDING_STATE_ACTIVE] = "  binding state active",
-		       [PREFIX_BINDING_STATE_BACKUP] = "  binding state backup",
-		       [PREFIX_HARDWARE_ETHERNET]    = "  hardware ethernet"
+		       [PREFIX_LEASE]                   = "lease ",
+		       [PREFIX_BINDING_STATE_FREE]      = "  binding state free",
+		       [PREFIX_BINDING_STATE_ABANDONED] = "  binding state abandoned",
+		       [PREFIX_BINDING_STATE_EXPIRED]   = "  binding state expired",
+		       [PREFIX_BINDING_STATE_RELEASED]  = "  binding state released",
+		       [PREFIX_BINDING_STATE_ACTIVE]    = "  binding state active",
+		       [PREFIX_BINDING_STATE_BACKUP]    = "  binding state backup",
+		       [PREFIX_HARDWARE_ETHERNET]       = "  hardware ethernet"
 	},
 	[VERSION_6] = {
-		       [PREFIX_LEASE]                = "  iaaddr ",
-		       [PREFIX_BINDING_STATE_FREE]   = "    binding state free",
-		       [PREFIX_BINDING_STATE_ACTIVE] = "    binding state active",
-		       [PREFIX_BINDING_STATE_BACKUP] = "    binding state backup",
-		       [PREFIX_HARDWARE_ETHERNET]    = "    hardware ethernet"
+		       [PREFIX_LEASE]                   = "  iaaddr ",
+		       [PREFIX_BINDING_STATE_FREE]      = "    binding state free",
+		       [PREFIX_BINDING_STATE_ABANDONED] = "    binding state abandoned",
+		       [PREFIX_BINDING_STATE_EXPIRED]   = "    binding state expired",
+		       [PREFIX_BINDING_STATE_RELEASED]  = "    binding state released",
+		       [PREFIX_BINDING_STATE_ACTIVE]    = "    binding state active",
+		       [PREFIX_BINDING_STATE_BACKUP]    = "    binding state backup",
+		       [PREFIX_HARDWARE_ETHERNET]       = "    hardware ethernet"
 	}
 };
 

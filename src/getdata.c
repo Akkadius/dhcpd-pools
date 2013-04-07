@@ -124,7 +124,10 @@ int parse_leases(void)
 			parse_ipaddr(ipstring, &addr);
 			continue;
 		}
-		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_FREE)) {
+		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_FREE) ||
+		    HAS_PREFIX(line, PREFIX_BINDING_STATE_ABANDONED) ||
+		    HAS_PREFIX(line, PREFIX_BINDING_STATE_EXPIRED) ||
+		    HAS_PREFIX(line, PREFIX_BINDING_STATE_RELEASED)) {
 			/* remove old entry, if exists */
 			if ((lease = find_lease(&addr)) != NULL) {
 				delete_lease(lease);
