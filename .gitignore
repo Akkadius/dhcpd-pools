@@ -1,3 +1,5 @@
+/.tarball-version
+/.version
 /aclocal.m4
 /autom4te.cache/
 /autoscan.log
