@@ -11,6 +11,7 @@ EXTRA_DIST = \
 	confs \
 	expected \
 	leases \
+	test.sh \
 	$(TESTS)
 
 TESTS_ENVIRONMENT = top_srcdir=$(top_srcdir) PATH=../src$(PATH_SEPARATOR)$$PATH
