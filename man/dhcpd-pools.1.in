@@ -68,7 +68,7 @@ Text
 .RI ( t ).
 Standard html
 .RI ( h )
-outputs only the HTML tables, and is useful for embeding more complex web
+outputs only the HTML tables, and is useful for embedding more complex web
 pages.  Full-html
 .RI ( H )
 provides complete HTML headers, etc., including in-line CSS.  The
@@ -138,7 +138,7 @@ for example
 .IR \-L10 .
 To monitor shared network only the limit would be
 .IR \-L20 .
-If warning percentage is not speficied it defaults to
+If warning percentage is not specified it defaults to
 .BR @ALARM_WARN@ .
 The
 .I percent
@@ -159,19 +159,19 @@ Print help to standard output and exit successfully.
 .SH EXAMPLES
 .TP
 Print ranges header, and analysis.
-$ dhcpd-pools -L 11 -c dhcpd.conf -l dhcpd.leases
+$ dhcpd-pools \-L 11 \-c dhcpd.conf \-l dhcpd.leases
 .br
 Ranges:
 .br
 shared net name [...]
 .TP
 Print shared networks and totals, both headers and results
-$ dhcpd-pools -L 66 -c dhcpd.conf -l dhcpd.leases shared net name
+$ dhcpd-pools \-L 66 \-c dhcpd.conf \-l dhcpd.leases shared net name
 .br
 [...]
 .TP
 Alarming
-$ dhcpd-pools -c dhcpd.conf -l dhcpd.leases --critical 80.1 --warning 75
+$ dhcpd-pools \-c dhcpd.conf \-l dhcpd.leases \-\-critical 80.1 \-\-warning 75
 .br
 CRITICAL: dhcpd-pools: Ranges; crit: 14 warn: 22 ok: 220 Shared nets; crit: 1 warn: 0 ok: 4
 .SH FILES
