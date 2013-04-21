@@ -160,6 +160,10 @@ int
     xstrstr(const char *restrict a, const char *restrict b, const int len)
 {
 	int i;
+	/* Skip when config.dhcp_version == VERSION_UNKNOWN -> len is zero.  */
+	if (len == 0) {
+		return false;
+	}
 	/* two spaces are very common in lease file, after them
 	 * nearly everything differs */
 	if (likely(a[2] != b[2])) {
