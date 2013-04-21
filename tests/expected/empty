@@ -1,0 +1,9 @@
+Ranges:
+shared net name     first ip           last ip            max   cur    percent  touch   t+c  t+c perc
+
+Shared networks:
+name                   max   cur     percent  touch    t+c  t+c perc
+
+Sum of all ranges:
+name                   max   cur     percent  touch    t+c  t+c perc
+All networks             0     0       -nan       0      0      -nan
