@@ -4,6 +4,7 @@ TESTS = \
 	empty \
 	full-json \
 	leading0 \
+	one-ip \
 	same-twice \
 	simple \
 	v6

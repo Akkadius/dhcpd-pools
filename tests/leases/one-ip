@@ -1,0 +1,4 @@
+lease 10.20.30.40 {
+  binding state active;
+  hardware ethernet 00:00:00:00:00:00;
+}
