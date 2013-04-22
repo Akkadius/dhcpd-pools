@@ -205,7 +205,7 @@ void parse_config(int is_include, const char *restrict config_file,
 		  struct shared_network_t *restrict shared_p)
 {
 	FILE *dhcpd_config;
-	bool newclause = true, comment = false;
+	bool newclause = true, comment = false, one_ip_range = false;
 	int quote = 0, braces = 0, argument = ITS_NOTHING_INTERESTING;
 	size_t i = 0;
 	char *word;
@@ -268,10 +268,15 @@ void parse_config(int is_include, const char *restrict config_file,
 				break;
 			}
 			if (comment == false
+			    && argument != ITS_A_RANGE_FIRST_IP
 			    && argument != ITS_A_RANGE_SECOND_IP
 			    && argument != ITS_AN_INCLUCE) {
 				newclause = true;
 				i = 0;
+			} else if (argument == ITS_A_RANGE_FIRST_IP) {
+				one_ip_range = true;
+				argument = ITS_A_RANGE_SECOND_IP;
+				c = ' ';
 			} else if (argument == ITS_A_RANGE_SECOND_IP) {
 				/* Range ends to ; and this hair in code
 				 * make two ranges wrote together like...
@@ -368,6 +373,10 @@ void parse_config(int is_include, const char *restrict config_file,
 				range_p = ranges + num_ranges;
 				parse_ipaddr(word, &addr);
 				argument = ITS_NOTHING_INTERESTING;
+				if (one_ip_range == true) {
+					one_ip_range = false;
+					copy_ipaddr(&range_p->first_ip, &addr);
+				}
 				copy_ipaddr(&range_p->last_ip, &addr);
 				range_p->count = 0;
 				range_p->touched = 0;
