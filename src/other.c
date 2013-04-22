@@ -40,6 +40,7 @@
 #include <config.h>
 
 #include "dhcpd-pools.h"
+#include "defaults.h"
 
 #include <err.h>
 #include <errno.h>
@@ -160,10 +161,20 @@ int
     xstrstr(const char *restrict a, const char *restrict b, const int len)
 {
 	int i;
-	/* Skip when config.dhcp_version == VERSION_UNKNOWN -> len is zero.  */
-	if (len == 0) {
+
+	/* Needed when dhcpd.conf has zero range definitions.  */
+	if (config.dhcp_version == VERSION_UNKNOWN) {
+		if (!strcmp(prefixes[VERSION_4][PREFIX_LEASE], a)) {
+			config.dhcp_version = VERSION_4;
+			return true;
+		}
+		if (!strcmp(prefixes[VERSION_6][PREFIX_LEASE], a)) {
+			config.dhcp_version = VERSION_6;
+			return true;
+		}
 		return false;
 	}
+
 	/* two spaces are very common in lease file, after them
 	 * nearly everything differs */
 	if (likely(a[2] != b[2])) {
