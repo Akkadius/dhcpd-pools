@@ -9,8 +9,8 @@ AC_INIT([dhcpd-pools],
 PACKAGE_MAINTAINER="Sami Kerola"
 AC_SUBST([PACKAGE_MAINTAINER])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([-Wall -Wextra-portability foreign 1.10 tar-pax no-dist-gzip dist-xz
-		  parallel-tests])
+AM_INIT_AUTOMAKE([-Wall -Wextra-portability foreign 1.10 tar-pax
+		  no-dist-gzip dist-xz parallel-tests subdir-objects])
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
@@ -143,12 +143,7 @@ AM_CONDITIONAL([HAVE_DOXYGEN_DOT], [test "x$DOXYGEN_DOT" != "x"])
 AC_CONFIG_FILES([
 	Makefile
 	lib/Makefile
-	src/Makefile
-	man/Makefile
 	man/dhcpd-pools.1
-	tests/Makefile
-	doc/Makefile
-	contrib/Makefile
 ])
 
 AC_OUTPUT

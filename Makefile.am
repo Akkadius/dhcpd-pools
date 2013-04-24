@@ -8,10 +8,21 @@ EXTRA_DIST = \
 	build-aux/git-version-gen \
 	m4/gnulib-cache.m4
 
-SUBDIRS = doc lib src man tests contrib
+SUBDIRS = lib
 
 BUILT_SOURCES = $(top_srcdir)/.version
 $(top_srcdir)/.version:
 	echo $(VERSION) > $@-t && mv $@-t $@
 dist-hook:
 	echo $(VERSION) > $(distdir)/.tarball-version
+
+CLEANFILES =
+CLEAN_LOCALS =
+
+include contrib/Makemodule.am
+include doc/Makemodule.am
+include man/Makemodule.am
+include src/Makemodule.am
+include tests/Makemodule.am
+
+clean-local: $(CLEAN_LOCALS)

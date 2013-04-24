@@ -1,0 +1,20 @@
+EXTRA_DIST += \
+	doc/doxy.conf.in \
+	doc/introduction.dox
+
+if ENABLE_DOXYGEN
+
+doxyfile.stamp:
+	$(DOXYGEN) doc/doxy.conf
+	date > doc/doxyfile.stamp
+
+CLEANFILES += doc/doxyfile.stamp
+
+all-local: doc/doxyfile.stamp
+
+clean-local-doc:
+	-rm -rf doc/*html
+
+CLEAN_LOCALS += clean-local-doc
+
+endif

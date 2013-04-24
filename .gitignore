@@ -1,30 +1,30 @@
-/.tarball-version
+# Wildcard + in any subdir.
+*.o
+
+# Exact filename in any subdir.
+.deps
+.dirstamp
+Makefile
+Makefile.in
+
+# Exact wildcard, e.g., not in subdirs.
+/tests/*.log
+/tests/*.trs
+
+# Exact match, if a directory then everything in directory.
 /.version
 /aclocal.m4
 /autom4te.cache/
-/autoscan.log
-/config.guess
 /config.h
 /config.h.in
-/config.h.in~
 /config.log
 /config.status
-/config.sub
 /configure
-/configure.scan
-/contrib/Makefile
-/contrib/Makefile.in
-/depcomp
-/gnulib/
+/dhcpd-pools
 /INSTALL
-/install-sh
 /libtool
-/ltmain.sh
-/m4
-/Makefile
-/Makefile.in
-/man/Makefile
-/man/Makefile.in
-/missing
+/m4/
+/man/dhcpd-pools.1
 /stamp-h1
-/tags
+/test-suite.log
+/tests/outputs/

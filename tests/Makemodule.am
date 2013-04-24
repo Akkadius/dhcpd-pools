@@ -1,0 +1,26 @@
+TESTS = \
+	tests/bootp \
+	tests/complete \
+	tests/empty \
+	tests/full-json \
+	tests/leading0 \
+	tests/one-ip \
+	tests/same-twice \
+	tests/simple \
+	tests/v6
+
+EXTRA_DIST += \
+	tests/confs \
+	tests/expected \
+	tests/leases \
+	tests/test.sh \
+	$(TESTS)
+
+TESTS_ENVIRONMENT = top_srcdir=$(top_srcdir) PATH=$(top_builddir)$(PATH_SEPARATOR)$$PATH
+
+check-local: $(SHELL) $(top_srcdir)/tests/test.sh
+
+clean-local-tests:
+	rm -rf $(top_builddir)/tests/outputs
+
+CLEAN_LOCALS += clean-local-tests

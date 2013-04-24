@@ -2,12 +2,12 @@
 #
 # Minimal regression test suite.
 
-if [ ! -d outputs ]; then
-	mkdir outputs
+if [ ! -d tests/outputs ]; then
+	mkdir tests/outputs
 fi
 
 dhcpd-pools -f J -c $top_srcdir/tests/confs/same-twice \
 		 -l $top_srcdir/tests/leases/same-twice \
-		 -o outputs/same-twice-json
-diff -u $top_srcdir/tests/expected/same-twice-json outputs/same-twice-json
+		 -o tests/outputs/same-twice-json
+diff -u $top_srcdir/tests/expected/same-twice-json tests/outputs/same-twice-json
 exit $?

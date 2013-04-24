@@ -7,12 +7,12 @@ AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/lib -I$(top_builddir)/lib
 dhcpd_pools_LDADD = $(top_builddir)/lib/libdhcpd_pools.la
 
 dhcpd_pools_SOURCES = \
-	analyze.c \
-	defaults.h \
-	dhcpd-pools.c \
-	dhcpd-pools.h \
-	getdata.c \
-	hash.c \
-	other.c \
-	output.c \
-	sort.c
+	src/analyze.c \
+	src/defaults.h \
+	src/dhcpd-pools.c \
+	src/dhcpd-pools.h \
+	src/getdata.c \
+	src/hash.c \
+	src/other.c \
+	src/output.c \
+	src/sort.c
