@@ -7,6 +7,32 @@ Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
 Version 2.21
+$ git shortlog v2.21..v2.22
+Cheer Xiao (1):
+      getdata: treat binding states abandoned, expired and release like free
+
+Sami Kerola (19):
+      tests: add complete check including multiple ranges and shared networks
+      include: add missing declarations to dhcpd-pool.h
+      cppcheck: fix variable scoping
+      build-sys: update .gitignore
+      build-sys: add git-version-gen and test.sh to release package
+      docs: fix spelling mistakes in manual page
+      build-sys: ensure distribution has version file
+      build-sys: update git-version-gen from gnulib
+      tests: binding states commit needs to be reflected in expected results
+      build-sys: reorder gnulib macro in relation to C standard
+      getdata: posix_fadvise() error checking
+      getdata: certain input files caused SIGSEGV
+      tests: check how command works with invalid input
+      getdata: make a lease address detection more robust
+      getdata: make single address ranges work
+      tests: add a test for one ip range
+      build-sys: fix gnulib function order
+      build-sys: use non-recursive build
+      release: 2.22
+
+Version 2.21
 $ git shortlog v2.20..v2.21
 Cheer Xiao (10):
       IPv6: add DHCPv6 support
