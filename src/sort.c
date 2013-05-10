@@ -47,6 +47,7 @@
 #include <string.h>
 
 #include "dhcpd-pools.h"
+#include "progname.h"
 
 /*! \brief Compare IP address, with IPv4/v6 determination.
  * \param a Binary IP address.
@@ -216,7 +217,7 @@ comparer_t field_selector(char c)
 	default:
 		warnx("field_selector: unknown sort order `%c'", c);
 		errx(EXIT_FAILURE, "Try `%s --help' for more information.",
-		     program_invocation_short_name);
+		     program_name);
 	}
 	return NULL;
 }

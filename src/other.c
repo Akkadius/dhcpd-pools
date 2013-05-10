@@ -41,9 +41,12 @@
 
 #include "dhcpd-pools.h"
 #include "defaults.h"
+#include "progname.h"
 
+#include <arpa/inet.h>
 #include <err.h>
 #include <errno.h>
+#include <netinet/in.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -282,7 +285,7 @@ void __attribute__ ((__noreturn__)) usage(int status)
 	fprintf(out, "\
 Usage: %s [OPTIONS]\n\n\
 This is ISC dhcpd pools usage analyzer.\n\
-\n", program_invocation_short_name);
+\n", program_name);
 	fprintf(out, "\
   -c, --config=FILE      path to the dhcpd.conf file\n\
   -l, --leases=FILE      path to the dhcpd.leases file\n");

@@ -51,6 +51,7 @@
 #include "closeout.h"
 #include "defaults.h"
 #include "dhcpd-pools.h"
+#include "progname.h"
 #include "xalloc.h"
 
 /*! \brief Start of execution.  Parse options, and call other other
@@ -92,6 +93,7 @@ int main(int argc, char **argv)
 	};
 
 	atexit(close_stdout);
+	set_program_name(argv[0]);
 
 	/* FIXME: These allocations should be fully dynamic, e.g., grow
 	 * if needed.  */
@@ -199,7 +201,7 @@ int main(int argc, char **argv)
 		default:
 			errx(EXIT_FAILURE,
 			     "Try `%s --help' for more information.",
-			     program_invocation_short_name);
+			     program_name);
 		}
 	}
 

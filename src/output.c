@@ -53,6 +53,7 @@
 
 #include "close-stream.h"
 #include "dhcpd-pools.h"
+#include "progname.h"
 #include "strftime.h"
 
 /*! \brief Text output format, which is the default.
@@ -1063,11 +1064,11 @@ int output_alarming(void)
 	if (0 < rc || 0 < sc) {
 		ret_val = 2;
 		fprintf(outfile, "CRITICAL: %s: ",
-			program_invocation_short_name);
+			program_name);
 	} else if (0 < rw || 0 < sw) {
 		ret_val = 1;
 		fprintf(outfile, "WARNING: %s: ",
-			program_invocation_short_name);
+			program_name);
 	} else {
 		ret_val = 0;
 		fprintf(outfile, "OK: ");

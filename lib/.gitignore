@@ -3,11 +3,13 @@
 /.deps/
 /.gitignore~
 /.libs/
+/arpa/
 /Makefile
 /Makefile.am
 /Makefile.in
 /_Exit.c
 /arg-nonnull.h
+/arpa_inet.in.h
 /atexit.c
 /c++defs.h
 /c-ctype.c
@@ -55,6 +57,7 @@
 /getopt1.c
 /getopt_int.h
 /gettext.h
+/inet_pton.c
 /intprops.h
 /langinfo.h
 /langinfo.in.h
@@ -74,6 +77,8 @@
 /msvc-nothrow.h
 /netinet_in.in.h
 /pathmax.h
+/progname.c
+/progname.h
 /quote.h
 /quotearg.c
 /quotearg.h
