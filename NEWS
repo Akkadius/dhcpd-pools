@@ -6,7 +6,14 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
-Version 2.21
+Version 2.23
+$ git shortlog v2.22..v2.23
+Sami Kerola (3):
+      gnulib: add gnulib modules
+      build-sys: update bootstrap from gnulib
+      release: 2.23
+
+Version 2.22
 $ git shortlog v2.21..v2.22
 Cheer Xiao (1):
       getdata: treat binding states abandoned, expired and release like free
