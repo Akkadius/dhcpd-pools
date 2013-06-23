@@ -1,16 +1,26 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.64)
+AC_PREREQ([2.69])
 AC_CONFIG_MACRO_DIR([m4])
 AC_INIT([dhcpd-pools],
-	m4_esyscmd([build-aux/git-version-gen .tarball-version]),
-	[kerolasa@iki.fi],,[http://dhcpd-pools.sourceforge.net/])
+	[m4_esyscmd([build-aux/git-version-gen .tarball-version])],
+	[kerolasa@iki.fi],[],
+	[http://dhcpd-pools.sourceforge.net/])
 PACKAGE_MAINTAINER="Sami Kerola"
 AC_SUBST([PACKAGE_MAINTAINER])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE([-Wall -Wextra-portability foreign 1.10 tar-pax
-		  no-dist-gzip dist-xz parallel-tests subdir-objects])
+AM_INIT_AUTOMAKE([
+	-Wall
+	-Wextra-portability
+	1.10
+	foreign
+	dist-xz
+	no-dist-gzip
+	parallel-tests
+	subdir-objects
+	tar-pax
+])
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
@@ -21,7 +31,7 @@ AC_PROG_CC_C99
 gl_EARLY
 gl_INIT
 AC_PROG_MAKE_SET
-AC_PROG_LIBTOOL
+LT_INIT
 
 # Checks for libraries.
 LT_INIT
@@ -35,20 +45,16 @@ AC_CHECK_HEADERS([\
 	sys/socket.h \
 ])
 
-AC_ARG_WITH(uthash,
-AC_HELP_STRING([--with-uthash=DIR], [Use uthash from [DIR]/uthash.h)]), [
-	case "$with_uthash" in
-	yes)
-		;;
-	no)
-		AC_MSG_ERROR([the uthash.h is required])
-		;;
-	*)
-		CPPFLAGS="$CPPFLAGS -I$with_uthash"
-		;;
-	esac
-])
-AC_CHECK_HEADER(uthash.h, [], [AC_MSG_ERROR([Unable to find uthash.h])])
+AC_ARG_WITH(
+	[uthash],
+	[AS_HELP_STRING([--with-uthash=DIR], [Use uthash from [DIR]/uthash.h)])],
+	[AS_CASE([$with_uthash],
+		[yes], [],
+		[no], [AC_MSG_ERROR([the uthash is required])],
+		[CPPFLAGS="$CPPFLAGS -I$with_uthash"]
+	)]
+)
+AC_CHECK_HEADER([uthash.h], [], [AC_MSG_ERROR([Unable to find uthash.h])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
@@ -64,12 +70,12 @@ AC_CHECK_FUNCS([\
 ])
 
 AC_MSG_CHECKING([if the compiler supports __builtin_expect])
-AC_TRY_COMPILE(, [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
 	return __builtin_expect(1, 1) ? 1 : 0
-], [
+]])],[
 	have_builtin_expect=yes
 	AC_MSG_RESULT([yes])
-], [
+],[
 	have_builtin_expect=no
 	AC_MSG_RESULT([no])
 ])
@@ -79,49 +85,49 @@ AS_IF([test x$have_builtin_expect = xyes], [
 ])
 
 AC_ARG_WITH([dhcpd-conf],
-	[AC_HELP_STRING([--with-dhcpd-conf=FILE], [default path of dhcpd.conf])],
+	[AS_HELP_STRING([--with-dhcpd-conf=FILE],[default path of dhcpd.conf])],
 	[dhcpd_conf_path="$withval"],
 	[dhcpd_conf_path="/etc/dhcpd.conf"])
 AC_DEFINE_UNQUOTED([DHCPDCONF_FILE], ["$dhcpd_conf_path"], [default path of dhcpd.conf])
 AC_SUBST([DHCPDCONF_FILE], [$dhcpd_conf_path])
 
 AC_ARG_WITH([dhcpd-leases],
-	[AC_HELP_STRING([--with-dhcpd-leases=FILE], [default path of dhcpd.leases])],
+	[AS_HELP_STRING([--with-dhcpd-leases=FILE],[default path of dhcpd.leases])],
 	[dhcpd_leases_path="$withval"],
 	[dhcpd_leases_path="/var/lib/dhcp/dhcpd.leases"])
 AC_DEFINE_UNQUOTED([DHCPDLEASE_FILE], ["$dhcpd_leases_path"], [default path of dhcpd.leases])
 AC_SUBST([DHCPDLEASE_FILE], [$dhcpd_leases_path])
 
 AC_ARG_WITH([output-format],
-	[AC_HELP_STRING([--with-output-format=FORMAT], [default output format])],
+	[AS_HELP_STRING([--with-output-format=FORMAT],[default output format])],
 	[output_format="$withval"],
 	[output_format="text"])
 AC_DEFINE_UNQUOTED([OUTPUT_FORMAT], ["$output_format"], [default output format])
 AC_SUBST([OUTPUT_FORMAT], [$output_format])
 
 AC_ARG_WITH([output-limit],
-	[AC_HELP_STRING([--with-output-limit=MASK], [default output limit])],
+	[AS_HELP_STRING([--with-output-limit=MASK],[default output limit])],
 	[output_limit="$withval"],
 	[output_limit="77"])
 AC_DEFINE_UNQUOTED([OUTPUT_LIMIT], ["$output_limit"], [default output limit])
 AC_SUBST([OUTPUT_LIMIT], [$output_limit])
 
 AC_ARG_WITH([warning],
-	[AC_HELP_STRING([--with-warning=NUM], [monitoring warning default])],
+	[AS_HELP_STRING([--with-warning=NUM],[monitoring warning default])],
 	[warning_percent="$withval"],
 	[warning_percent="80"])
 AC_DEFINE_UNQUOTED([ALARM_WARN], [$warning_percent], [monitoring warning default])
 AC_SUBST([ALARM_WARN], [$warning_percent])
 
 AC_ARG_WITH([critical],
-	[AC_HELP_STRING([--with-critical=NUM], [monitoring critical default])],
+	[AS_HELP_STRING([--with-critical=NUM],[monitoring critical default])],
 	[critical_percent="$withval"],
 	[critical_percent="90"])
 AC_DEFINE_UNQUOTED([ALARM_CRIT], [$critical_percent], [monitoring critical default])
 AC_SUBST([ALARM_CRIT], [$critical_percent])
 
 AC_ARG_ENABLE([doxygen],
-	AC_HELP_STRING([--enable-doxygen], [build internal api documentation @<:@default=disabled@:>@]),
+	AS_HELP_STRING([--enable-doxygen],[build internal api documentation @<:@default=disabled@:>@]),
 	[], [enable_doxygen=no])
 AM_CONDITIONAL([ENABLE_DOXYGEN],  [test "x$enable_doxygen" = "xyes"])
 
