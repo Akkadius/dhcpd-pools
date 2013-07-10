@@ -1061,11 +1061,11 @@ int output_alarming(void)
 			shared_p++;
 		}
 	}
-	if (0 < rc || 0 < sc) {
+	if ((0 < rc && config.output_limit[1] & BIT1) || (0 < sc && config.output_limit[1] & BIT2)) {
 		ret_val = 2;
 		fprintf(outfile, "CRITICAL: %s: ",
 			program_name);
-	} else if (0 < rw || 0 < sw) {
+	} else if ((0 < rw && config.output_limit[1] & BIT1) || (0 < sw && config.output_limit[1] & BIT2)) {
 		ret_val = 1;
 		fprintf(outfile, "WARNING: %s: ",
 			program_name);
