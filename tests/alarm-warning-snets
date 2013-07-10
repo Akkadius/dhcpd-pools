@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Alarm warning shared networks only.
+
+IAM=$(basename $0)
+
+if [ ! -d tests/outputs ]; then
+	mkdir tests/outputs
+fi
+
+dhcpd-pools -L 22 --warning=50 -c $top_srcdir/tests/confs/complete \
+	    -l $top_srcdir/tests/leases/complete -o tests/outputs/$IAM
+echo $? >> tests/outputs/$IAM
+
+diff -u $top_srcdir/tests/expected/$IAM tests/outputs/$IAM
+exit $?

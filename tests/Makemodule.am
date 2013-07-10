@@ -1,4 +1,12 @@
 TESTS = \
+	tests/alarm-critical \
+	tests/alarm-critical-ranges \
+	tests/alarm-critical-snets \
+	tests/alarm-ok \
+	tests/alarm-shared-ok \
+	tests/alarm-warning \
+	tests/alarm-warning-ranges \
+	tests/alarm-warning-snets \
 	tests/bootp \
 	tests/complete \
 	tests/empty \

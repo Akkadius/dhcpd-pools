@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Shared network should be OK, and critical range ignored.
+
+IAM=$(basename $0)
+
+if [ ! -d tests/outputs ]; then
+	mkdir tests/outputs
+fi
+
+dhcpd-pools -L 22 --critical=54 -c $top_srcdir/tests/confs/complete \
+	    -l $top_srcdir/tests/leases/complete -o tests/outputs/$IAM
+echo $? >> tests/outputs/$IAM
+
+diff -u $top_srcdir/tests/expected/$IAM tests/outputs/$IAM
+exit $?
