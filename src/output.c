@@ -1071,7 +1071,10 @@ int output_alarming(void)
 			program_name);
 	} else {
 		ret_val = 0;
-		fprintf(outfile, "OK: ");
+		if (config.output_limit[1] & BIT3)
+			fprintf(outfile, "OK: ");
+		else
+			return ret_val;
 	}
 	if (config.output_limit[0] & BIT1) {
 		fprintf(outfile, "Ranges; crit: %d warn: %d ok: %d ", rc, rw,
