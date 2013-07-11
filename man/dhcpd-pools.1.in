@@ -127,6 +127,14 @@ Print shared network header
 Print total summary header
 .PD
 .RE
+.IP
+The output limit for total summary has special meaning in
+.B \-\-warning
+and
+.B \-\-critical
+alarming context.  When the alarming is in use, and total is not wanted
+to be seen then in the case of alarming returning success nothing is
+printed.
 .TP
 \fB\-\-warning\fR=\fIpercent\fR
 Turn on alarm output format, and specify percentage number which will
