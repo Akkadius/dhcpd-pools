@@ -314,7 +314,8 @@ This is ISC dhcpd pools usage analyzer.\n\
   -L, --limit=NR         output limit mask 77 - 00\n");
 	fprintf(out, "\
       --warning=PERC     set warning alarming limit\n\
-      --critical=PERC    set critical alarming limit\n");
+      --critical=PERC    set critical alarming limit\n\
+      --minsize=size     disable alarms for small ranges and shared-nets\n");
 	fprintf(out, "\
   -v, --version          version information\n\
   -h, --help             this screen\n\

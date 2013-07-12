@@ -72,7 +72,8 @@ int main(int argc, char **argv)
 	struct range_t *tmp_ranges;
 	enum {
 		OPT_WARN = CHAR_MAX + 1,
-		OPT_CRIT
+		OPT_CRIT,
+		OPT_MINSIZE
 	};
 	int ret_val;
 
@@ -89,6 +90,7 @@ int main(int argc, char **argv)
 		{"help", no_argument, NULL, 'h'},
 		{"warning", required_argument, NULL, OPT_WARN},
 		{"critical", required_argument, NULL, OPT_CRIT},
+		{"minsize", required_argument, NULL, OPT_MINSIZE},
 		{NULL, 0, NULL, 0}
 	};
 
@@ -190,6 +192,10 @@ int main(int argc, char **argv)
 		case OPT_CRIT:
 			strcpy(config.output_format, "a");
 			config.critical =
+			    strtod_or_err(optarg, "illegal argument");
+			break;
+		case OPT_MINSIZE:
+			config.minsize =
 			    strtod_or_err(optarg, "illegal argument");
 			break;
 		case 'v':

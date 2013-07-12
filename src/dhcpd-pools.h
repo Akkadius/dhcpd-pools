@@ -110,6 +110,7 @@ struct configuration_t {
 	bool backups_found;
 	double warning;
 	double critical;
+	double minsize;
 };
 /*! \struct shared_network_t
  * \brief Counters for an individual shared network.

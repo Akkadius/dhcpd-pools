@@ -1018,7 +1018,7 @@ int output_alarming(void)
 	struct shared_network_t *shared_p;
 	unsigned int i;
 	float perc;
-	int rw = 0, rc = 0, ro = 0, sw = 0, sc = 0, so = 0;
+	int rw = 0, rc = 0, ro = 0, ri = 0, sw = 0, sc = 0, so = 0, si = 0;
 	int ret_val, ret;
 
 	range_p = ranges;
@@ -1037,27 +1037,36 @@ int output_alarming(void)
 
 	if (config.output_limit[1] & BIT1) {
 		for (i = 0; i < num_ranges; i++) {
-			perc = (float)(100 * range_p->count) / range_size;
-			if (config.critical < perc)
-				rc++;
-			else if (config.warning < perc)
-				rw++;
-			else
-				ro++;
+			if (config.minsize < range_size) {
+				perc =
+				    (float)(100 * range_p->count) / range_size;
+				if (config.critical < perc)
+					rc++;
+				else if (config.warning < perc)
+					rw++;
+				else
+					ro++;
+			} else {
+				ri++;
+			}
 			range_p++;
 			range_size = get_range_size(range_p);
 		}
 	}
 	if (config.output_limit[1] & BIT2) {
 		for (i = 0; i < num_shared_networks; i++) {
-			perc = (float)(100 * shared_p->used) /
-			    shared_p->available;
-			if (config.critical < perc)
-				sc++;
-			else if (config.warning < perc)
-				sw++;
-			else
-				so++;
+			if (config.minsize < shared_p->available) {
+				perc = (float)(100 * shared_p->used) /
+				    shared_p->available;
+				if (config.critical < perc)
+					sc++;
+				else if (config.warning < perc)
+					sw++;
+				else
+					so++;
+			} else {
+				si++;
+			}
 			shared_p++;
 		}
 	}
@@ -1079,10 +1088,17 @@ int output_alarming(void)
 	if (config.output_limit[0] & BIT1) {
 		fprintf(outfile, "Ranges; crit: %d warn: %d ok: %d ", rc, rw,
 			ro);
+		if (ri != 0) {
+			fprintf(outfile, "ignored: %d ", ri);
+		}
+
 	}
 	if (config.output_limit[0] & BIT2) {
 		fprintf(outfile, "Shared nets; crit: %d warn: %d ok: %d", sc,
 			sw, so);
+		if (si != 0) {
+			fprintf(outfile, "ignored: %d ", si);
+		}
 	}
 	fprintf(outfile, "\n");
 	if (outfile == stdout) {

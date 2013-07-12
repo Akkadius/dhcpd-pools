@@ -159,6 +159,12 @@ is
 If critical percentage is not specified it defaults to
 .BR @ALARM_CRIT@ .
 .TP
+\fB\-\-minsize\fR=\fIsize\f
+Ignore ranges and shared networks that are smaller or equal to the
+defined size.  This option is meaningful only in context of alarming, and
+will intented to supress for example single host ranges.  By default this
+option is not in use.
+.TP
 \fB\-v\fR, \fB\-\-version\fR
 Print version information to standard output and exit successfully.
 .TP
