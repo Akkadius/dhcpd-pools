@@ -188,6 +188,13 @@ Alarming
 $ dhcpd-pools \-c dhcpd.conf \-l dhcpd.leases \-\-critical 80.1 \-\-warning 75
 .br
 CRITICAL: dhcpd-pools: Ranges; crit: 14 warn: 22 ok: 220 Shared nets; crit: 1 warn: 0 ok: 4
+.IP
+$ dhcpd-pools \-c dhcpd.conf \-l dhcpd.leases \-L 22 \-\-critical 70 \-\-warning 50
+.br
+[no-output]
+.br
+Supress printing OK, and make alarm only to go off if shared networks
+exceed critial or warning levels.
 .SH FILES
 .TP
 @DHCPDCONF_FILE@
