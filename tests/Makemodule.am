@@ -2,6 +2,7 @@ TESTS = \
 	tests/alarm-critical \
 	tests/alarm-critical-ranges \
 	tests/alarm-critical-snets \
+	tests/alarm-ignore \
 	tests/alarm-ok \
 	tests/alarm-shared-ok \
 	tests/alarm-warning \
