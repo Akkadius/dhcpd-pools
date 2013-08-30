@@ -101,62 +101,52 @@ int parse_leases(void)
 		ethernets = true;
 	}
 
-	const char **p = prefixes[config.dhcp_version];
-	int *l = prefix_length[config.dhcp_version];
-
-/*! \def HAS_PREFIX(line, type)
- * \brief A macro to match IPv4 and IPv6 lease lines.
- *
- * FIXME: This macro should have better name. The HAS_PREFIX sounds like
- * some sort of prefix length test. */
-#define HAS_PREFIX(line, type) xstrstr((line), p[type], l[type])
-
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases)) {
 			err(EXIT_FAILURE, "parse_leases: %s",
 			    config.dhcpdlease_file);
 		}
+		switch(xstrstr(line)) {
 		/* It's a lease, save IP */
-		if (HAS_PREFIX(line, PREFIX_LEASE)) {
-			nth_field(ipstring, line + l[PREFIX_LEASE]);
+		case PREFIX_LEASE:
+			nth_field(ipstring, line + (config.dhcp_version == VERSION_4 ? 6 : 9));
 			parse_ipaddr(ipstring, &addr);
-			continue;
-		}
-		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_FREE) ||
-		    HAS_PREFIX(line, PREFIX_BINDING_STATE_ABANDONED) ||
-		    HAS_PREFIX(line, PREFIX_BINDING_STATE_EXPIRED) ||
-		    HAS_PREFIX(line, PREFIX_BINDING_STATE_RELEASED)) {
-			/* remove old entry, if exists */
+			break;
+		case PREFIX_BINDING_STATE_FREE:
+		case PREFIX_BINDING_STATE_ABANDONED:
+		case PREFIX_BINDING_STATE_EXPIRED:
+		case PREFIX_BINDING_STATE_RELEASED:
 			if ((lease = find_lease(&addr)) != NULL) {
 				delete_lease(lease);
 			}
 			add_lease(&addr, FREE);
-			continue;
-		}
-		/* Copy IP to correct array */
-		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_ACTIVE)) {
+			break;
+		case PREFIX_BINDING_STATE_ACTIVE:
 			/* remove old entry, if exists */
 			if ((lease = find_lease(&addr)) != NULL) {
 				delete_lease(lease);
 			}
 			add_lease(&addr, ACTIVE);
-			continue;
-		}
-		if (HAS_PREFIX(line, PREFIX_BINDING_STATE_BACKUP)) {
+			break;
+		case PREFIX_BINDING_STATE_BACKUP:
 			/* remove old entry, if exists */
 			if ((lease = find_lease(&addr)) != NULL) {
 				delete_lease(lease);
 			}
 			add_lease(&addr, BACKUP);
 			config.backups_found = true;
-			continue;
-		}
-		if (ethernets && (xstrstr(line, "  hardware ethernet", 19))) {
+			break;
+		case PREFIX_HARDWARE_ETHERNET:
+			if (ethernets == false)
+				break;
 			nth_field(macstring, line + 20);
 			macstring[17] = '\0';
 			if ((lease = find_lease(&addr)) != NULL) {
 				lease->ethernet = xstrdup(macstring);
 			}
+			break;
+		default:
+			/* do nothing */;
 		}
 	}
 #undef HAS_PREFIX

@@ -272,13 +272,6 @@ int main(int argc, char **argv)
  * FIXME: This function should return void. */
 int prepare_memory(void)
 {
-	/* Fill in prefix length cache */
-	int i, j;
-	for (i = 0; i < 2; i++) {
-		for (j = 0; j < NUM_OF_PREFIX; j++) {
-			prefix_length[i][j] = strlen(prefixes[i][j]);
-		}
-	}
 	config.dhcp_version = VERSION_UNKNOWN;
 	RANGES = 64;
 	num_ranges = num_shared_networks = 0;

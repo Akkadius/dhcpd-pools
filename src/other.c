@@ -148,53 +148,103 @@ double get_range_size(const struct range_t *r)
 	}
 }
 
-/*! \fn xstrstr(const char *restrict a, const char *restrict b, const int len)
- * \brief Compare two strings.  Similar to strcmp, but tuned to be
- * quicker which is possible because input data is known to have certain
- * structure.
+/*! \fn xstrstr(const char *restrict str)
+ * \brief Categorize dhcpd.leases line.
  *
- * \param a String which is been compared, e.g., a haystack.
- * \param b Constant string which is hoped to found, e.g., a needle.
- * \param len Stop point in characters when comparison must be ended.
- * \return Zero if strings differ, one if they are the same. */
+ * \param str A line from dhcpd.conf
+ * \return prefix_t enum value
+ */
 int
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((hot))
 #endif
-    xstrstr(const char *restrict a, const char *restrict b, const int len)
+    xstrstr(const char *restrict str)
 {
-	int i;
-
+	size_t len;
 	/* Needed when dhcpd.conf has zero range definitions.  */
 	if (config.dhcp_version == VERSION_UNKNOWN) {
-		if (!strcmp(prefixes[VERSION_4][PREFIX_LEASE], a)) {
+		if (strncmp("lease ", str, 6)) {
 			config.dhcp_version = VERSION_4;
-			return true;
-		}
-		if (!strcmp(prefixes[VERSION_6][PREFIX_LEASE], a)) {
+			return PREFIX_LEASE;
+		} else if (strncmp("  iaaddr ", str, 9)) {
 			config.dhcp_version = VERSION_6;
-			return true;
+			return PREFIX_LEASE;
 		}
-		return false;
+		return NUM_OF_PREFIX;
 	}
-
-	/* two spaces are very common in lease file, after them
-	 * nearly everything differs */
-	if (likely(a[2] != b[2])) {
-		return false;
+	if ((config.dhcp_version == VERSION_4 && str[2] == 'b')
+	    || (config.dhcp_version == VERSION_6 && str[4] == 'b')
+	    || str[2] == 'h') {
+		len = strlen(str);
+	} else {
+		len = 0;
 	}
-	/* "  binding state " == 16 chars, this will skip right
-	 * to first differing line. */
-	if (17 < len && a[17] != b[17]) {
-		return false;
-	}
-	/* looking good, double check the whole thing... */
-	for (i = 0; a[i] != '\0' && b[i] != '\0'; i++) {
-		if (a[i] != b[i]) {
-			return false;
+	if (15 < len && config.dhcp_version == VERSION_4) {
+		switch (str[16]) {
+		case 'f':
+			if (!strncmp("  binding state free;", str, 21))
+				return PREFIX_BINDING_STATE_FREE;
+			break;
+		case 'a':
+			if (!strncmp("  binding state active;", str, 23))
+				return PREFIX_BINDING_STATE_ACTIVE;
+			if (!strncmp("  binding state abandoned;", str, 25))
+				return PREFIX_BINDING_STATE_ABANDONED;
+			break;
+		case 'e':
+			if (!strncmp("  binding state expired;", str, 24))
+				return PREFIX_BINDING_STATE_EXPIRED;
+			break;
+		case 'r':
+			if (!strncmp("  binding state released;", str, 25))
+				return PREFIX_BINDING_STATE_RELEASED;
+			break;
+		case 'b':
+			if (!strncmp("  binding state backup;", str, 23))
+				return PREFIX_BINDING_STATE_BACKUP;
+			break;
+		case 'n':
+			if (!strncmp("  hardware ethernet", str, 19))
+				return PREFIX_HARDWARE_ETHERNET;
+			break;
+		}
+	} else if (17 < len /* && config.dhcp_version == VERSION_6 */ ) {
+		switch (str[18]) {
+		case 'f':
+			if (!strncmp("    binding state free;", str, 23))
+				return PREFIX_BINDING_STATE_FREE;
+			break;
+		case 'a':
+			if (!strncmp("    binding state active;", str, 25))
+				return PREFIX_BINDING_STATE_ACTIVE;
+			if (!strncmp("    binding state abandoned;", str, 27))
+				return PREFIX_BINDING_STATE_ABANDONED;
+			break;
+		case 'e':
+			if (!strncmp("    binding state expired;", str, 26))
+				return PREFIX_BINDING_STATE_EXPIRED;
+			break;
+		case 'r':
+			if (!strncmp("    binding state released;", str, 27))
+				return PREFIX_BINDING_STATE_RELEASED;
+			break;
+		case 'b':
+			if (!strncmp("    binding state backup;", str, 25))
+				return PREFIX_BINDING_STATE_BACKUP;
+			break;
+		case 'n':
+			if (!strncmp("  hardware ethernet", str, 19))
+				return PREFIX_HARDWARE_ETHERNET;
+			break;
 		}
 	}
-	return true;
+	if (config.dhcp_version == VERSION_4 && !strncmp("lease ", str, 6)) {
+		return PREFIX_LEASE;
+	} else if (config.dhcp_version == VERSION_6
+		   && !strncmp("  iaaddr ", str, 9)) {
+		return PREFIX_LEASE;
+	}
+	return NUM_OF_PREFIX;
 }
 
 /*! \brief Return a double floating point value.

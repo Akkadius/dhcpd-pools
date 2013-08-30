@@ -210,8 +210,7 @@ void copy_ipaddr(union ipaddr_t *restrict dst,
 		 const union ipaddr_t *restrict src);
 const char *ntop_ipaddr(const union ipaddr_t *ip);
 double get_range_size(const struct range_t *r);
-int xstrstr(const char *__restrict a, const char *__restrict b, int len)
-    __attribute__ ((nonnull(1, 2)))
+int xstrstr(const char *__restrict str)
 # if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((__hot__))
 # endif
