@@ -163,10 +163,10 @@ int
 	size_t len;
 	/* Needed when dhcpd.conf has zero range definitions.  */
 	if (config.dhcp_version == VERSION_UNKNOWN) {
-		if (strncmp("lease ", str, 6)) {
+		if (memcmp("lease ", str, 6)) {
 			config.dhcp_version = VERSION_4;
 			return PREFIX_LEASE;
-		} else if (strncmp("  iaaddr ", str, 9)) {
+		} else if (memcmp("  iaaddr ", str, 9)) {
 			config.dhcp_version = VERSION_6;
 			return PREFIX_LEASE;
 		}
@@ -182,66 +182,66 @@ int
 	if (15 < len && config.dhcp_version == VERSION_4) {
 		switch (str[16]) {
 		case 'f':
-			if (!strncmp("  binding state free;", str, 21))
+			if (!memcmp("  binding state free;", str, 21))
 				return PREFIX_BINDING_STATE_FREE;
 			break;
 		case 'a':
-			if (!strncmp("  binding state active;", str, 23))
+			if (!memcmp("  binding state active;", str, 23))
 				return PREFIX_BINDING_STATE_ACTIVE;
-			if (!strncmp("  binding state abandoned;", str, 25))
+			if (!memcmp("  binding state abandoned;", str, 25))
 				return PREFIX_BINDING_STATE_ABANDONED;
 			break;
 		case 'e':
-			if (!strncmp("  binding state expired;", str, 24))
+			if (!memcmp("  binding state expired;", str, 24))
 				return PREFIX_BINDING_STATE_EXPIRED;
 			break;
 		case 'r':
-			if (!strncmp("  binding state released;", str, 25))
+			if (!memcmp("  binding state released;", str, 25))
 				return PREFIX_BINDING_STATE_RELEASED;
 			break;
 		case 'b':
-			if (!strncmp("  binding state backup;", str, 23))
+			if (!memcmp("  binding state backup;", str, 23))
 				return PREFIX_BINDING_STATE_BACKUP;
 			break;
 		case 'n':
-			if (!strncmp("  hardware ethernet", str, 19))
+			if (!memcmp("  hardware ethernet", str, 19))
 				return PREFIX_HARDWARE_ETHERNET;
 			break;
 		}
 	} else if (17 < len /* && config.dhcp_version == VERSION_6 */ ) {
 		switch (str[18]) {
 		case 'f':
-			if (!strncmp("    binding state free;", str, 23))
+			if (!memcmp("    binding state free;", str, 23))
 				return PREFIX_BINDING_STATE_FREE;
 			break;
 		case 'a':
-			if (!strncmp("    binding state active;", str, 25))
+			if (!memcmp("    binding state active;", str, 25))
 				return PREFIX_BINDING_STATE_ACTIVE;
-			if (!strncmp("    binding state abandoned;", str, 27))
+			if (!memcmp("    binding state abandoned;", str, 27))
 				return PREFIX_BINDING_STATE_ABANDONED;
 			break;
 		case 'e':
-			if (!strncmp("    binding state expired;", str, 26))
+			if (!memcmp("    binding state expired;", str, 26))
 				return PREFIX_BINDING_STATE_EXPIRED;
 			break;
 		case 'r':
-			if (!strncmp("    binding state released;", str, 27))
+			if (!memcmp("    binding state released;", str, 27))
 				return PREFIX_BINDING_STATE_RELEASED;
 			break;
 		case 'b':
-			if (!strncmp("    binding state backup;", str, 25))
+			if (!memcmp("    binding state backup;", str, 25))
 				return PREFIX_BINDING_STATE_BACKUP;
 			break;
 		case 'n':
-			if (!strncmp("  hardware ethernet", str, 19))
+			if (!memcmp("  hardware ethernet", str, 19))
 				return PREFIX_HARDWARE_ETHERNET;
 			break;
 		}
 	}
-	if (config.dhcp_version == VERSION_4 && !strncmp("lease ", str, 6)) {
+	if (config.dhcp_version == VERSION_4 && !memcmp("lease ", str, 6)) {
 		return PREFIX_LEASE;
 	} else if (config.dhcp_version == VERSION_6
-		   && !strncmp("  iaaddr ", str, 9)) {
+		   && !memcmp("  iaaddr ", str, 9)) {
 		return PREFIX_LEASE;
 	}
 	return NUM_OF_PREFIX;
