@@ -139,3 +139,4 @@
 /xprintf.h
 /xstrtod.c
 /xstrtod.h
+/stpncpy.c
