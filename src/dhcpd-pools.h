@@ -230,7 +230,6 @@ int comp_percent(struct range_t *r1, struct range_t *r2);
 int comp_tc(struct range_t *r1, struct range_t *r2);
 int comp_tcperc(struct range_t *r1, struct range_t *r2);
 int comp_touched(struct range_t *r1, struct range_t *r2);
-int leasecomp(const void *restrict a, const void *restrict b);
 int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */

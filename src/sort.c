@@ -67,17 +67,6 @@ int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
 	}
 }
 
-/*! \brief Compare IP address in leases. Suitable for sorting leases.
- * \param a A lease structure.
- * \param b A lease structure.
- * \return Return pas through from ipcomp.
- */
-int leasecomp(const void *restrict a, const void *restrict b)
-{
-	return ipcomp(&((const struct leases_t *)a)->ip,
-		      &((const struct leases_t *)b)->ip);
-}
-
 /*! \brief Compare IP address in leases. Suitable for sorting range table.
  * \param r1 A range structure.
  * \param r2 A range structure.

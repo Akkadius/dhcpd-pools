@@ -51,7 +51,7 @@
 int prepare_data(void)
 {
 	/* Sort leases */
-	HASH_SORT(leases, leasecomp);
+	HASH_SORT(leases, ipcomp);
 	/* Sort ranges */
 	qsort(ranges, (size_t)num_ranges, sizeof(struct range_t), &rangecomp);
 	return 0;
