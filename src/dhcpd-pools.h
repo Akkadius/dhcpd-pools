@@ -193,12 +193,6 @@ int parse_leases(void);
 void parse_config(int, const char *__restrict,
 		  struct shared_network_t *__restrict)
     __attribute__ ((nonnull(2, 3)));
-void nth_field(char *__restrict dest, const char *__restrict src)
-    __attribute__ ((nonnull(1, 2)))
-# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
-    __attribute__ ((__hot__))
-# endif
-    ;
 int prepare_data(void);
 int do_counting(void);
 void flip_ranges(struct range_t *__restrict ranges,

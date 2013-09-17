@@ -62,7 +62,7 @@
 int parse_leases(void)
 {
 	FILE *dhcpd_leases;
-	char *line, *ipstring, macstring[20];
+	char *line, *ipstring, macstring[20], *stop;
 	union ipaddr_t addr;
 	struct stat lease_file_stats;
 	bool ethernets = false;
@@ -109,7 +109,11 @@ int parse_leases(void)
 		switch(xstrstr(line)) {
 		/* It's a lease, save IP */
 		case PREFIX_LEASE:
-			nth_field(ipstring, line + (config.dhcp_version == VERSION_4 ? 6 : 9));
+			stop = memccpy(ipstring, line + (config.dhcp_version == VERSION_4 ? 6 : 9), ' ', strlen(line));
+			if (stop != NULL) {
+				--stop;
+				*stop = '\0';
+			}
 			parse_ipaddr(ipstring, &addr);
 			break;
 		case PREFIX_BINDING_STATE_FREE:
@@ -139,7 +143,7 @@ int parse_leases(void)
 		case PREFIX_HARDWARE_ETHERNET:
 			if (ethernets == false)
 				break;
-			nth_field(macstring, line + 20);
+			memcpy(macstring, line + 20, 17);
 			macstring[17] = '\0';
 			if ((lease = find_lease(&addr)) != NULL) {
 				lease->ethernet = xstrdup(macstring);
@@ -154,23 +158,6 @@ int parse_leases(void)
 	free(ipstring);
 	fclose(dhcpd_leases);
 	return 0;
-}
-
-/*! \brief A version of strcpy, but for a white space separated field.
- * \param dest String copy destination.
- * \param src String copy source.
- */
-void nth_field(char *restrict dest, const char *restrict src)
-{
-	size_t i, len;
-	len = strlen(src);
-	for (i = 0; i < len; i++) {
-		dest[i] = src[i];
-		if (unlikely(src[i] == ' ')) {
-			dest[i] = '\0';
-			break;
-		}
-	}
 }
 
 /*! \brief Keyword search in dhcpd.conf file.
