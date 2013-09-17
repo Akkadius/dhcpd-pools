@@ -204,11 +204,23 @@ void copy_ipaddr(union ipaddr_t *restrict dst,
 		 const union ipaddr_t *restrict src);
 const char *ntop_ipaddr(const union ipaddr_t *ip);
 double get_range_size(const struct range_t *r);
-int xstrstr(const char *__restrict str)
+int (*xstrstr)(const char *__restrict str);
+int xstrstr_init(const char *__restrict str)
 # if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((__hot__))
 # endif
     ;
+int xstrstr_v4(const char *__restrict str)
+# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+    __attribute__ ((__hot__))
+# endif
+    ;
+int xstrstr_v6(const char *__restrict str)
+# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+    __attribute__ ((__hot__))
+# endif
+    ;
+
 double strtod_or_err(const char *__restrict str,
 		     const char *__restrict errmesg);
 void print_version(void) __attribute__ ((noreturn));

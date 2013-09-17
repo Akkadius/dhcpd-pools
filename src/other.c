@@ -68,8 +68,10 @@ int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst)
 		struct in6_addr addr6;
 		if (inet_aton(src, &addr) == 1) {
 			config.dhcp_version = VERSION_4;
+			xstrstr = xstrstr_v4;
 		} else if (inet_pton(AF_INET6, src, &addr6) == 1) {
 			config.dhcp_version = VERSION_6;
+			xstrstr = xstrstr_v6;
 		} else {
 			return 0;
 		}
@@ -148,8 +150,9 @@ double get_range_size(const struct range_t *r)
 	}
 }
 
-/*! \fn xstrstr(const char *restrict str)
- * \brief Categorize dhcpd.leases line.
+/*! \fn xstrstr_init(const char *restrict str)
+ * \brief Determine if the dhcpd is in IPv4 or IPv6 mode. This function
+ * may be needed when dhcpd.conf file has zero IP version hints.
  *
  * \param str A line from dhcpd.conf
  * \return prefix_t enum value
@@ -158,28 +161,39 @@ int
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
     __attribute__ ((hot))
 #endif
-    xstrstr(const char *restrict str)
+    xstrstr_init(const char *restrict str)
+{
+	if (memcmp("lease ", str, 6)) {
+		config.dhcp_version = VERSION_4;
+		xstrstr = xstrstr_v4;
+		return PREFIX_LEASE;
+	} else if (memcmp("  iaaddr ", str, 9)) {
+		config.dhcp_version = VERSION_6;
+		xstrstr = xstrstr_v6;
+		return PREFIX_LEASE;
+	}
+	return NUM_OF_PREFIX;
+}
+
+/*! \fn xstrstr_v4(const char *restrict str)
+ * \brief parse lease file in IPv4 mode
+ *
+ * \param str A line from dhcpd.conf
+ * \return prefix_t enum value
+ */
+int
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+    __attribute__ ((hot))
+#endif
+    xstrstr_v4(const char *restrict str)
 {
 	size_t len;
-	/* Needed when dhcpd.conf has zero range definitions.  */
-	if (config.dhcp_version == VERSION_UNKNOWN) {
-		if (memcmp("lease ", str, 6)) {
-			config.dhcp_version = VERSION_4;
-			return PREFIX_LEASE;
-		} else if (memcmp("  iaaddr ", str, 9)) {
-			config.dhcp_version = VERSION_6;
-			return PREFIX_LEASE;
-		}
-		return NUM_OF_PREFIX;
-	}
-	if ((config.dhcp_version == VERSION_4 && str[2] == 'b')
-	    || (config.dhcp_version == VERSION_6 && str[4] == 'b')
-	    || str[2] == 'h') {
+	if (str[2] == 'b' || str[2] == 'h') {
 		len = strlen(str);
 	} else {
 		len = 0;
 	}
-	if (15 < len && config.dhcp_version == VERSION_4) {
+	if (15 < len) {
 		switch (str[16]) {
 		case 'f':
 			if (!memcmp("  binding state free;", str, 21))
@@ -208,7 +222,32 @@ int
 				return PREFIX_HARDWARE_ETHERNET;
 			break;
 		}
-	} else if (17 < len /* && config.dhcp_version == VERSION_6 */ ) {
+	}
+	if (!memcmp("lease ", str, 6)) {
+		return PREFIX_LEASE;
+	}
+	return NUM_OF_PREFIX;
+}
+
+/*! \fn xstrstr_v4(const char *restrict str)
+ * \brief parse lease file in IPv6 mode
+ *
+ * \param str A line from dhcpd.conf
+ * \return prefix_t enum value
+ */
+int
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+    __attribute__ ((hot))
+#endif
+    xstrstr_v6(const char *restrict str)
+{
+	size_t len;
+	if (str[4] == 'b' || str[2] == 'h') {
+		len = strlen(str);
+	} else {
+		len = 0;
+	}
+	if (17 < len) {
 		switch (str[18]) {
 		case 'f':
 			if (!memcmp("    binding state free;", str, 23))
@@ -238,10 +277,7 @@ int
 			break;
 		}
 	}
-	if (config.dhcp_version == VERSION_4 && !memcmp("lease ", str, 6)) {
-		return PREFIX_LEASE;
-	} else if (config.dhcp_version == VERSION_6
-		   && !memcmp("  iaaddr ", str, 9)) {
+	if (!memcmp("  iaaddr ", str, 9)) {
 		return PREFIX_LEASE;
 	}
 	return NUM_OF_PREFIX;
