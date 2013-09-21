@@ -47,17 +47,27 @@
 /*! \brief Add a lease to hash array.
  * \param addr Binary IP to be added in leases hash.
  * \param type Lease state of the IP. */
-void add_lease(union ipaddr_t *addr, enum ltype type)
+void add_lease_init(union ipaddr_t *addr __attribute__((unused)), enum ltype type __attribute__((unused)))
+{
+}
+
+void add_lease_v4(union ipaddr_t *addr, enum ltype type)
 {
 	struct leases_t *l;
 	l = xmalloc(sizeof(struct leases_t));
 	copy_ipaddr(&l->ip, addr);
 	l->type = type;
-	if (config.dhcp_version == VERSION_6) {
-		HASH_ADD_V6(leases, ip.v6, l);
-	} else {
-		HASH_ADD_INT(leases, ip.v4, l);
-	}
+	HASH_ADD_INT(leases, ip.v4, l);
+	l->ethernet = NULL;
+}
+
+void add_lease_v6(union ipaddr_t *addr, enum ltype type)
+{
+	struct leases_t *l;
+	l = xmalloc(sizeof(struct leases_t));
+	copy_ipaddr(&l->ip, addr);
+	l->type = type;
+	HASH_ADD_V6(leases, ip.v6, l);
 	l->ethernet = NULL;
 }
 
@@ -65,15 +75,22 @@ void add_lease(union ipaddr_t *addr, enum ltype type)
  * \param addr Binary IP searched from leases hash.
  * \return A lease structure about requested IP, or NULL.
  */
-struct leases_t *find_lease(union ipaddr_t *addr)
+struct leases_t *find_lease_init(union ipaddr_t *addr __attribute__((unused)))
+{
+	return NULL;
+}
+
+struct leases_t *find_lease_v4(union ipaddr_t *addr)
 {
 	struct leases_t *l;
+	HASH_FIND_INT(leases, &addr->v4, l);
+	return l;
+}
 
-	if (config.dhcp_version == VERSION_6) {
-		HASH_FIND_V6(leases, &addr->v6, l);
-	} else {
-		HASH_FIND_INT(leases, &addr->v4, l);
-	}
+struct leases_t *find_lease_v6(union ipaddr_t *addr)
+{
+	struct leases_t *l;
+	HASH_FIND_V6(leases, &addr->v4, l);
 	return l;
 }
 

@@ -54,17 +54,26 @@
  * \param b Binary IP address.
  * \return If a < b return -1, if a < b return 1, when they are equal return 0.
  */
-int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
+int ipcomp_init(const union ipaddr_t *restrict a __attribute__((unused)),
+		const union ipaddr_t *restrict b __attribute__((unused)))
 {
-	if (config.dhcp_version == VERSION_6) {
-		return memcmp(&a->v6, &b->v6, sizeof(a->v6));
-	} else {
-		if (a->v4 < b->v4)
-			return -1;
-		if (a->v4 > b->v4)
-			return 1;
-		return 0;
-	}
+	return 0;
+}
+
+int ipcomp_v4(const union ipaddr_t *restrict a,
+	      const union ipaddr_t *restrict b)
+{
+	if (a->v4 < b->v4)
+		return -1;
+	if (a->v4 > b->v4)
+		return 1;
+	return 0;
+}
+
+int ipcomp_v6(const union ipaddr_t *restrict a,
+	      const union ipaddr_t *restrict b)
+{
+	return memcmp(&a->v6, &b->v6, sizeof(a->v6));
 }
 
 /*! \brief Compare IP address in leases. Suitable for sorting range table.

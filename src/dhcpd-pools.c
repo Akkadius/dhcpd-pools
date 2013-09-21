@@ -248,7 +248,7 @@ int main(int argc, char **argv)
 
 	/* Do the job */
 	prepare_memory();
-	xstrstr = xstrstr_init;
+	set_ipv_functions(VERSION_UNKNOWN);
 	parse_config(true, config.dhcpdconf_file, shared_networks);
 
 	parse_leases();

@@ -189,6 +189,7 @@ unsigned int RANGES;
 
 /* Function prototypes */
 int prepare_memory(void);
+void set_ipv_functions(int version);
 int parse_leases(void);
 void parse_config(int, const char *__restrict,
 		  struct shared_network_t *__restrict)
@@ -199,11 +200,26 @@ void flip_ranges(struct range_t *__restrict ranges,
 		 struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
-int parse_ipaddr(const char *restrict src, union ipaddr_t *restrict dst);
-void copy_ipaddr(union ipaddr_t *restrict dst,
-		 const union ipaddr_t *restrict src);
-const char *ntop_ipaddr(const union ipaddr_t *ip);
-double get_range_size(const struct range_t *r);
+int (*parse_ipaddr)(const char *restrict src, union ipaddr_t *restrict dst);
+int parse_ipaddr_init(const char *restrict src, union ipaddr_t *restrict dst);
+int parse_ipaddr_v4(const char *restrict src, union ipaddr_t *restrict dst);
+int parse_ipaddr_v6(const char *restrict src, union ipaddr_t *restrict dst);
+
+void (*copy_ipaddr)(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
+void copy_ipaddr_init(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
+void copy_ipaddr_v4(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
+void copy_ipaddr_v6(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
+
+const char *(*ntop_ipaddr)(const union ipaddr_t *ip);
+const char *ntop_ipaddr_init(const union ipaddr_t *ip);
+const char *ntop_ipaddr_v4(const union ipaddr_t *ip);
+const char *ntop_ipaddr_v6(const union ipaddr_t *ip);
+
+double (*get_range_size)(const struct range_t *r);
+double get_range_size_init(const struct range_t *r);
+double get_range_size_v4(const struct range_t *r);
+double get_range_size_v6(const struct range_t *r);
+
 int (*xstrstr)(const char *__restrict str);
 int xstrstr_init(const char *__restrict str)
 # if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
@@ -227,7 +243,11 @@ void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
-int ipcomp(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int (*ipcomp)(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int ipcomp_init(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int ipcomp_v4(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int ipcomp_v6(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+
 int comp_cur(struct range_t *r1, struct range_t *r2);
 int comp_double(double f1, double f2);
 int comp_ip(struct range_t *r1, struct range_t *r2);
@@ -258,8 +278,16 @@ int output_alarming(void);
 /* Memory release, file closing etc */
 void clean_up(void);
 /* Hash functions */
-void add_lease(union ipaddr_t *ip, enum ltype type);
-struct leases_t *find_lease(union ipaddr_t *ip);
+void (*add_lease)(union ipaddr_t *ip, enum ltype type);
+void add_lease_init(union ipaddr_t *ip, enum ltype type);
+void add_lease_v4(union ipaddr_t *ip, enum ltype type);
+void add_lease_v6(union ipaddr_t *ip, enum ltype type);
+
+struct leases_t *(*find_lease)(union ipaddr_t *ip);
+struct leases_t *find_lease_init(union ipaddr_t *ip);
+struct leases_t *find_lease_v4(union ipaddr_t *ip);
+struct leases_t *find_lease_v6(union ipaddr_t *ip);
+
 void delete_lease(struct leases_t *lease);
 void delete_all_leases(void);
 
