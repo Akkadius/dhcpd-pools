@@ -109,6 +109,7 @@ void delete_all_leases(void)
 {
 	struct leases_t *l, *tmp;
 	HASH_ITER(hh, leases, l, tmp) {
+		free(l->ethernet);
 		HASH_DEL(leases, l);
 		free(l);
 	}

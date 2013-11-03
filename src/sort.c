@@ -213,6 +213,7 @@ comparer_t field_selector(char c)
 	case 'e':
 		return comp_tcperc;
 	default:
+		clean_up();
 		warnx("field_selector: unknown sort order `%c'", c);
 		errx(EXIT_FAILURE, "Try `%s --help' for more information.",
 		     program_name);

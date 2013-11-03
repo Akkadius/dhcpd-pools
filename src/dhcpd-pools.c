@@ -178,6 +178,7 @@ int main(int argc, char **argv)
 					config.output_limit[i] =
 					    optarg[i] - '0';
 				} else {
+					clean_up();
 					errx(EXIT_FAILURE,
 					     "main: output mask `%s' is illegal",
 					     optarg);
@@ -242,6 +243,7 @@ int main(int argc, char **argv)
 		output_analysis = output_csv;
 		break;
 	default:
+		clean_up();
 		errx(EXIT_FAILURE, "main: unknown output format `%c'",
 		     config.output_format[0]);
 	}

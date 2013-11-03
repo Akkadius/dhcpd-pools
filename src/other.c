@@ -411,16 +411,18 @@ void clean_up(void)
 	if (fflush(NULL)) {
 		warn("clean_up: fflush");
 	}
-	num_shared_networks++;
-	for (i = 0; i < num_shared_networks; i++) {
-		free((shared_networks + i)->name);
-	}
 	free(config.dhcpdconf_file);
 	free(config.dhcpdlease_file);
 	free(config.output_file);
 	free(ranges);
 	delete_all_leases();
-	free(shared_networks);
+	if (shared_networks) {
+		num_shared_networks++;
+		for (i = 0; i < num_shared_networks; i++) {
+			free((shared_networks + i)->name);
+		}
+		free(shared_networks);
+	}
 }
 
 /*! \brief A version printing. */
