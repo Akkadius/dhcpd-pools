@@ -250,11 +250,10 @@ void parse_config(int is_include, const char *restrict config_file,
 			    && argument != ITS_AN_INCLUCE) {
 				newclause = true;
 				i = 0;
-			} else if (argument == ITS_A_RANGE_FIRST_IP) {
-				one_ip_range = true;
+			} else if (argument == ITS_A_RANGE_FIRST_IP && one_ip_range == true) {
 				argument = ITS_A_RANGE_SECOND_IP;
 				c = ' ';
-			} else if (argument == ITS_A_RANGE_SECOND_IP) {
+			} else if (argument == ITS_A_RANGE_SECOND_IP && 0 < i) {
 				/* Range ends to ; and this hair in code
 				 * make two ranges wrote together like...
 				 *
@@ -262,6 +261,9 @@ void parse_config(int is_include, const char *restrict config_file,
 				 *
 				 * ...to be interpreted correctly. */
 				c = ' ';
+			} else if (argument == ITS_A_RANGE_SECOND_IP && i == 0) {
+				range_p->last_ip = range_p->first_ip;
+				goto newrange;
 			}
 			continue;
 		case '{':
@@ -310,8 +312,7 @@ void parse_config(int is_include, const char *restrict config_file,
 		}
 		/* Strip white spaces before new clause word. */
 		if ((newclause == true || argument != ITS_NOTHING_INTERESTING)
-		    && isspace(c)
-		    && i == 0) {
+		    && isspace(c) && i == 0 && one_ip_range == false) {
 			continue;
 		}
 		/* Save to word which clause this is. */
@@ -337,6 +338,9 @@ void parse_config(int is_include, const char *restrict config_file,
 			}
 			i = 0;
 			argument = is_interesting_config_clause(word);
+			if (argument == ITS_A_RANGE_FIRST_IP) {
+				one_ip_range = true;
+			}
 		}
 		/* words after range, shared-network or include */
 		else if (argument != ITS_NOTHING_INTERESTING) {
@@ -348,13 +352,14 @@ void parse_config(int is_include, const char *restrict config_file,
 			case ITS_A_RANGE_SECOND_IP:
 				/* printf ("range 2nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
-				parse_ipaddr(word, &addr);
 				argument = ITS_NOTHING_INTERESTING;
+				parse_ipaddr(word, &addr);
 				if (one_ip_range == true) {
 					one_ip_range = false;
 					copy_ipaddr(&range_p->first_ip, &addr);
 				}
 				copy_ipaddr(&range_p->last_ip, &addr);
+ newrange:
 				range_p->count = 0;
 				range_p->touched = 0;
 				range_p->backups = 0;
@@ -379,6 +384,7 @@ void parse_config(int is_include, const char *restrict config_file,
 					break;
 				}
 				copy_ipaddr(&range_p->first_ip, &addr);
+				one_ip_range = false;
 				argument = ITS_A_RANGE_SECOND_IP;
 				break;
 			case ITS_A_SHAREDNET:
