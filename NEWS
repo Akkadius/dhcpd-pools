@@ -6,6 +6,32 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.24
+$ git shortlog v2.23..v2.24
+Sami Kerola (22):
+      build-sys: update configure.ac
+      output: make output limits to apply to alarm return values
+      tests: add alarming tests
+      output: allow alarming, in case of success, be silent
+      tests: fix tests to use the new OK printing limit
+      docs: inform how the limits affect to printing when alarming is in use
+      output: allow user to ignore small ranges and shared networks
+      tests: test small network alarm ignoring
+      docs: add an example how to use limits with alarming
+      thanks: Dan Pritts
+      xstrstr: speed up analysis by avoiding string comparisons
+      other: memcmp() is tiny bit quicker than strncmp()
+      build-sys: update gnulib modules
+      build-sys: AC_PROG_CC_C99 is obsolete; use AC_PROG_CC
+      getdata: use correct file caching advice
+      analyze: remove unnecessary function
+      getdata: memccpy() is better than own similar function
+      getdata: split busy function to segments used via function pointer
+      various: split functions to IPv4 and IPv6 versions
+      various: fix memory leaks
+      getdata: fix one ip ranges when they have trailing spaces in definition
+      release: 2.24
+
 Version 2.23
 $ git shortlog v2.22..v2.23
 Sami Kerola (3):
