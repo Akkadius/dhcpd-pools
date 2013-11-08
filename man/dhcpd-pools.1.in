@@ -49,7 +49,9 @@ only if there is failover configuration.
 .SH OPTIONS
 .TP
 \fB\-c\fR, \fB\-\-config\fR=\fIFILE\fR
-Path to the dhcpd.conf file.
+Path to the dhcpd.conf file.  If the dhcpd.conf has include files they
+can be analysed separately, that can be useful when trying to understand
+or monitor subset of data.
 .TP
 \fB\-l\fR, \fB\-\-leases\fR=\fIFILE\fR
 Path to the dhcpd.leases file.
