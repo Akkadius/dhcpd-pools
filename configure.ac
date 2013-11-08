@@ -70,7 +70,7 @@ AC_CHECK_FUNCS([\
 ])
 
 AC_MSG_CHECKING([if the compiler supports __builtin_expect])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[
 	return __builtin_expect(1, 1) ? 1 : 0
 ]])],[
 	have_builtin_expect=yes
