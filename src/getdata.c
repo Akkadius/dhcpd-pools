@@ -263,6 +263,7 @@ if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
 				 *
 				 * ...to be interpreted correctly. */
 				c = ' ';
+				break;
 			} else if (argument == ITS_A_RANGE_SECOND_IP && i == 0) {
 				range_p->last_ip = range_p->first_ip;
 				goto newrange;
