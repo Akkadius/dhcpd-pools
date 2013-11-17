@@ -64,6 +64,28 @@
 #  define unlikely(x)	(x)
 # endif
 
+/* The __attribute__ feature is available in gcc versions 2.5 and later.
+ * The attribute __pure__ was added in gcc 2.96.  */
+# if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
+#  define _DP_ATTRIBUTE_PURE __attribute__ ((__pure__))
+# else
+#  define _DP_ATTRIBUTE_PURE	/* empty */
+# endif
+
+/* The __const__ attribute was added in gcc 2.95.  */
+# if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
+#  define _DP_ATTRIBUTE_CONST __attribute__ ((__const__))
+# else
+#  define _DP_ATTRIBUTE_CONST	/* empty */
+# endif
+
+/* The attribute __hot__ was added in gcc 4.3.  */
+# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
+#  define _DP_ATTRIBUTE_HOT __attribute__ ((__hot__))
+# else
+#  define _DP_ATTRIBUTE_HOT	/* empty */
+# endif
+
 /*! \union ipaddr_t
  * \brief Memory space for a binary IP address saving. */
 union ipaddr_t {
@@ -201,41 +223,29 @@ void flip_ranges(struct range_t *__restrict ranges,
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
 int (*parse_ipaddr)(const char *restrict src, union ipaddr_t *restrict dst);
-int parse_ipaddr_init(const char *restrict src, union ipaddr_t *restrict dst);
+int parse_ipaddr_init(const char *restrict src, union ipaddr_t *restrict dst) _DP_ATTRIBUTE_CONST;
 int parse_ipaddr_v4(const char *restrict src, union ipaddr_t *restrict dst);
 int parse_ipaddr_v6(const char *restrict src, union ipaddr_t *restrict dst);
 
 void (*copy_ipaddr)(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
-void copy_ipaddr_init(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
+void copy_ipaddr_init(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src) _DP_ATTRIBUTE_CONST;
 void copy_ipaddr_v4(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 void copy_ipaddr_v6(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 
 const char *(*ntop_ipaddr)(const union ipaddr_t *ip);
-const char *ntop_ipaddr_init(const union ipaddr_t *ip);
+const char *ntop_ipaddr_init(const union ipaddr_t *ip) _DP_ATTRIBUTE_CONST;
 const char *ntop_ipaddr_v4(const union ipaddr_t *ip);
 const char *ntop_ipaddr_v6(const union ipaddr_t *ip);
 
 double (*get_range_size)(const struct range_t *r);
-double get_range_size_init(const struct range_t *r);
-double get_range_size_v4(const struct range_t *r);
-double get_range_size_v6(const struct range_t *r);
+double get_range_size_init(const struct range_t *r) _DP_ATTRIBUTE_CONST;
+double get_range_size_v4(const struct range_t *r) _DP_ATTRIBUTE_PURE;
+double get_range_size_v6(const struct range_t *r) _DP_ATTRIBUTE_PURE;
 
 int (*xstrstr)(const char *__restrict str);
-int xstrstr_init(const char *__restrict str)
-# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
-    __attribute__ ((__hot__))
-# endif
-    ;
-int xstrstr_v4(const char *__restrict str)
-# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
-    __attribute__ ((__hot__))
-# endif
-    ;
-int xstrstr_v6(const char *__restrict str)
-# if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
-    __attribute__ ((__hot__))
-# endif
-    ;
+int xstrstr_init(const char *__restrict str) _DP_ATTRIBUTE_CONST;
+int xstrstr_v4(const char *__restrict str) _DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
+int xstrstr_v6(const char *__restrict str) _DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
 
 double strtod_or_err(const char *__restrict str,
 		     const char *__restrict errmesg);
@@ -244,25 +254,25 @@ void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
 int (*ipcomp)(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
-int ipcomp_init(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
-int ipcomp_v4(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
-int ipcomp_v6(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int ipcomp_init(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b) _DP_ATTRIBUTE_CONST;
+int ipcomp_v4(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
+int ipcomp_v6(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
 
-int comp_cur(struct range_t *r1, struct range_t *r2);
-int comp_double(double f1, double f2);
+int comp_cur(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
+int comp_double(double f1, double f2) _DP_ATTRIBUTE_CONST;
 int comp_ip(struct range_t *r1, struct range_t *r2);
 int comp_max(struct range_t *r1, struct range_t *r2);
 int comp_percent(struct range_t *r1, struct range_t *r2);
-int comp_tc(struct range_t *r1, struct range_t *r2);
+int comp_tc(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
 int comp_tcperc(struct range_t *r1, struct range_t *r2);
-int comp_touched(struct range_t *r1, struct range_t *r2);
+int comp_touched(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
 int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
 typedef int (*comparer_t) (struct range_t *r1, struct range_t *r2);
 comparer_t field_selector(char c);
 double ret_percent(struct range_t r);
-double ret_tc(struct range_t r);
+double ret_tc(struct range_t r) _DP_ATTRIBUTE_CONST;
 double ret_tcperc(struct range_t r);
 void mergesort_ranges(struct range_t *__restrict orig, int size,
 		      struct range_t *__restrict temp)
@@ -279,14 +289,14 @@ int output_alarming(void);
 void clean_up(void);
 /* Hash functions */
 void (*add_lease)(union ipaddr_t *ip, enum ltype type);
-void add_lease_init(union ipaddr_t *ip, enum ltype type);
+void add_lease_init(union ipaddr_t *ip, enum ltype type) _DP_ATTRIBUTE_CONST;
 void add_lease_v4(union ipaddr_t *ip, enum ltype type);
 void add_lease_v6(union ipaddr_t *ip, enum ltype type);
 
 struct leases_t *(*find_lease)(union ipaddr_t *ip);
-struct leases_t *find_lease_init(union ipaddr_t *ip);
-struct leases_t *find_lease_v4(union ipaddr_t *ip);
-struct leases_t *find_lease_v6(union ipaddr_t *ip);
+struct leases_t *find_lease_init(union ipaddr_t *ip) _DP_ATTRIBUTE_CONST;
+struct leases_t *find_lease_v4(union ipaddr_t *ip) _DP_ATTRIBUTE_PURE;
+struct leases_t *find_lease_v6(union ipaddr_t *ip) _DP_ATTRIBUTE_PURE;
 
 void delete_lease(struct leases_t *lease);
 void delete_all_leases(void);
