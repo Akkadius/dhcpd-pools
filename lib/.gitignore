@@ -1,14 +1,14 @@
-/*.o
 /*.lo
+/*.o
 /.deps/
 /.gitignore~
 /.libs/
-/arpa/
 /Makefile
 /Makefile.am
 /Makefile.in
 /_Exit.c
 /arg-nonnull.h
+/arpa/
 /arpa_inet.in.h
 /atexit.c
 /c++defs.h
@@ -57,6 +57,7 @@
 /getopt1.c
 /getopt_int.h
 /gettext.h
+/gettimeofday.c
 /inet_pton.c
 /intprops.h
 /langinfo.h
@@ -99,6 +100,7 @@
 /stdio.in.h
 /stdlib.h
 /stdlib.in.h
+/stpncpy.c
 /str-two-way.h
 /strdup.c
 /streq.h
@@ -115,6 +117,7 @@
 /sys_socket.c
 /sys_socket.in.h
 /sys_stat.in.h
+/sys_time.in.h
 /sys_types.in.h
 /sys_uio.in.h
 /time.h
@@ -139,4 +142,3 @@
 /xprintf.h
 /xstrtod.c
 /xstrtod.h
-/stpncpy.c
