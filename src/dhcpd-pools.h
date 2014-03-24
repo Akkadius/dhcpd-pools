@@ -191,6 +191,13 @@ enum limbits {
 	BIT3 = 0x4
 };
 
+/*! \def STATE_OK
+ * \brief Nagios alarm exit value.
+ */
+#define STATE_OK 0
+#define STATE_WARNING 1
+#define STATE_CRITICAL 2
+
 /* Global variables */
 /* \var prefix_length Length of each prefix.  */
 int prefix_length[2][NUM_OF_PREFIX];

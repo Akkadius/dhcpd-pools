@@ -1070,16 +1070,21 @@ int output_alarming(void)
 			shared_p++;
 		}
 	}
+
+	if (sc || rc)
+		ret_val = STATE_CRITICAL;
+	else if (sw || rw)
+		ret_val = STATE_WARNING;
+	else
+		ret_val = STATE_OK;
+
 	if ((0 < rc && config.output_limit[1] & BIT1) || (0 < sc && config.output_limit[1] & BIT2)) {
-		ret_val = 2;
 		fprintf(outfile, "CRITICAL: %s:",
 			program_name);
 	} else if ((0 < rw && config.output_limit[1] & BIT1) || (0 < sw && config.output_limit[1] & BIT2)) {
-		ret_val = 1;
 		fprintf(outfile, "WARNING: %s:",
 			program_name);
 	} else {
-		ret_val = 0;
 		if (config.output_limit[1] & BIT3)
 			fprintf(outfile, "OK:");
 		else
