@@ -1,2 +1,2 @@
-OK: Shared nets; crit: 0 warn: 0 ok: 2
+OK: Shared nets - crit: 0 warn: 0 ok: 2; | snet_crit=0 snet_warn=0 snet_ok=2
 0

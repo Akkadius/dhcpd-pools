@@ -1,2 +1,3 @@
-CRITICAL: dhcpd-pools: Ranges; crit: 1 warn: 0 ok: 4 
+CRITICAL: dhcpd-pools: Ranges - crit: 1 warn: 0 ok: 4; | range_crit=1 range_warn=0 range_ok=4
+
 2

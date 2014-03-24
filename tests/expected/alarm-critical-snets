@@ -1,2 +1,2 @@
-CRITICAL: dhcpd-pools: Shared nets; crit: 1 warn: 0 ok: 1
+CRITICAL: dhcpd-pools: Shared nets - crit: 1 warn: 0 ok: 1; | snet_crit=1 snet_warn=0 snet_ok=1
 2

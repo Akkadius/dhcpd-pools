@@ -1072,32 +1072,44 @@ int output_alarming(void)
 	}
 	if ((0 < rc && config.output_limit[1] & BIT1) || (0 < sc && config.output_limit[1] & BIT2)) {
 		ret_val = 2;
-		fprintf(outfile, "CRITICAL: %s: ",
+		fprintf(outfile, "CRITICAL: %s:",
 			program_name);
 	} else if ((0 < rw && config.output_limit[1] & BIT1) || (0 < sw && config.output_limit[1] & BIT2)) {
 		ret_val = 1;
-		fprintf(outfile, "WARNING: %s: ",
+		fprintf(outfile, "WARNING: %s:",
 			program_name);
 	} else {
 		ret_val = 0;
 		if (config.output_limit[1] & BIT3)
-			fprintf(outfile, "OK: ");
+			fprintf(outfile, "OK:");
 		else
 			return ret_val;
 	}
 	if (config.output_limit[0] & BIT1) {
-		fprintf(outfile, "Ranges; crit: %d warn: %d ok: %d ", rc, rw,
+		fprintf(outfile, " Ranges - crit: %d warn: %d ok: %d", rc, rw,
 			ro);
 		if (ri != 0) {
-			fprintf(outfile, "ignored: %d ", ri);
+			fprintf(outfile, " ignored: %d", ri);
 		}
-
+		fprintf(outfile, "; | range_crit=%d range_warn=%d range_ok=%d", rc, rw,
+			ro);
+		if (ri != 0) {
+			fprintf(outfile, " range_ignored=%d", ri);
+		}
+		fprintf(outfile, "\n");
+	} else {
+		fprintf(outfile, " ");
 	}
 	if (config.output_limit[0] & BIT2) {
-		fprintf(outfile, "Shared nets; crit: %d warn: %d ok: %d", sc,
+		fprintf(outfile, "Shared nets - crit: %d warn: %d ok: %d", sc,
 			sw, so);
 		if (si != 0) {
-			fprintf(outfile, "ignored: %d ", si);
+			fprintf(outfile, " ignored: %d", si);
+		}
+		fprintf(outfile, "; | snet_crit=%d snet_warn=%d snet_ok=%d", sc,
+			sw, so);
+		if (si != 0) {
+			fprintf(outfile, " snet_ignored=%d\n", si);
 		}
 	}
 	fprintf(outfile, "\n");

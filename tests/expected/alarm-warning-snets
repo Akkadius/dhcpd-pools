@@ -1,2 +1,2 @@
-WARNING: dhcpd-pools: Shared nets; crit: 0 warn: 1 ok: 1
+WARNING: dhcpd-pools: Shared nets - crit: 0 warn: 1 ok: 1; | snet_crit=0 snet_warn=1 snet_ok=1
 1
