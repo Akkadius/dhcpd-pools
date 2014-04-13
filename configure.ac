@@ -13,7 +13,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([
 	-Wall
 	-Wextra-portability
-	1.10
+	1.12
 	foreign
 	dist-xz
 	no-dist-gzip
