@@ -6,6 +6,24 @@ See the end for copying conditions.
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 
+Version 2.25
+$ git shortlog v2.24..v2.25
+Sami Kerola (14):
+      build-sys: use more strict method to check __builtin_expect
+      getdata: add missing HAVE_POSIX_FADVISE protection
+      getdata: fix consecutive range definition regression
+      man: add tip analysis of include files can be useful
+      thanks: add Fredrik Lysén & Conor McCarthy
+      generic: use pure and const function attributes when possible
+      tests: fix testing error
+      output: make nagios output have performance data
+      build-sys: update gitinore file
+      output: use symbolic exit values for nagios commands
+      build-sys: update bootstrap script
+      build-sys: require automake 1.12 to get working test-driver
+      contrib: add release siging key to contrib/
+      release: 2.25
+
 Version 2.24
 $ git shortlog v2.23..v2.24
 Sami Kerola (22):
