@@ -5,6 +5,7 @@ See the end for copying conditions.
 
 Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
+gpg: Signature is crated using RSA key ID FDE9B739.
 
 Version 2.25
 $ git shortlog v2.24..v2.25
