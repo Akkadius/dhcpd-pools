@@ -194,9 +194,9 @@ enum limbits {
 /*! \def STATE_OK
  * \brief Nagios alarm exit value.
  */
-#define STATE_OK 0
-#define STATE_WARNING 1
-#define STATE_CRITICAL 2
+# define STATE_OK 0
+# define STATE_WARNING 1
+# define STATE_CRITICAL 2
 
 /* Global variables */
 /* \var prefix_length Length of each prefix.  */
@@ -220,50 +220,53 @@ unsigned int RANGES;
 int prepare_memory(void);
 void set_ipv_functions(int version);
 int parse_leases(void);
-void parse_config(int, const char *__restrict,
-		  struct shared_network_t *__restrict)
+void parse_config(int, const char *__restrict, struct shared_network_t *__restrict)
     __attribute__ ((nonnull(2, 3)));
 int prepare_data(void);
 int do_counting(void);
-void flip_ranges(struct range_t *__restrict ranges,
-		 struct range_t *__restrict tmp_ranges)
+void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
-int (*parse_ipaddr)(const char *restrict src, union ipaddr_t *restrict dst);
+int (*parse_ipaddr) (const char *restrict src, union ipaddr_t *restrict dst);
 int parse_ipaddr_init(const char *restrict src, union ipaddr_t *restrict dst) _DP_ATTRIBUTE_CONST;
 int parse_ipaddr_v4(const char *restrict src, union ipaddr_t *restrict dst);
 int parse_ipaddr_v6(const char *restrict src, union ipaddr_t *restrict dst);
 
-void (*copy_ipaddr)(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
-void copy_ipaddr_init(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src) _DP_ATTRIBUTE_CONST;
+void (*copy_ipaddr) (union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
+void copy_ipaddr_init(union ipaddr_t *restrict dst,
+		      const union ipaddr_t *restrict src) _DP_ATTRIBUTE_CONST;
 void copy_ipaddr_v4(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 void copy_ipaddr_v6(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 
-const char *(*ntop_ipaddr)(const union ipaddr_t *ip);
+const char *(*ntop_ipaddr) (const union ipaddr_t *ip);
 const char *ntop_ipaddr_init(const union ipaddr_t *ip) _DP_ATTRIBUTE_CONST;
 const char *ntop_ipaddr_v4(const union ipaddr_t *ip);
 const char *ntop_ipaddr_v6(const union ipaddr_t *ip);
 
-double (*get_range_size)(const struct range_t *r);
+double (*get_range_size) (const struct range_t *r);
 double get_range_size_init(const struct range_t *r) _DP_ATTRIBUTE_CONST;
 double get_range_size_v4(const struct range_t *r) _DP_ATTRIBUTE_PURE;
 double get_range_size_v6(const struct range_t *r) _DP_ATTRIBUTE_PURE;
 
-int (*xstrstr)(const char *__restrict str);
+int (*xstrstr) (const char *__restrict str);
 int xstrstr_init(const char *__restrict str) _DP_ATTRIBUTE_CONST;
-int xstrstr_v4(const char *__restrict str) _DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
-int xstrstr_v6(const char *__restrict str) _DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
+int xstrstr_v4(const char *__restrict str)
+_DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
+int xstrstr_v6(const char *__restrict str)
+_DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
 
-double strtod_or_err(const char *__restrict str,
-		     const char *__restrict errmesg);
+double strtod_or_err(const char *__restrict str, const char *__restrict errmesg);
 void print_version(void) __attribute__ ((noreturn));
 void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
 /* ...for ranges and... */
-int (*ipcomp)(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
-int ipcomp_init(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b) _DP_ATTRIBUTE_CONST;
-int ipcomp_v4(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
-int ipcomp_v6(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
+int (*ipcomp) (const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int ipcomp_init(const union ipaddr_t *restrict a,
+		const union ipaddr_t *restrict b) _DP_ATTRIBUTE_CONST;
+int ipcomp_v4(const union ipaddr_t *restrict a,
+	      const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
+int ipcomp_v6(const union ipaddr_t *restrict a,
+	      const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
 
 int comp_cur(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
 int comp_double(double f1, double f2) _DP_ATTRIBUTE_CONST;
@@ -281,8 +284,7 @@ comparer_t field_selector(char c);
 double ret_percent(struct range_t r);
 double ret_tc(struct range_t r) _DP_ATTRIBUTE_CONST;
 double ret_tcperc(struct range_t r);
-void mergesort_ranges(struct range_t *__restrict orig, int size,
-		      struct range_t *__restrict temp)
+void mergesort_ranges(struct range_t *__restrict orig, int size, struct range_t *__restrict temp)
     __attribute__ ((nonnull(1, 3)));
 /* output function pointer and functions */
 int (*output_analysis) (void);
@@ -295,12 +297,12 @@ int output_alarming(void);
 /* Memory release, file closing etc */
 void clean_up(void);
 /* Hash functions */
-void (*add_lease)(union ipaddr_t *ip, enum ltype type);
+void (*add_lease) (union ipaddr_t *ip, enum ltype type);
 void add_lease_init(union ipaddr_t *ip, enum ltype type) _DP_ATTRIBUTE_CONST;
 void add_lease_v4(union ipaddr_t *ip, enum ltype type);
 void add_lease_v6(union ipaddr_t *ip, enum ltype type);
 
-struct leases_t *(*find_lease)(union ipaddr_t *ip);
+struct leases_t *(*find_lease) (union ipaddr_t *ip);
 struct leases_t *find_lease_init(union ipaddr_t *ip) _DP_ATTRIBUTE_CONST;
 struct leases_t *find_lease_v4(union ipaddr_t *ip) _DP_ATTRIBUTE_PURE;
 struct leases_t *find_lease_v6(union ipaddr_t *ip) _DP_ATTRIBUTE_PURE;

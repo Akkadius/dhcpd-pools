@@ -54,14 +54,13 @@
  * \param b Binary IP address.
  * \return If a < b return -1, if a < b return 1, when they are equal return 0.
  */
-int ipcomp_init(const union ipaddr_t *restrict a __attribute__((unused)),
-		const union ipaddr_t *restrict b __attribute__((unused)))
+int ipcomp_init(const union ipaddr_t *restrict a __attribute__ ((unused)),
+		const union ipaddr_t *restrict b __attribute__ ((unused)))
 {
 	return 0;
 }
 
-int ipcomp_v4(const union ipaddr_t *restrict a,
-	      const union ipaddr_t *restrict b)
+int ipcomp_v4(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
 {
 	if (a->v4 < b->v4)
 		return -1;
@@ -70,8 +69,7 @@ int ipcomp_v4(const union ipaddr_t *restrict a,
 	return 0;
 }
 
-int ipcomp_v6(const union ipaddr_t *restrict a,
-	      const union ipaddr_t *restrict b)
+int ipcomp_v6(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b)
 {
 	return memcmp(&a->v6, &b->v6, sizeof(a->v6));
 }
@@ -215,8 +213,7 @@ comparer_t field_selector(char c)
 	default:
 		clean_up();
 		warnx("field_selector: unknown sort order `%c'", c);
-		errx(EXIT_FAILURE, "Try `%s --help' for more information.",
-		     program_name);
+		errx(EXIT_FAILURE, "Try `%s --help' for more information.", program_name);
 	}
 	return NULL;
 }
@@ -236,9 +233,7 @@ static int merge(struct range_t *restrict left, struct range_t *restrict right)
 	for (i = 0; i < len; i++) {
 		/* Handling strings is case of it's own */
 		if (config.sort[i] == 'n') {
-			ret =
-			    strcmp(left->shared_net->name,
-				   right->shared_net->name);
+			ret = strcmp(left->shared_net->name, right->shared_net->name);
 			if (0 < ret)
 				return (0);
 			if (ret < 0)
@@ -269,8 +264,7 @@ static int merge(struct range_t *restrict left, struct range_t *restrict right)
  * \param temp Temporary memory space, needed when a values has to be
  * flipped.
  */
-void mergesort_ranges(struct range_t *restrict orig, int size,
-		      struct range_t *restrict temp)
+void mergesort_ranges(struct range_t *restrict orig, int size, struct range_t *restrict temp)
 {
 	int left, right, i;
 	struct range_t hold;

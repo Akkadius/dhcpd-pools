@@ -75,14 +75,12 @@ int parse_leases(void)
 #ifdef HAVE_POSIX_FADVISE
 # ifdef POSIX_FADV_NOREUSE
 	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_NOREUSE) != 0) {
-		err(EXIT_FAILURE, "parse_leases: fadvise %s",
-		    config.dhcpdlease_file);
+		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
 	}
 # endif				/* POSIX_FADV_NOREUSE */
 # ifdef POSIX_FADV_SEQUENTIAL
 	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
-		err(EXIT_FAILURE, "parse_leases: fadvise %s",
-		    config.dhcpdlease_file);
+		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
 	}
 # endif				/* POSIX_FADV_SEQUENTIAL */
 #endif				/* HAVE_POSIX_FADVISE */
@@ -103,13 +101,15 @@ int parse_leases(void)
 
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases)) {
-			err(EXIT_FAILURE, "parse_leases: %s",
-			    config.dhcpdlease_file);
+			err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
 		}
-		switch(xstrstr(line)) {
-		/* It's a lease, save IP */
+		switch (xstrstr(line)) {
+			/* It's a lease, save IP */
 		case PREFIX_LEASE:
-			stop = memccpy(ipstring, line + (config.dhcp_version == VERSION_4 ? 6 : 9), ' ', strlen(line));
+			stop =
+			    memccpy(ipstring,
+				    line + (config.dhcp_version ==
+					    VERSION_4 ? 6 : 9), ' ', strlen(line));
 			if (stop != NULL) {
 				--stop;
 				*stop = '\0';
@@ -150,7 +150,7 @@ int parse_leases(void)
 			}
 			break;
 		default:
-			/* do nothing */;
+			/* do nothing */ ;
 		}
 	}
 #undef HAS_PREFIX
@@ -204,14 +204,14 @@ void parse_config(int is_include, const char *restrict config_file,
 	}
 #ifdef HAVE_POSIX_FADVISE
 # ifdef POSIX_FADV_NOREUSE
-if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_NOREUSE) != 0) {
-	err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
-}
+	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_NOREUSE) != 0) {
+		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
+	}
 # endif				/* POSIX_FADV_NOREUSE */
 # ifdef POSIX_FADV_SEQUENTIAL
-if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
-	err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
-}
+	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
+		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
+	}
 # endif				/* POSIX_FADV_SEQUENTIAL */
 #endif				/* HAVE_POSIX_FADVISE */
 
@@ -248,8 +248,7 @@ if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
 			}
 			if (comment == false
 			    && argument != ITS_A_RANGE_FIRST_IP
-			    && argument != ITS_A_RANGE_SECOND_IP
-			    && argument != ITS_AN_INCLUCE) {
+			    && argument != ITS_A_RANGE_SECOND_IP && argument != ITS_AN_INCLUCE) {
 				newclause = true;
 				i = 0;
 			} else if (argument == ITS_A_RANGE_FIRST_IP && one_ip_range == true) {
@@ -308,9 +307,7 @@ if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
 		}
 
 		/* Either inside comment or Nth word of clause. */
-		if (comment == true
-		    || (newclause == false
-			&& argument == ITS_NOTHING_INTERESTING)) {
+		if (comment == true || (newclause == false && argument == ITS_NOTHING_INTERESTING)) {
 			continue;
 		}
 		/* Strip white spaces before new clause word. */
@@ -370,10 +367,7 @@ if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
 				num_ranges++;
 				if (RANGES < num_ranges + 1) {
 					RANGES *= 2;
-					ranges =
-					    xrealloc(ranges,
-						     sizeof(struct
-							    range_t) * RANGES);
+					ranges = xrealloc(ranges, sizeof(struct range_t) * RANGES);
 					range_p = ranges + num_ranges;
 				}
 				newclause = true;
@@ -393,8 +387,7 @@ if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
 			case ITS_A_SHAREDNET:
 				/* printf ("shared-network named: %s\n", word); */
 				num_shared_networks++;
-				shared_p =
-				    shared_networks + num_shared_networks;
+				shared_p = shared_networks + num_shared_networks;
 				shared_p->name = xstrdup(word);
 				shared_p->available = 0;
 				shared_p->used = 0;

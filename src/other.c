@@ -146,19 +146,17 @@ int parse_ipaddr_v6(const char *restrict src, union ipaddr_t *restrict dst)
  *
  * \param dst Destination for a binary IP address.
  * \param src Sourse of an IP address. */
-void copy_ipaddr_init(union ipaddr_t *restrict dst __attribute__((unused)),
-		      const union ipaddr_t *restrict src __attribute__((unused)))
+void copy_ipaddr_init(union ipaddr_t *restrict dst __attribute__ ((unused)),
+		      const union ipaddr_t *restrict src __attribute__ ((unused)))
 {
 }
 
-void copy_ipaddr_v4(union ipaddr_t *restrict dst,
-		    const union ipaddr_t *restrict src)
+void copy_ipaddr_v4(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src)
 {
 	dst->v4 = src->v4;
 }
 
-void copy_ipaddr_v6(union ipaddr_t *restrict dst,
-		 const union ipaddr_t *restrict src)
+void copy_ipaddr_v6(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src)
 {
 	memcpy(&dst->v6, &src->v6, sizeof(src->v6));
 }
@@ -171,7 +169,7 @@ void copy_ipaddr_v6(union ipaddr_t *restrict dst,
  * \param ip Binary IP address.
  * \return Printable address.
  */
-const char *ntop_ipaddr_init(const union ipaddr_t *ip __attribute__((unused)))
+const char *ntop_ipaddr_init(const union ipaddr_t *ip __attribute__ ((unused)))
 {
 	static char buffer = '\0';
 	return &buffer;
@@ -187,8 +185,7 @@ const char *ntop_ipaddr_v4(const union ipaddr_t *ip)
 
 const char *ntop_ipaddr_v6(const union ipaddr_t *ip)
 {
-	static char
-	    buffer[sizeof("ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255")];
+	static char buffer[sizeof("ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255")];
 	struct in6_addr addr;
 	memcpy(addr.s6_addr, ip->v6, sizeof(addr.s6_addr));
 	return inet_ntop(AF_INET6, &addr, buffer, sizeof(buffer));
@@ -200,7 +197,7 @@ const char *ntop_ipaddr_v6(const union ipaddr_t *ip)
  * and last IP in the range.
  * \return Size of a range.
  */
-double get_range_size_init(const struct range_t *r __attribute__((unused)))
+double get_range_size_init(const struct range_t *r __attribute__ ((unused)))
 {
 	return 0;
 }
@@ -389,8 +386,7 @@ double strtod_or_err(const char *restrict str, const char *restrict errmesg)
  *
  * \param flip_me The range that needs to be inverted.
  * \param tmp_ranges Temporary memory area for the flip. */
-void flip_ranges(struct range_t *restrict flip_me,
-		 struct range_t *restrict tmp_ranges)
+void flip_ranges(struct range_t *restrict flip_me, struct range_t *restrict tmp_ranges)
 {
 	unsigned int i = num_ranges - 1, j;
 

@@ -41,7 +41,7 @@
 #ifndef DEFAULTS_H
 # define DEFAULTS_H 1
 
-#include "dhcpd-pools.h"
+# include "dhcpd-pools.h"
 
 /*! \var MAXLEN
  * \brief Maximum expected line length in dhcpd.conf and dhcpd.leases

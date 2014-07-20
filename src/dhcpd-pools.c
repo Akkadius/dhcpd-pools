@@ -129,8 +129,7 @@ int main(int argc, char **argv)
 	/* Parse command line options */
 	while (1) {
 		int c;
-		c = getopt_long(argc, argv, "c:l:f:o:s:rL:vh",
-				long_options, &option_index);
+		c = getopt_long(argc, argv, "c:l:f:o:s:rL:vh", long_options, &option_index);
 
 		if (c == EOF)
 			break;
@@ -152,8 +151,7 @@ int main(int argc, char **argv)
 			/* Output sorting option */
 			sorts = strlen(optarg);
 			if (5 < sorts) {
-				warnx
-				    ("main: only first 5 sort orders will be used");
+				warnx("main: only first 5 sort orders will be used");
 				strncpy(config.sort, optarg, (size_t)5);
 				sorts = 5;
 			} else {
@@ -175,29 +173,24 @@ int main(int argc, char **argv)
 			/* Specification what will be printed */
 			for (i = 0; i < 2; i++) {
 				if (optarg[i] >= '0' && optarg[i] < '8') {
-					config.output_limit[i] =
-					    optarg[i] - '0';
+					config.output_limit[i] = optarg[i] - '0';
 				} else {
 					clean_up();
 					errx(EXIT_FAILURE,
-					     "main: output mask `%s' is illegal",
-					     optarg);
+					     "main: output mask `%s' is illegal", optarg);
 				}
 			}
 			break;
 		case OPT_WARN:
 			strcpy(config.output_format, "a");
-			config.warning =
-			    strtod_or_err(optarg, "illegal argument");
+			config.warning = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_CRIT:
 			strcpy(config.output_format, "a");
-			config.critical =
-			    strtod_or_err(optarg, "illegal argument");
+			config.critical = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_MINSIZE:
-			config.minsize =
-			    strtod_or_err(optarg, "illegal argument");
+			config.minsize = strtod_or_err(optarg, "illegal argument");
 			break;
 		case 'v':
 			/* Print version */
@@ -206,9 +199,7 @@ int main(int argc, char **argv)
 			/* Print help */
 			usage(EXIT_SUCCESS);
 		default:
-			errx(EXIT_FAILURE,
-			     "Try `%s --help' for more information.",
-			     program_name);
+			errx(EXIT_FAILURE, "Try `%s --help' for more information.", program_name);
 		}
 	}
 
@@ -244,8 +235,7 @@ int main(int argc, char **argv)
 		break;
 	default:
 		clean_up();
-		errx(EXIT_FAILURE, "main: unknown output format `%c'",
-		     config.output_format[0]);
+		errx(EXIT_FAILURE, "main: unknown output format `%c'", config.output_format[0]);
 	}
 
 	/* Do the job */
@@ -278,8 +268,7 @@ int prepare_memory(void)
 	config.dhcp_version = VERSION_UNKNOWN;
 	RANGES = 64;
 	num_ranges = num_shared_networks = 0;
-	shared_networks =
-	    xmalloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);
+	shared_networks = xmalloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);
 
 	ranges = xmalloc(sizeof(struct range_t) * RANGES);
 

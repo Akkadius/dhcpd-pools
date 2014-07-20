@@ -47,7 +47,8 @@
 /*! \brief Add a lease to hash array.
  * \param addr Binary IP to be added in leases hash.
  * \param type Lease state of the IP. */
-void add_lease_init(union ipaddr_t *addr __attribute__((unused)), enum ltype type __attribute__((unused)))
+void add_lease_init(union ipaddr_t *addr
+		    __attribute__ ((unused)), enum ltype type __attribute__ ((unused)))
 {
 }
 
@@ -75,7 +76,7 @@ void add_lease_v6(union ipaddr_t *addr, enum ltype type)
  * \param addr Binary IP searched from leases hash.
  * \return A lease structure about requested IP, or NULL.
  */
-struct leases_t *find_lease_init(union ipaddr_t *addr __attribute__((unused)))
+struct leases_t *find_lease_init(union ipaddr_t *addr __attribute__ ((unused)))
 {
 	return NULL;
 }
