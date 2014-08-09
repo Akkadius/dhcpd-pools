@@ -1,6 +1,7 @@
 -linux
 -TFILE
 -Tipaddr_t
+-Tleases_t
 -Toff_t
 -Trange_t
 -Tsize_t

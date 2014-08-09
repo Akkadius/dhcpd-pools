@@ -69,6 +69,7 @@ void set_ipv_functions(int version)
 		find_lease = find_lease_v4;
 		get_range_size = get_range_size_v4;
 		ipcomp = ipcomp_v4;
+		leasecomp = leasecomp_v4;
 		ntop_ipaddr = ntop_ipaddr_v4;
 		parse_ipaddr = parse_ipaddr_v4;
 		xstrstr = xstrstr_v4;
@@ -81,6 +82,7 @@ void set_ipv_functions(int version)
 		find_lease = find_lease_v6;
 		get_range_size = get_range_size_v6;
 		ipcomp = ipcomp_v6;
+		leasecomp = leasecomp_v6;
 		ntop_ipaddr = ntop_ipaddr_v6;
 		parse_ipaddr = parse_ipaddr_v6;
 		xstrstr = xstrstr_v6;
@@ -93,6 +95,7 @@ void set_ipv_functions(int version)
 		find_lease = find_lease_init;
 		get_range_size = get_range_size_init;
 		ipcomp = ipcomp_init;
+		leasecomp = leasecomp_init;
 		ntop_ipaddr = ntop_ipaddr_init;
 		parse_ipaddr = parse_ipaddr_init;
 		xstrstr = xstrstr_init;

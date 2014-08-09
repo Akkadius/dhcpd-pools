@@ -71,6 +71,7 @@ const char *(*ntop_ipaddr) (const union ipaddr_t *ip);
 double (*get_range_size) (const struct range_t *r);
 int (*xstrstr) (const char *__restrict str);
 int (*ipcomp) (const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int (*leasecomp) (const struct leases_t *restrict a, const struct leases_t *restrict b);
 int (*output_analysis) (void);
 void (*add_lease) (union ipaddr_t *ip, enum ltype type);
 struct leases_t *(*find_lease) (union ipaddr_t *ip);

@@ -269,6 +269,13 @@ extern int ipcomp_v4(const union ipaddr_t *restrict a,
 extern int ipcomp_v6(const union ipaddr_t *restrict a,
 		     const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
 
+extern int (*leasecomp) (const struct leases_t *restrict a, const struct leases_t *restrict b);
+extern int leasecomp_init(const struct leases_t *restrict a
+			  __attribute__ ((unused)),
+			  const struct leases_t *restrict b __attribute__ ((unused)));
+extern int leasecomp_v4(const struct leases_t *restrict a, const struct leases_t *restrict b);
+extern int leasecomp_v6(const struct leases_t *restrict a, const struct leases_t *restrict b);
+
 extern int comp_cur(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
 extern int comp_double(double f1, double f2) _DP_ATTRIBUTE_CONST;
 extern int comp_ip(struct range_t *r1, struct range_t *r2);

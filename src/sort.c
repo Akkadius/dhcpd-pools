@@ -74,6 +74,31 @@ int ipcomp_v6(const union ipaddr_t *restrict a, const union ipaddr_t *restrict b
 	return memcmp(&a->v6, &b->v6, sizeof(a->v6));
 }
 
+/*! \brief Compare IP address in leases_t structure, with IPv4/v6 determination.
+ * \param a Binary IP address.
+ * \param b Binary IP address.
+ * \return If a < b return -1, if a < b return 1, when they are equal return 0.
+ */
+int leasecomp_init(const struct leases_t *restrict a __attribute__ ((unused)),
+		   const struct leases_t *restrict b __attribute__ ((unused)))
+{
+	return 0;
+}
+
+int leasecomp_v4(const struct leases_t *restrict a, const struct leases_t *restrict b)
+{
+	if (a->ip.v4 < b->ip.v4)
+		return -1;
+	if (a->ip.v4 > b->ip.v4)
+		return 1;
+	return 0;
+}
+
+int leasecomp_v6(const struct leases_t *restrict a, const struct leases_t *restrict b)
+{
+	return memcmp(&a->ip.v6, &b->ip.v6, sizeof(a->ip.v6));
+}
+
 /*! \brief Compare IP address in leases. Suitable for sorting range table.
  * \param r1 A range structure.
  * \param r2 A range structure.
