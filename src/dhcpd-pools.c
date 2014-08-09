@@ -54,6 +54,27 @@
 #include "progname.h"
 #include "xalloc.h"
 
+/* Global variables */
+int prefix_length[2][NUM_OF_PREFIX];
+struct configuration_t config;
+struct shared_network_t *shared_networks;
+unsigned int num_shared_networks;
+struct range_t *ranges;
+unsigned int num_ranges;
+struct leases_t *leases;
+unsigned int RANGES;
+
+/* Function pointers */
+int (*parse_ipaddr) (const char *restrict src, union ipaddr_t *restrict dst);
+void (*copy_ipaddr) (union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
+const char *(*ntop_ipaddr) (const union ipaddr_t *ip);
+double (*get_range_size) (const struct range_t *r);
+int (*xstrstr) (const char *__restrict str);
+int (*ipcomp) (const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
+int (*output_analysis) (void);
+void (*add_lease) (union ipaddr_t *ip, enum ltype type);
+struct leases_t *(*find_lease) (union ipaddr_t *ip);
+
 /*! \brief Start of execution.  Parse options, and call other other
  * functions one after another.  At the moment adding threading support
  * would be difficult, but there does not seem to be valid reason to
