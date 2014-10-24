@@ -94,7 +94,9 @@ int parse_leases(void)
 	}
 
 	line = xmalloc(sizeof(char) * MAXLEN);
+	line[0] = '\0';
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
+	ipstring[0] = '\0';
 	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
 		ethernets = true;
 	}
