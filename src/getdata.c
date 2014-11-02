@@ -325,7 +325,7 @@ void parse_config(int is_include, const char *restrict config_file,
 			/* Long word which is almost causing overflow. None
 			 * of words are this long which the program is
 			 * searching. */
-			if (MAXLEN < i) {
+			if (MAXLEN == i) {
 				newclause = false;
 				i = 0;
 				continue;
