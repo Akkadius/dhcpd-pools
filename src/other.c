@@ -404,8 +404,6 @@ void flip_ranges(struct range_t *restrict flip_me, struct range_t *restrict tmp_
 /*! \brief Free memory, flush buffers etc. */
 void clean_up(void)
 {
-	unsigned int i;
-
 	/* Just in case there something in buffers */
 	if (fflush(NULL)) {
 		warn("clean_up: fflush");
@@ -416,6 +414,7 @@ void clean_up(void)
 	free(ranges);
 	delete_all_leases();
 	if (shared_networks) {
+		unsigned int i;
 		num_shared_networks++;
 		for (i = 0; i < num_shared_networks; i++) {
 			free((shared_networks + i)->name);
