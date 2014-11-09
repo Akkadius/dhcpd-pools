@@ -458,16 +458,16 @@ int output_json(void)
 static void html_header(FILE *restrict f)
 {
 	char outstr[200];
-	struct tm *tmp;
+	struct tm *tmp, result;
 
 	struct stat statbuf;
 	stat(config.dhcpdlease_file, &statbuf);
 
-	tmp = localtime(&statbuf.st_mtime);
+	tmp = localtime_r(&statbuf.st_mtime, &result);
 	if (tmp == NULL) {
 		err(EXIT_FAILURE, "html_header: localtime");
 	}
-	if (strftime(outstr, sizeof(outstr), nl_langinfo(D_T_FMT), tmp) == 0) {
+	if (strftime(outstr, sizeof(outstr), nl_langinfo(D_T_FMT), &result) == 0) {
 		errx(EXIT_FAILURE, "html_header: strftime returned 0");
 	}
 
