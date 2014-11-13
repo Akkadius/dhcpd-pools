@@ -994,6 +994,7 @@ int output_alarming(void)
 	}
 	if (config.output_limit[1] & BIT2) {
 		for (i = 0; i < num_shared_networks; i++) {
+			shared_p++;
 			if (config.minsize < shared_p->available) {
 				perc = (float)(100 * shared_p->used) / shared_p->available;
 				if (config.critical < perc)
@@ -1005,7 +1006,6 @@ int output_alarming(void)
 			} else {
 				si++;
 			}
-			shared_p++;
 		}
 	}
 
