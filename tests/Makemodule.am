@@ -8,6 +8,7 @@ TESTS = \
 	tests/alarm-warning \
 	tests/alarm-warning-ranges \
 	tests/alarm-warning-snets \
+	tests/shnet-alarm \
 	tests/bootp \
 	tests/complete \
 	tests/empty \

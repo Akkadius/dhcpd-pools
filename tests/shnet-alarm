@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Alarm critical ranges only.
+
+IAM=$(basename $0)
+
+if [ ! -d tests/outputs ]; then
+	mkdir tests/outputs
+fi
+
+dhcpd-pools --critical=30 -c $top_srcdir/tests/confs/shnet-alarm \
+	    -l $top_srcdir/tests/leases/shnet-alarm -o tests/outputs/$IAM
+echo $? >> tests/outputs/$IAM
+
+diff -u $top_srcdir/tests/expected/$IAM tests/outputs/$IAM
+exit $?

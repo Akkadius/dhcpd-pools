@@ -1,0 +1,3 @@
+CRITICAL: dhcpd-pools: Ranges - crit: 2 warn: 0 ok: 3; | range_crit=2 range_warn=0 range_ok=3
+Shared nets - crit: 1 warn: 0 ok: 1; | snet_crit=1 snet_warn=0 snet_ok=1
+2
