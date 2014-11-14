@@ -44,6 +44,7 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <langinfo.h>
+#include <math.h>
 #include <netinet/in.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -147,12 +148,12 @@ int output_txt(void)
 				"%-20s %5g %5g %10.3f %7g %6g %9.3f",
 				shared_p->name, shared_p->available,
 				shared_p->used,
-				(float)(100 * shared_p->used) /
-				shared_p->available, shared_p->touched,
-				shared_p->touched + shared_p->used,
-				(float)(100 *
-					(shared_p->touched +
-					 shared_p->used)) / shared_p->available);
+				shared_p->available ==
+				0 ? -NAN : (float)(100 * shared_p->used) / shared_p->available,
+				shared_p->touched, shared_p->touched + shared_p->used,
+				shared_p->available ==
+				0 ? -NAN : ((float)(100 * (shared_p->touched + shared_p->used)) /
+					    shared_p->available));
 			if (config.backups_found == true) {
 				fprintf(outfile, "%7g %8.3f",
 					shared_p->backups,
@@ -180,17 +181,18 @@ int output_txt(void)
 			shared_networks->name,
 			shared_networks->available,
 			shared_networks->used,
-			(float)(100 * shared_networks->used) /
-			shared_networks->available,
-			shared_networks->touched,
+			shared_networks->available ==
+			0 ? -NAN : (float)(100 * shared_networks->used) /
+			shared_networks->available, shared_networks->touched,
 			shared_networks->touched + shared_networks->used,
-			(float)(100 *
-				(shared_networks->touched +
-				 shared_networks->used)) / shared_networks->available);
+			shared_networks->available ==
+			0 ? -NAN : (float)(100 *
+					   (shared_networks->touched +
+					    shared_networks->used)) / shared_networks->available);
 
 		if (config.backups_found == true) {
 			fprintf(outfile, "%7g %8.3f",
-				shared_networks->backups,
+				shared_networks->available == 0 ? -NAN : shared_networks->backups,
 				(float)(100 * shared_networks->backups) /
 				shared_networks->available);
 		}
@@ -736,18 +738,23 @@ int output_html(void)
 			output_double(outfile, "td", shared_p->available);
 			output_double(outfile, "td", shared_p->used);
 			output_float(outfile, "td",
-				     (float)(100 * shared_p->used) / shared_p->available);
+				     shared_p->available ==
+				     0 ? -NAN : (float)(100 * shared_p->used) /
+				     shared_p->available);
 			output_double(outfile, "td", shared_p->touched);
 			output_double(outfile, "td", shared_p->touched + shared_p->used);
 			output_float(outfile, "td",
-				     (float)(100 *
-					     (shared_p->touched +
-					      shared_p->used)) / shared_p->available);
+				     shared_p->available == 0 ? -NAN : (float)(100 *
+									       (shared_p->touched +
+										shared_p->used)) /
+				     shared_p->available);
 			if (config.backups_found == true) {
 				output_double(outfile, "td", shared_p->backups);
 				output_float(outfile, "td",
-					     (float)(100 *
-						     shared_p->backups) / shared_p->available);
+					     shared_p->available == 0 ? -NAN : (float)(100 *
+										       shared_p->
+										       backups) /
+					     shared_p->available);
 			}
 
 			endrow(outfile);
@@ -776,18 +783,24 @@ int output_html(void)
 		output_double(outfile, "td", shared_networks->available);
 		output_double(outfile, "td", shared_networks->used);
 		output_float(outfile, "td",
-			     (float)(100 * shared_networks->used) / shared_networks->available);
+			     shared_networks->available ==
+			     0 ? -NAN : (float)(100 * shared_networks->used) /
+			     shared_networks->available);
 		output_double(outfile, "td", shared_networks->touched);
 		output_double(outfile, "td", shared_networks->touched + shared_networks->used);
 		output_float(outfile, "td",
-			     (float)(100 *
-				     (shared_networks->touched +
-				      shared_networks->used)) / shared_networks->available);
+			     shared_networks->available == 0 ? -NAN : (float)(100 *
+									      (shared_networks->
+									       touched +
+									       shared_networks->
+									       used)) /
+			     shared_networks->available);
 		if (config.backups_found == true) {
 			output_double(outfile, "td", shared_networks->backups);
 			output_float(outfile, "td",
-				     (float)(100 *
-					     shared_networks->backups) /
+				     shared_networks->available == 0 ? -NAN : (float)(100 *
+										      shared_networks->
+										      backups) /
 				     shared_networks->available);
 		}
 		endrow(outfile);
@@ -888,16 +901,19 @@ int output_csv(void)
 				"\"%s\",\"%g\",\"%g\",\"%.3f\",\"%g\",\"%g\",\"%.3f\"",
 				shared_p->name, shared_p->available,
 				shared_p->used,
-				(float)(100 * shared_p->used) /
+				shared_p->available == 0 ? -NAN : (float)(100 * shared_p->used) /
 				shared_p->available, shared_p->touched,
 				shared_p->touched + shared_p->used,
-				(float)(100 *
-					(shared_p->touched +
-					 shared_p->used)) / shared_p->available);
+				shared_p->available == 0 ? -NAN : (float)(100 *
+									  (shared_p->touched +
+									   shared_p->used)) /
+				shared_p->available);
 			if (config.backups_found == true) {
 				fprintf(outfile, ",\"%g\",\"%.3f\"",
 					shared_p->backups,
-					(float)(100 * shared_p->backups) / shared_p->available);
+					shared_p->available ==
+					0 ? -NAN : (float)(100 * shared_p->backups) /
+					shared_p->available);
 			}
 
 			fprintf(outfile, "\n");
@@ -919,17 +935,19 @@ int output_csv(void)
 			"\"%s\",\"%g\",\"%g\",\"%.3f\",\"%g\",\"%g\",\"%.3f\"",
 			shared_networks->name, shared_networks->available,
 			shared_networks->used,
-			(float)(100 * shared_networks->used) /
-			shared_networks->available,
-			shared_networks->touched,
+			shared_networks->available ==
+			0 ? -NAN : (float)(100 * shared_networks->used) /
+			shared_networks->available, shared_networks->touched,
 			shared_networks->touched + shared_networks->used,
-			(float)(100 *
-				(shared_networks->touched +
-				 shared_networks->used)) / shared_networks->available);
+			shared_networks->available ==
+			0 ? -NAN : (float)(100 *
+					   (shared_networks->touched +
+					    shared_networks->used)) / shared_networks->available);
 		if (config.backups_found == true) {
 			fprintf(outfile, "%7g %8.3f",
 				shared_networks->backups,
-				(float)(100 * shared_networks->backups) /
+				shared_networks->available ==
+				0 ? -NAN : (float)(100 * shared_networks->backups) /
 				shared_networks->available);
 		}
 		fprintf(outfile, "\n");
@@ -996,7 +1014,9 @@ int output_alarming(void)
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			if (config.minsize < shared_p->available) {
-				perc = (float)(100 * shared_p->used) / shared_p->available;
+				perc =
+				    shared_p->available ==
+				    0 ? 100 : (float)(100 * shared_p->used) / shared_p->available;
 				if (config.critical < perc)
 					sc++;
 				else if (config.warning < perc)
