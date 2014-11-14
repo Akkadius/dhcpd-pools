@@ -393,9 +393,8 @@ void flip_ranges(struct range_t *restrict flip_me, struct range_t *restrict tmp_
 {
 	unsigned int i = num_ranges - 1, j;
 
-	for (j = 0; j < num_ranges; j++) {
+	for (j = 0; j < num_ranges; j++, i--) {
 		*(tmp_ranges + j) = *(flip_me + i);
-		i--;
 	}
 
 	memcpy(flip_me, tmp_ranges, num_ranges * sizeof(struct range_t));
