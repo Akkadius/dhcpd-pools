@@ -7,6 +7,29 @@ Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 gpg: Signature is crated using RSA key ID FDE9B739.
 
+Version 2.26
+$ git shortlog v2.25..v2.26
+Sami Kerola (15):
+      news: add the note about .sig pgp key id
+      reindent all files
+      declare global variables only once
+      add appropriate sorting function for struct leases_t
+      update kernel.org url in README
+      getdata: fix buffer-overflows reported by address sanitizer
+      update bootstrap from gnulib
+      getdata: fix buffer overflow [AddressSanitizer]
+      other: reduce variable scope
+      output: prefer thread safe function localtime_r()
+      tests: add regression test to avoid shared-net off by one alarming
+      issue
+      output: avoid division by zero
+      other: disallow unsigned counter ever to have minus value
+      maint: remove unnecessary braces, spaces, update gnulib .gitignore
+      release: 2.26
+
+Wolfgang Steudel (1):
+      alarming: include last shared network in alarming [off by one]
+
 Version 2.25
 $ git shortlog v2.24..v2.25
 Sami Kerola (14):
