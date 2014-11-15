@@ -9,3 +9,5 @@
 -Tuintmax_t
 -l100
 -ppi1
+-bad
+-sob

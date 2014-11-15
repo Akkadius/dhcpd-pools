@@ -99,7 +99,6 @@ int main(int argc, char **argv)
 	};
 	int ret_val;
 
-	/* Options for getopt_long */
 	static struct option const long_options[] = {
 		{"config", required_argument, NULL, 'c'},
 		{"leases", required_argument, NULL, 'l'},
@@ -118,20 +117,17 @@ int main(int argc, char **argv)
 
 	atexit(close_stdout);
 	set_program_name(argv[0]);
-
 	/* FIXME: These allocations should be fully dynamic, e.g., grow
 	 * if needed.  */
 	config.dhcpdconf_file = xmalloc(sizeof(char) * MAXLEN);
 	config.dhcpdlease_file = xmalloc(sizeof(char) * MAXLEN);
 	config.output_file = xmalloc(sizeof(char) * MAXLEN);
-
 	/* Make sure string has zero length if there is no
 	 * command line option */
 	config.output_file[0] = '\0';
 	/* Alarming defaults. */
 	config.warning = ALARM_WARN;
 	config.critical = ALARM_CRIT;
-
 	/* File location defaults */
 	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE, MAXLEN - 1);
 	strncpy(config.dhcpdlease_file, DHCPDLEASE_FILE, MAXLEN - 1);
@@ -140,22 +136,18 @@ int main(int argc, char **argv)
 	tmp++;
 	config.output_limit[1] = (*tmp - '0');
 	config.fullhtml = false;
-
 	/* Make sure some output format is selected by default */
 	strncpy(config.output_format, OUTPUT_FORMAT, (size_t)1);
-
 	/* Default sort order is by IPs small to big */
 	config.reverse_order = false;
 	config.backups_found = false;
-
 	/* Parse command line options */
 	while (1) {
 		int c;
-		c = getopt_long(argc, argv, "c:l:f:o:s:rL:vh", long_options, &option_index);
 
+		c = getopt_long(argc, argv, "c:l:f:o:s:rL:vh", long_options, &option_index);
 		if (c == EOF)
 			break;
-
 		switch (c) {
 		case 'c':
 			/* config file */
@@ -176,12 +168,10 @@ int main(int argc, char **argv)
 				warnx("main: only first 5 sort orders will be used");
 				strncpy(config.sort, optarg, (size_t)5);
 				sorts = 5;
-			} else {
+			} else
 				strncpy(config.sort, optarg, (size_t)sorts);
-			}
-			for (i = 0; i < sorts; i++) {
+			for (i = 0; i < sorts; i++)
 				field_selector(config.sort[i]);
-			}
 			break;
 		case 'r':
 			/* What ever sort in reverse order */
@@ -194,9 +184,9 @@ int main(int argc, char **argv)
 		case 'L':
 			/* Specification what will be printed */
 			for (i = 0; i < 2; i++) {
-				if (optarg[i] >= '0' && optarg[i] < '8') {
+				if (optarg[i] >= '0' && optarg[i] < '8')
 					config.output_limit[i] = optarg[i] - '0';
-				} else {
+				else {
 					clean_up();
 					errx(EXIT_FAILURE,
 					     "main: output mask `%s' is illegal", optarg);
@@ -224,7 +214,6 @@ int main(int argc, char **argv)
 			errx(EXIT_FAILURE, "Try `%s --help' for more information.", program_name);
 		}
 	}
-
 	/* Output function selection */
 	switch (config.output_format[0]) {
 	case 't':
@@ -259,25 +248,20 @@ int main(int argc, char **argv)
 		clean_up();
 		errx(EXIT_FAILURE, "main: unknown output format `%c'", config.output_format[0]);
 	}
-
 	/* Do the job */
 	prepare_memory();
 	set_ipv_functions(VERSION_UNKNOWN);
 	parse_config(true, config.dhcpdconf_file, shared_networks);
-
 	parse_leases();
 	prepare_data();
 	do_counting();
 	tmp_ranges = xmalloc(sizeof(struct range_t) * num_ranges);
-	if (sorts != 0) {
+	if (sorts != 0)
 		mergesort_ranges(ranges, num_ranges, tmp_ranges);
-	}
-	if (config.reverse_order == true) {
+	if (config.reverse_order == true)
 		flip_ranges(ranges, tmp_ranges);
-	}
 	free(tmp_ranges);
 	ret_val = output_analysis();
-
 	clean_up();
 	return (ret_val);
 }
@@ -291,14 +275,11 @@ int prepare_memory(void)
 	RANGES = 64;
 	num_ranges = num_shared_networks = 0;
 	shared_networks = xmalloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);
-
 	ranges = xmalloc(sizeof(struct range_t) * RANGES);
-
 	/* First shared network entry is all networks */
 	shared_networks->name = xstrdup("All networks");
 	shared_networks->used = 0;
 	shared_networks->touched = 0;
 	shared_networks->backups = 0;
-
 	return 0;
 }

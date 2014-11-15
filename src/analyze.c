@@ -65,19 +65,16 @@ int do_counting(void)
 	const struct leases_t *restrict l = leases;
 	unsigned long i, k, block_size;
 
-	range_p = ranges;
-
 	/* Walk through ranges */
+	range_p = ranges;
 	for (i = 0; i < num_ranges; i++) {
 		for (; l != NULL && ipcomp(&range_p->first_ip, &l->ip) < 0; l = l->hh.prev)
 			/* rewind */ ;
 		if (l == NULL)
 			l = leases;
 		for (; l != NULL && ipcomp(&l->ip, &range_p->last_ip) <= 0; l = l->hh.next) {
-			if (ipcomp(&l->ip, &range_p->first_ip) < 0) {
-				/* should not be necessary */
-				continue;
-			}
+			if (ipcomp(&l->ip, &range_p->first_ip) < 0)
+				continue;	/* cannot happen? */
 			/* IP in range */
 			switch (l->type) {
 			case FREE:
@@ -90,7 +87,6 @@ int do_counting(void)
 				range_p->backups++;
 				break;
 			}
-
 			if (range_p->shared_net) {
 				switch (l->type) {
 				case FREE:
@@ -105,16 +101,12 @@ int do_counting(void)
 				}
 			}
 		}
-
 		/* Size of range, shared net & all networks */
 		block_size = get_range_size(range_p);
-		if (range_p->shared_net) {
+		if (range_p->shared_net)
 			range_p->shared_net->available += block_size;
-		}
-
 		range_p++;
 	}
-
 	/* FIXME: During count of other shared networks default network
 	 * and all networks got mixed together semantically.  The below
 	 * fixes the problem, but is not elegant.  */
@@ -129,6 +121,5 @@ int do_counting(void)
 		shared_networks->backups += range_p->backups;
 		range_p++;
 	}
-
 	return 0;
 }

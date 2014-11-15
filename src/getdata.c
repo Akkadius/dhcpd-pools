@@ -69,42 +69,33 @@ int parse_leases(void)
 	struct leases_t *lease;
 
 	dhcpd_leases = fopen(config.dhcpdlease_file, "r");
-	if (dhcpd_leases == NULL) {
+	if (dhcpd_leases == NULL)
 		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
-	}
 #ifdef HAVE_POSIX_FADVISE
 # ifdef POSIX_FADV_NOREUSE
-	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_NOREUSE) != 0) {
+	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_NOREUSE) != 0)
 		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
-	}
 # endif				/* POSIX_FADV_NOREUSE */
 # ifdef POSIX_FADV_SEQUENTIAL
-	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
+	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_SEQUENTIAL) != 0)
 		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
-	}
 # endif				/* POSIX_FADV_SEQUENTIAL */
 #endif				/* HAVE_POSIX_FADVISE */
-
 	/* I found out that there's one lease address per 300 bytes in
 	 * dhcpd.leases file. Malloc is little bit pessimistic and uses 250.
 	 * If someone has higher density in lease file I'm interested to
 	 * hear about that. */
-	if (stat(config.dhcpdlease_file, &lease_file_stats)) {
+	if (stat(config.dhcpdlease_file, &lease_file_stats))
 		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
-	}
-
 	line = xmalloc(sizeof(char) * MAXLEN);
 	line[0] = '\0';
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
 	ipstring[0] = '\0';
-	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
+	if (config.output_format[0] == 'X' || config.output_format[0] == 'J')
 		ethernets = true;
-	}
-
 	while (!feof(dhcpd_leases)) {
-		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases)) {
+		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases))
 			err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
-		}
 		switch (xstrstr(line)) {
 			/* It's a lease, save IP */
 		case PREFIX_LEASE:
@@ -122,23 +113,20 @@ int parse_leases(void)
 		case PREFIX_BINDING_STATE_ABANDONED:
 		case PREFIX_BINDING_STATE_EXPIRED:
 		case PREFIX_BINDING_STATE_RELEASED:
-			if ((lease = find_lease(&addr)) != NULL) {
+			if ((lease = find_lease(&addr)) != NULL)
 				delete_lease(lease);
-			}
 			add_lease(&addr, FREE);
 			break;
 		case PREFIX_BINDING_STATE_ACTIVE:
 			/* remove old entry, if exists */
-			if ((lease = find_lease(&addr)) != NULL) {
+			if ((lease = find_lease(&addr)) != NULL)
 				delete_lease(lease);
-			}
 			add_lease(&addr, ACTIVE);
 			break;
 		case PREFIX_BINDING_STATE_BACKUP:
 			/* remove old entry, if exists */
-			if ((lease = find_lease(&addr)) != NULL) {
+			if ((lease = find_lease(&addr)) != NULL)
 				delete_lease(lease);
-			}
 			add_lease(&addr, BACKUP);
 			config.backups_found = true;
 			break;
@@ -147,9 +135,8 @@ int parse_leases(void)
 				break;
 			memcpy(macstring, line + 20, 17);
 			macstring[17] = '\0';
-			if ((lease = find_lease(&addr)) != NULL) {
+			if ((lease = find_lease(&addr)) != NULL)
 				lease->ethernet = xstrdup(macstring);
-			}
 			break;
 		default:
 			/* do nothing */ ;
@@ -193,41 +180,34 @@ void parse_config(int is_include, const char *restrict config_file,
 	struct range_t *range_p;
 
 	word = xmalloc(sizeof(char) * MAXLEN);
-
-	if (is_include) {
+	if (is_include)
 		/* Default place holder for ranges "All networks". */
 		shared_p->name = shared_networks->name;
-	}
-
 	/* Open configuration file */
 	dhcpd_config = fopen(config_file, "r");
-	if (dhcpd_config == NULL) {
+	if (dhcpd_config == NULL)
 		err(EXIT_FAILURE, "parse_config: %s", config_file);
-	}
 #ifdef HAVE_POSIX_FADVISE
 # ifdef POSIX_FADV_NOREUSE
-	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_NOREUSE) != 0) {
+	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_NOREUSE) != 0)
 		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
-	}
 # endif				/* POSIX_FADV_NOREUSE */
 # ifdef POSIX_FADV_SEQUENTIAL
-	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0) {
+	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0)
 		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
-	}
 # endif				/* POSIX_FADV_SEQUENTIAL */
 #endif				/* HAVE_POSIX_FADVISE */
-
 	/* Very hairy stuff begins. */
 	while (unlikely(!feof(dhcpd_config))) {
 		char c;
+
 		c = fgetc(dhcpd_config);
 		/* Certain characters are magical */
 		switch (c) {
 			/* Handle comments if they are not quoted */
 		case '#':
-			if (quote == 0) {
+			if (quote == 0)
 				comment = true;
-			}
 			continue;
 		case '"':
 			if (comment == false) {
@@ -239,15 +219,13 @@ void parse_config(int is_include, const char *restrict config_file,
 		case '\n':
 			/* New line resets comment section, but
 			 * not if quoted */
-			if (quote == 0) {
+			if (quote == 0)
 				comment = false;
-			}
 			break;
 		case ';':
 			/* Quoted colon does not mean new clause */
-			if (0 < quote) {
+			if (0 < quote)
 				break;
-			}
 			if (comment == false
 			    && argument != ITS_A_RANGE_FIRST_IP
 			    && argument != ITS_A_RANGE_SECOND_IP && argument != ITS_AN_INCLUCE) {
@@ -271,25 +249,21 @@ void parse_config(int is_include, const char *restrict config_file,
 			}
 			continue;
 		case '{':
-			if (0 < quote) {
+			if (0 < quote)
 				break;
-			}
-			if (comment == 0) {
+			if (comment == 0)
 				braces++;
-			}
 			/* i == 0 detects word that ends to brace like:
 			 *
 			 * shared-network DSL{ ... */
 			if (i == 0) {
 				newclause = true;
 				continue;
-			} else {
+			} else
 				break;
-			}
 		case '}':
-			if (0 < quote) {
+			if (0 < quote)
 				break;
-			}
 			if (comment == false) {
 				braces--;
 				/* End of shared-network */
@@ -307,16 +281,13 @@ void parse_config(int is_include, const char *restrict config_file,
 		default:
 			break;
 		}
-
 		/* Either inside comment or Nth word of clause. */
-		if (comment == true || (newclause == false && argument == ITS_NOTHING_INTERESTING)) {
+		if (comment == true || (newclause == false && argument == ITS_NOTHING_INTERESTING))
 			continue;
-		}
 		/* Strip white spaces before new clause word. */
 		if ((newclause == true || argument != ITS_NOTHING_INTERESTING)
-		    && isspace(c) && i == 0 && one_ip_range == false) {
+		    && isspace(c) && i == 0 && one_ip_range == false)
 			continue;
-		}
 		/* Save to word which clause this is. */
 		if ((newclause == true || argument != ITS_NOTHING_INTERESTING)
 		    && (!isspace(c) || 0 < quote)) {
@@ -335,14 +306,12 @@ void parse_config(int is_include, const char *restrict config_file,
 		else if (newclause == true) {
 			/* Insert string end & set state */
 			word[i] = '\0';
-			if (word[i - 1] != '{') {
+			if (word[i - 1] != '{')
 				newclause = false;
-			}
 			i = 0;
 			argument = is_interesting_config_clause(word);
-			if (argument == ITS_A_RANGE_FIRST_IP) {
+			if (argument == ITS_A_RANGE_FIRST_IP)
 				one_ip_range = true;
-			}
 		}
 		/* words after range, shared-network or include */
 		else if (argument != ITS_NOTHING_INTERESTING) {
@@ -377,11 +346,9 @@ void parse_config(int is_include, const char *restrict config_file,
 			case ITS_A_RANGE_FIRST_IP:
 				/* printf ("range 1nd ip: %s\n", word); */
 				range_p = ranges + num_ranges;
-				if (!(parse_ipaddr(word, &addr))) {
-					/* word was not ip, try
-					 * again */
+				if (!(parse_ipaddr(word, &addr)))
+					/* word was not ip, try again */
 					break;
-				}
 				copy_ipaddr(&range_p->first_ip, &addr);
 				one_ip_range = false;
 				argument = ITS_A_RANGE_SECOND_IP;
@@ -395,13 +362,10 @@ void parse_config(int is_include, const char *restrict config_file,
 				shared_p->used = 0;
 				shared_p->touched = 0;
 				shared_p->backups = 0;
-				if (SHARED_NETWORKS < num_shared_networks + 2) {
-					/* FIXME: make this
-					 * away by reallocating
-					 * more space. */
+				if (SHARED_NETWORKS < num_shared_networks + 2)
+					/* FIXME: make this to go away by reallocating more space. */
 					errx(EXIT_FAILURE,
 					     "parse_config: increase default.h SHARED_NETWORKS and recompile");
-				}
 				argument = ITS_NOTHING_INTERESTING;
 				braces_shared = braces;
 				break;

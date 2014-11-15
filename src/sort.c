@@ -265,20 +265,16 @@ static int merge(struct range_t *restrict left, struct range_t *restrict right)
 				return (1);
 			continue;
 		}
-
 		/* Select which function is pointed by comparer */
 		comparer = field_selector(config.sort[i]);
 		cmp = comparer(left, right);
 		/* If fields are equal use next sort method */
-		if (cmp == 0) {
+		if (cmp == 0)
 			continue;
-		}
-		if (cmp < 0) {
+		if (cmp < 0)
 			return (1);
-		}
 		return (0);
 	}
-
 	/* If all comparers where equal */
 	return (0);
 }
@@ -300,23 +296,19 @@ void mergesort_ranges(struct range_t *restrict orig, int size, struct range_t *r
 		for (left = 0; left < size; left++) {
 			hold = *(orig + left);
 			for (right = left - 1; 0 <= right; right--) {
-				if (merge((orig + right), &hold)) {
+				if (merge((orig + right), &hold))
 					break;
-				}
 				*(orig + right + 1) = *(orig + right);
 			}
 			*(orig + right + 1) = hold;
 		}
 		return;
 	}
-
 	mergesort_ranges(orig, size / 2, temp);
 	mergesort_ranges(orig + size / 2, size - size / 2, temp);
-
 	left = 0;
 	right = size / 2;
 	i = 0;
-
 	while (left < size / 2 && right < size) {
 		if (merge((orig + left), (orig + right))) {
 			*(temp + i) = *(orig + left);
@@ -337,6 +329,5 @@ void mergesort_ranges(struct range_t *restrict orig, int size, struct range_t *r
 		right++;
 		i++;
 	}
-
 	memcpy(orig, temp, size * sizeof(struct range_t));
 }

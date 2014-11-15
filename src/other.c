@@ -117,13 +117,13 @@ int parse_ipaddr_init(const char *restrict src, union ipaddr_t *restrict dst)
 {
 	struct in_addr addr;
 	struct in6_addr addr6;
-	if (inet_aton(src, &addr) == 1) {
+
+	if (inet_aton(src, &addr) == 1)
 		set_ipv_functions(VERSION_4);
-	} else if (inet_pton(AF_INET6, src, &addr6) == 1) {
+	else if (inet_pton(AF_INET6, src, &addr6) == 1)
 		set_ipv_functions(VERSION_6);
-	} else {
+	else
 		return 0;
-	}
 	return parse_ipaddr(src, dst);
 }
 
@@ -131,6 +131,7 @@ int parse_ipaddr_v4(const char *restrict src, union ipaddr_t *restrict dst)
 {
 	int rv;
 	struct in_addr addr;
+
 	rv = inet_aton(src, &addr);
 	dst->v4 = ntohl(addr.s_addr);
 	return rv == 1;
@@ -140,6 +141,7 @@ int parse_ipaddr_v6(const char *restrict src, union ipaddr_t *restrict dst)
 {
 	int rv;
 	struct in6_addr addr;
+
 	rv = inet_pton(AF_INET6, src, &addr);
 	memcpy(&dst->v6, addr.s6_addr, sizeof(addr.s6_addr));
 	return rv == 1;
@@ -175,6 +177,7 @@ void copy_ipaddr_v6(union ipaddr_t *restrict dst, const union ipaddr_t *restrict
 const char *ntop_ipaddr_init(const union ipaddr_t *ip __attribute__ ((unused)))
 {
 	static char buffer = '\0';
+
 	return &buffer;
 }
 
@@ -182,6 +185,7 @@ const char *ntop_ipaddr_v4(const union ipaddr_t *ip)
 {
 	static char buffer[sizeof("255.255.255.255")];
 	struct in_addr addr;
+
 	addr.s_addr = htonl(ip->v4);
 	return inet_ntop(AF_INET, &addr, buffer, sizeof(buffer));
 }
@@ -190,6 +194,7 @@ const char *ntop_ipaddr_v6(const union ipaddr_t *ip)
 {
 	static char buffer[sizeof("ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255")];
 	struct in6_addr addr;
+
 	memcpy(addr.s6_addr, ip->v6, sizeof(addr.s6_addr));
 	return inet_ntop(AF_INET6, &addr, buffer, sizeof(buffer));
 }
@@ -214,6 +219,7 @@ double get_range_size_v6(const struct range_t *r)
 {
 	double size = 0;
 	int i;
+
 	/* When calculating the size of an IPv6 range overflow may occur.
 	 * In that case only the last LONG_BIT bits are preserved, thus
 	 * we just skip the first (16 - LONG_BIT) bits...  */
@@ -260,11 +266,11 @@ int
     xstrstr_v4(const char *restrict str)
 {
 	size_t len;
-	if (str[2] == 'b' || str[2] == 'h') {
+
+	if (str[2] == 'b' || str[2] == 'h')
 		len = strlen(str);
-	} else {
+	else
 		len = 0;
-	}
 	if (15 < len) {
 		switch (str[16]) {
 		case 'f':
@@ -295,9 +301,8 @@ int
 			break;
 		}
 	}
-	if (!memcmp("lease ", str, 6)) {
+	if (!memcmp("lease ", str, 6))
 		return PREFIX_LEASE;
-	}
 	return NUM_OF_PREFIX;
 }
 
@@ -314,11 +319,11 @@ int
     xstrstr_v6(const char *restrict str)
 {
 	size_t len;
-	if (str[4] == 'b' || str[2] == 'h') {
+
+	if (str[4] == 'b' || str[2] == 'h')
 		len = strlen(str);
-	} else {
+	else
 		len = 0;
-	}
 	if (17 < len) {
 		switch (str[18]) {
 		case 'f':
@@ -349,9 +354,8 @@ int
 			break;
 		}
 	}
-	if (!memcmp("  iaaddr ", str, 9)) {
+	if (!memcmp("  iaaddr ", str, 9))
 		return PREFIX_LEASE;
-	}
 	return NUM_OF_PREFIX;
 }
 
@@ -370,15 +374,12 @@ double strtod_or_err(const char *restrict str, const char *restrict errmesg)
 		goto err;
 	errno = 0;
 	num = strtod(str, &end);
-
 	if (errno || str == end || (end && *end))
 		goto err;
-
 	return num;
  err:
 	if (errno)
 		err(EXIT_FAILURE, "%s: '%s'", errmesg, str);
-
 	errx(EXIT_FAILURE, "%s: '%s'", errmesg, str);
 }
 
@@ -393,10 +394,8 @@ void flip_ranges(struct range_t *restrict flip_me, struct range_t *restrict tmp_
 {
 	unsigned int i = num_ranges - 1, j;
 
-	for (j = 0; j < num_ranges; j++, i--) {
+	for (j = 0; j < num_ranges; j++, i--)
 		*(tmp_ranges + j) = *(flip_me + i);
-	}
-
 	memcpy(flip_me, tmp_ranges, num_ranges * sizeof(struct range_t));
 }
 
@@ -404,9 +403,8 @@ void flip_ranges(struct range_t *restrict flip_me, struct range_t *restrict tmp_
 void clean_up(void)
 {
 	/* Just in case there something in buffers */
-	if (fflush(NULL)) {
+	if (fflush(NULL))
 		warn("clean_up: fflush");
-	}
 	free(config.dhcpdconf_file);
 	free(config.dhcpdlease_file);
 	free(config.output_file);
@@ -414,10 +412,10 @@ void clean_up(void)
 	delete_all_leases();
 	if (shared_networks) {
 		unsigned int i;
+
 		num_shared_networks++;
-		for (i = 0; i < num_shared_networks; i++) {
+		for (i = 0; i < num_shared_networks; i++)
 			free((shared_networks + i)->name);
-		}
 		free(shared_networks);
 	}
 }
@@ -437,6 +435,7 @@ void __attribute__ ((__noreturn__)) print_version(void)
 void __attribute__ ((__noreturn__)) usage(int status)
 {
 	FILE *out;
+
 	out = status != 0 ? stderr : stdout;
 
 	fprintf(out, "\

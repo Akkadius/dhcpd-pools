@@ -40,6 +40,9 @@
 /fd-hook.h
 /fdopen.c
 /fflush.c
+/float+.h
+/float.c
+/float.in.h
 /fopen.c
 /fpending.c
 /fpending.h
@@ -60,6 +63,11 @@
 /gettimeofday.c
 /inet_pton.c
 /intprops.h
+/isnan.c
+/isnand.c
+/isnanf.c
+/isnanl.c
+/itold.c
 /langinfo.h
 /langinfo.in.h
 /libdhcpd_pools.la
@@ -67,6 +75,9 @@
 /localcharset.h
 /lseek.c
 /malloc.c
+/math.c
+/math.h
+/math.in.h
 /mbrtowc.c
 /mbsinit.c
 /memchr.c

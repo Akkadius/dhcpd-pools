@@ -55,6 +55,7 @@ void add_lease_init(union ipaddr_t *addr
 void add_lease_v4(union ipaddr_t *addr, enum ltype type)
 {
 	struct leases_t *l;
+
 	l = xmalloc(sizeof(struct leases_t));
 	copy_ipaddr(&l->ip, addr);
 	l->type = type;
@@ -65,6 +66,7 @@ void add_lease_v4(union ipaddr_t *addr, enum ltype type)
 void add_lease_v6(union ipaddr_t *addr, enum ltype type)
 {
 	struct leases_t *l;
+
 	l = xmalloc(sizeof(struct leases_t));
 	copy_ipaddr(&l->ip, addr);
 	l->type = type;
@@ -84,6 +86,7 @@ struct leases_t *find_lease_init(union ipaddr_t *addr __attribute__ ((unused)))
 struct leases_t *find_lease_v4(union ipaddr_t *addr)
 {
 	struct leases_t *l;
+
 	HASH_FIND_INT(leases, &addr->v4, l);
 	return l;
 }
@@ -91,6 +94,7 @@ struct leases_t *find_lease_v4(union ipaddr_t *addr)
 struct leases_t *find_lease_v6(union ipaddr_t *addr)
 {
 	struct leases_t *l;
+
 	HASH_FIND_V6(leases, &addr->v4, l);
 	return l;
 }
@@ -109,6 +113,7 @@ void delete_lease(struct leases_t *lease)
 void delete_all_leases(void)
 {
 	struct leases_t *l, *tmp;
+
 	HASH_ITER(hh, leases, l, tmp) {
 		free(l->ethernet);
 		HASH_DEL(leases, l);
@@ -120,6 +125,7 @@ void delete_all_leases(void)
 {
 	while (leases) {
 		struct leases_t *l;
+
 		l = leases;
 		free(l->ethernet);
 		HASH_DEL(leases, l);	/* leases advances to next on delete */
