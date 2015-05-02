@@ -264,12 +264,8 @@ int output_xml(void)
 			} else {
 				fprintf(outfile, "\t<location></location>\n");
 			}
-
-			fprintf(outfile, "\t<network></network>\n");
-			fprintf(outfile, "\t<netmask></netmask>\n");
 			fprintf(outfile, "\t<range>%s ", ntop_ipaddr(&range_p->first_ip));
 			fprintf(outfile, "- %s</range>\n", ntop_ipaddr(&range_p->last_ip));
-			fprintf(outfile, "\t<gateway></gateway>\n");
 			fprintf(outfile, "\t<defined>%g</defined>\n", range_size);
 			fprintf(outfile, "\t<used>%g</used>\n", range_p->count);
 			fprintf(outfile, "\t<free>%g</free>\n", range_size - range_p->count);
