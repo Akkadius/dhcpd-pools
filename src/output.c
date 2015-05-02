@@ -268,6 +268,7 @@ int output_xml(void)
 			fprintf(outfile, "- %s</range>\n", ntop_ipaddr(&range_p->last_ip));
 			fprintf(outfile, "\t<defined>%g</defined>\n", range_size);
 			fprintf(outfile, "\t<used>%g</used>\n", range_p->count);
+			fprintf(outfile, "\t<touched>%g</touched>\n", range_p->touched);
 			fprintf(outfile, "\t<free>%g</free>\n", range_size - range_p->count);
 			range_p++;
 			range_size = get_range_size(range_p);
@@ -282,6 +283,7 @@ int output_xml(void)
 			fprintf(outfile, "\t<location>%s</location>\n", shared_p->name);
 			fprintf(outfile, "\t<defined>%g</defined>\n", shared_p->available);
 			fprintf(outfile, "\t<used>%g</used>\n", shared_p->used);
+			fprintf(outfile, "\t<touched>%g</touched>\n", shared_p->touched);
 			fprintf(outfile, "\t<free>%g</free>\n",
 				shared_p->available - shared_p->used);
 			fprintf(outfile, "</shared-network>\n");
@@ -293,6 +295,7 @@ int output_xml(void)
 		fprintf(outfile, "\t<location>%s</location>\n", shared_networks->name);
 		fprintf(outfile, "\t<defined>%g</defined>\n", shared_networks->available);
 		fprintf(outfile, "\t<used>%g</used>\n", shared_networks->used);
+		fprintf(outfile, "\t<touched>%g</touched>\n", shared_networks->touched);
 		fprintf(outfile, "\t<free>%g</free>\n",
 			shared_networks->available - shared_networks->used);
 		fprintf(outfile, "</summary>\n");
@@ -385,6 +388,7 @@ int output_json(void)
 			fprintf(outfile, " - %s\", ", ntop_ipaddr(&range_p->last_ip));
 			fprintf(outfile, "\"defined\":%g, ", range_size);
 			fprintf(outfile, "\"used\":%g, ", range_p->count);
+			fprintf(outfile, "\"touched\":%g, ", range_p->touched);
 			fprintf(outfile, "\"free\":%g ", range_size - range_p->count);
 			range_p++;
 			range_size = get_range_size(range_p);
@@ -409,6 +413,7 @@ int output_json(void)
 			fprintf(outfile, "\"location\":\"%s\", ", shared_p->name);
 			fprintf(outfile, "\"defined\":%g, ", shared_p->available);
 			fprintf(outfile, "\"used\":%g, ", shared_p->used);
+			fprintf(outfile, "\"touched\":%g, ", shared_p->touched);
 			fprintf(outfile, "\"free\":%g ", shared_p->available - shared_p->used);
 			if (i + 1 < num_shared_networks)
 				fprintf(outfile, "},\n");
@@ -427,6 +432,7 @@ int output_json(void)
 		fprintf(outfile, "         \"location\":\"%s\",\n", shared_networks->name);
 		fprintf(outfile, "         \"defined\":%g,\n", shared_networks->available);
 		fprintf(outfile, "         \"used\":%g,\n", shared_networks->used);
+		fprintf(outfile, "         \"touched\":%g,\n", shared_networks->touched);
 		fprintf(outfile, "         \"free\":%g\n",
 			shared_networks->available - shared_networks->used);
 		fprintf(outfile, "   }");	/* end of summary */
