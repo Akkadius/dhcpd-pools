@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Minimal regression test suite.
+
+if [ ! -d tests/outputs ]; then
+	mkdir tests/outputs
+fi
+
+dhcpd-pools -f X -c $top_srcdir/tests/confs/same-twice \
+		 -l $top_srcdir/tests/leases/same-twice \
+		 -o tests/outputs/same-twice-xml
+diff -u $top_srcdir/tests/expected/same-twice-xml tests/outputs/same-twice-xml
+exit $?

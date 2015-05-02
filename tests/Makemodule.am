@@ -13,6 +13,7 @@ TESTS = \
 	tests/complete \
 	tests/empty \
 	tests/full-json \
+	tests/full-xml \
 	tests/leading0 \
 	tests/one-ip \
 	tests/one-line \

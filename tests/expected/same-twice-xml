@@ -1,0 +1,21 @@
+<dhcpstatus>
+<active_lease>
+	<ip>10.0.0.5</ip>
+	<macaddress>00:00:00:00:00:00</macaddress>
+</active_lease>
+<subnet>
+	<location>All networks</location>
+	<range>10.0.0.1 - 10.0.0.10</range>
+	<defined>10</defined>
+	<used>1</used>
+	<touched>0</touched>
+	<free>9</free>
+</subnet>
+<summary>
+	<location>All networks</location>
+	<defined>10</defined>
+	<used>1</used>
+	<touched>0</touched>
+	<free>9</free>
+</summary>
+</dhcpstatus>
