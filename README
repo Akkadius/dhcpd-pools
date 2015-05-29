@@ -7,6 +7,10 @@ This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
 	make
 	make install
 
+	# Notice that there are configuration options for dhcpd.conf,
+	# dhcpd.leases, and uthash include paths, among other things.
+
+	./configure --help
 
 == General information
 
