@@ -1,4 +1,4 @@
-.TH DHCPD-POOLS "1" "2012-11-25" "@PACKAGE_STRING@" "User Commands"
+.TH DHCPD-POOLS "1" "2015-09-04" "@PACKAGE_STRING@" "User Commands"
 .SH NAME
 dhcpd-pools \- ISC dhcpd pools usage analysis
 .SH SYNOPSIS
@@ -161,7 +161,7 @@ is
 If critical percentage is not specified it defaults to
 .BR @ALARM_CRIT@ .
 .TP
-\fB\-\-minsize\fR=\fIsize\f
+\fB\-\-minsize\fR=\fIsize\fR
 Ignore ranges and shared networks that are smaller or equal to the
 defined size.  This option is meaningful only in context of alarming, and
 will intented to supress for example single host ranges.  By default this
