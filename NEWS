@@ -7,6 +7,19 @@ Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 gpg: Signature is crated using RSA key ID FDE9B739.
 
+Version 2.27
+Sami Kerola (9):
+      docs: remove very basic git usage info
+      docs: remove todo items that will never happen
+      output: remove empty element from xml
+      add touched addresses counts to xml and json reports
+      add xml format check
+      improve html output
+      add hint about configure options to README
+      man: fix character class change
+      gitignore: update gnulib file list
+      release: 2.27
+
 Version 2.26
 $ git shortlog v2.25..v2.26
 Sami Kerola (15):
