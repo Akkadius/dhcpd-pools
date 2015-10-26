@@ -380,6 +380,7 @@ double strtod_or_err(const char *restrict str, const char *restrict errmesg)
 	return num;
  err:
 	error(EXIT_FAILURE, errno, "%s: '%s'", errmesg, str);
+	return 0;
 }
 
 /*! \brief Reverse range.

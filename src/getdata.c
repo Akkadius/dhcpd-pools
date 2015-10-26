@@ -178,7 +178,7 @@ void parse_config(int is_include, const char *restrict config_file,
 	char *word;
 	int braces_shared = 1000;
 	union ipaddr_t addr;
-	struct range_t *range_p;
+	struct range_t *range_p = NULL;
 
 	word = xmalloc(sizeof(char) * MAXLEN);
 	if (is_include)
@@ -245,6 +245,9 @@ void parse_config(int is_include, const char *restrict config_file,
 				c = ' ';
 				break;
 			} else if (argument == ITS_A_RANGE_SECOND_IP && i == 0) {
+				if (!range_p) {
+					error(EXIT_FAILURE, 0, "parse_config: range_p uninitialized: please report a bug");
+				}
 				range_p->last_ip = range_p->first_ip;
 				goto newrange;
 			}
