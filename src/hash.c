@@ -38,8 +38,11 @@
  * analysis happen as quick as possible..
  */
 
-#include "dhcpd-pools.h"
+#include <config.h>
+
 #include "xalloc.h"
+
+#include "dhcpd-pools.h"
 
 #define HASH_FIND_V6(head, findv6, out) HASH_FIND(hh, head, findv6, 16, out)
 #define HASH_ADD_V6(head, v6field, add) HASH_ADD(hh, head, v6field, 16, add)

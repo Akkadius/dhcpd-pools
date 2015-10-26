@@ -38,10 +38,9 @@
  */
 
 #include <config.h>
+
 #include <stdlib.h>
 #include <string.h>
-#include <err.h>
-#include <errno.h>
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -49,10 +48,12 @@
 
 #include "close-stream.h"
 #include "closeout.h"
-#include "defaults.h"
-#include "dhcpd-pools.h"
+#include "error.h"
 #include "progname.h"
 #include "xalloc.h"
+
+#include "dhcpd-pools.h"
+#include "defaults.h"
 
 /* Global variables */
 int prefix_length[2][NUM_OF_PREFIX];
@@ -165,7 +166,7 @@ int main(int argc, char **argv)
 			/* Output sorting option */
 			sorts = strlen(optarg);
 			if (5 < sorts) {
-				warnx("main: only first 5 sort orders will be used");
+				error(0, 0, "main: only first 5 sort orders will be used");
 				strncpy(config.sort, optarg, (size_t)5);
 				sorts = 5;
 			} else
@@ -188,8 +189,8 @@ int main(int argc, char **argv)
 					config.output_limit[i] = optarg[i] - '0';
 				else {
 					clean_up();
-					errx(EXIT_FAILURE,
-					     "main: output mask `%s' is illegal", optarg);
+					error(EXIT_FAILURE, 0,
+					      "main: output mask `%s' is illegal", optarg);
 				}
 			}
 			break;
@@ -211,7 +212,8 @@ int main(int argc, char **argv)
 			/* Print help */
 			usage(EXIT_SUCCESS);
 		default:
-			errx(EXIT_FAILURE, "Try `%s --help' for more information.", program_name);
+			error(EXIT_FAILURE, 0, "Try `%s --help' for more information.",
+			      program_name);
 		}
 	}
 	/* Output function selection */
@@ -246,7 +248,7 @@ int main(int argc, char **argv)
 		break;
 	default:
 		clean_up();
-		errx(EXIT_FAILURE, "main: unknown output format `%c'", config.output_format[0]);
+		error(EXIT_FAILURE, 0, "main: unknown output format `%c'", config.output_format[0]);
 	}
 	/* Do the job */
 	prepare_memory();

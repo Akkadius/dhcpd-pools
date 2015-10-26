@@ -39,13 +39,9 @@
 
 #include <config.h>
 
-#include "dhcpd-pools.h"
-#include "defaults.h"
-#include "progname.h"
-
 #include <arpa/inet.h>
-#include <err.h>
 #include <errno.h>
+#include <limits.h>
 #include <netinet/in.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -53,7 +49,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <limits.h>
+
+#include "error.h"
+#include "progname.h"
+
+#include "dhcpd-pools.h"
+#include "defaults.h"
 
 /*! \brief Set function pointers depending on IP version.
  * \param ip IP version.
@@ -378,9 +379,7 @@ double strtod_or_err(const char *restrict str, const char *restrict errmesg)
 		goto err;
 	return num;
  err:
-	if (errno)
-		err(EXIT_FAILURE, "%s: '%s'", errmesg, str);
-	errx(EXIT_FAILURE, "%s: '%s'", errmesg, str);
+	error(EXIT_FAILURE, errno, "%s: '%s'", errmesg, str);
 }
 
 /*! \brief Reverse range.
@@ -404,7 +403,7 @@ void clean_up(void)
 {
 	/* Just in case there something in buffers */
 	if (fflush(NULL))
-		warn("clean_up: fflush");
+		error(0, 0, "clean_up: fflush");
 	free(config.dhcpdconf_file);
 	free(config.dhcpdlease_file);
 	free(config.output_file);

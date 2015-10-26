@@ -40,7 +40,6 @@
 #include <config.h>
 
 #include <arpa/inet.h>
-#include <err.h>
 #include <errno.h>
 #include <inttypes.h>
 #include <langinfo.h>
@@ -53,9 +52,11 @@
 #include <time.h>
 
 #include "close-stream.h"
-#include "dhcpd-pools.h"
+#include "error.h"
 #include "progname.h"
 #include "strftime.h"
+
+#include "dhcpd-pools.h"
 
 /*! \brief Text output format, which is the default.
  * FIXME: This function should return void. */
@@ -72,7 +73,7 @@ int output_txt(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			err(EXIT_FAILURE, "output_txt: %s", config.output_file);
+			error(EXIT_FAILURE, errno, "output_txt: %s", config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -201,12 +202,12 @@ int output_txt(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			warn("output_txt: fflush");
+			error(0, 0, "output_txt: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			warn("output_txt: fclose");
+			error(0, 0, "output_txt: fclose");
 		}
 	}
 
@@ -228,7 +229,7 @@ int output_xml(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			err(EXIT_FAILURE, "output_xml: %s", config.output_file);
+			error(EXIT_FAILURE, errno, "output_xml: %s", config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -242,6 +243,7 @@ int output_xml(void)
 
 	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
 		struct leases_t *l;
+
 		for (l = leases; l != NULL; l = l->hh.next) {
 			if (l->type == ACTIVE) {
 				fputs("<active_lease>\n\t<ip>", outfile);
@@ -305,12 +307,12 @@ int output_xml(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			warn("output_xml: fflush");
+			error(0, 0, "output_xml: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			warn("output_xml: fclose");
+			error(0, 0, "output_xml: fclose");
 		}
 	}
 
@@ -333,7 +335,7 @@ int output_json(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			err(EXIT_FAILURE, "output_json: %s", config.output_file);
+			error(EXIT_FAILURE, errno, "output_json: %s", config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -348,6 +350,7 @@ int output_json(void)
 
 	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
 		struct leases_t *l;
+
 		fprintf(outfile, "   \"active_leases\": [");
 		for (l = leases; l != NULL; l = l->hh.next) {
 			if (l->type == ACTIVE) {
@@ -443,12 +446,12 @@ int output_json(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			warn("output_json: fflush");
+			error(0, 0, "output_json: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			warn("output_json: fclose");
+			error(0, 0, "output_json: fclose");
 		}
 	}
 
@@ -465,14 +468,15 @@ static void html_header(FILE *restrict f)
 	struct tm *tmp, result;
 
 	struct stat statbuf;
+
 	stat(config.dhcpdlease_file, &statbuf);
 
 	tmp = localtime_r(&statbuf.st_mtime, &result);
 	if (tmp == NULL) {
-		err(EXIT_FAILURE, "html_header: localtime");
+		error(EXIT_FAILURE, errno, "html_header: localtime");
 	}
 	if (strftime(outstr, sizeof(outstr), nl_langinfo(D_T_FMT), &result) == 0) {
-		errx(EXIT_FAILURE, "html_header: strftime returned 0");
+		error(EXIT_FAILURE, 0, "html_header: strftime returned 0");
 	}
 
 	fprintf(f, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n");
@@ -652,10 +656,11 @@ int output_html(void)
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
+
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			err(EXIT_FAILURE, "output_html: %s", config.output_file);
+			error(EXIT_FAILURE, errno, "output_html: %s", config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -754,9 +759,8 @@ int output_html(void)
 				output_double(outfile, "td", shared_p->backups);
 				output_float(outfile, "td",
 					     shared_p->available == 0 ? -NAN : (float)(100 *
-										       shared_p->
-										       backups) /
-					     shared_p->available);
+										       shared_p->backups)
+					     / shared_p->available);
 			}
 
 			endrow(outfile);
@@ -792,18 +796,16 @@ int output_html(void)
 		output_double(outfile, "td", shared_networks->touched + shared_networks->used);
 		output_float(outfile, "td",
 			     shared_networks->available == 0 ? -NAN : (float)(100 *
-									      (shared_networks->
-									       touched +
-									       shared_networks->
-									       used)) /
-			     shared_networks->available);
+									      (shared_networks->touched
+									       +
+									       shared_networks->used))
+			     / shared_networks->available);
 		if (config.backups_found == true) {
 			output_double(outfile, "td", shared_networks->backups);
 			output_float(outfile, "td",
 				     shared_networks->available == 0 ? -NAN : (float)(100 *
-										      shared_networks->
-										      backups) /
-				     shared_networks->available);
+										      shared_networks->backups)
+				     / shared_networks->available);
 		}
 		endrow(outfile);
 	}
@@ -814,12 +816,12 @@ int output_html(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			warn("output_html: fflush");
+			error(0, 0, "output_html: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			warn("output_html: fclose");
+			error(0, 0, "output_html: fclose");
 		}
 	}
 	return 0;
@@ -836,10 +838,11 @@ int output_csv(void)
 	struct shared_network_t *shared_p;
 	FILE *outfile;
 	int ret;
+
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			err(EXIT_FAILURE, "output_csv: %s", config.output_file);
+			error(EXIT_FAILURE, errno, "output_csv: %s", config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -957,12 +960,12 @@ int output_csv(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			warn("output_cvs: fflush");
+			error(0, 0, "output_cvs: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			warn("output_cvs: fclose");
+			error(0, 0, "output_cvs: fclose");
 		}
 	}
 	return 0;
@@ -989,7 +992,7 @@ int output_alarming(void)
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
 		if (outfile == NULL) {
-			err(EXIT_FAILURE, "output_alarming: %s", config.output_file);
+			error(EXIT_FAILURE, errno, "output_alarming: %s", config.output_file);
 		}
 	} else {
 		outfile = stdout;
@@ -1077,12 +1080,12 @@ int output_alarming(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			warn("output_alarming: fflush");
+			error(0, 0, "output_alarming: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			warn("output_alarming: fclose");
+			error(0, 0, "output_alarming: fclose");
 		}
 	}
 	return ret_val;

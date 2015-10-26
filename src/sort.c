@@ -40,14 +40,14 @@
 
 #include <config.h>
 
-#include <err.h>
-#include <errno.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "dhcpd-pools.h"
+#include "error.h"
 #include "progname.h"
+
+#include "dhcpd-pools.h"
 
 /*! \brief Compare IP address, with IPv4/v6 determination.
  * \param a Binary IP address.
@@ -237,8 +237,7 @@ comparer_t field_selector(char c)
 		return comp_tcperc;
 	default:
 		clean_up();
-		warnx("field_selector: unknown sort order `%c'", c);
-		errx(EXIT_FAILURE, "Try `%s --help' for more information.", program_name);
+		error(EXIT_FAILURE, 0, "field_selector: unknown sort order `%c'", c);
 	}
 	return NULL;
 }
@@ -289,6 +288,7 @@ void mergesort_ranges(struct range_t *restrict orig, int size, struct range_t *r
 {
 	int left, right, i;
 	struct range_t hold;
+
 	/* Merge sort split size */
 	static const int MIN_MERGE_SIZE = 8;
 

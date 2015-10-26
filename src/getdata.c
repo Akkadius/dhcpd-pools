@@ -42,7 +42,6 @@
 #include <arpa/inet.h>
 #include <assert.h>
 #include <ctype.h>
-#include <err.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <netinet/in.h>
@@ -53,9 +52,11 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#include "defaults.h"
-#include "dhcpd-pools.h"
+#include "error.h"
 #include "xalloc.h"
+
+#include "dhcpd-pools.h"
+#include "defaults.h"
 
 /*! \brief Lease file parser.  The parser can only read ISC DHCPD
  * dhcpd.leases file format.  */
@@ -70,15 +71,15 @@ int parse_leases(void)
 
 	dhcpd_leases = fopen(config.dhcpdlease_file, "r");
 	if (dhcpd_leases == NULL)
-		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
+		error(EXIT_FAILURE, errno, "parse_leases: %s", config.dhcpdlease_file);
 #ifdef HAVE_POSIX_FADVISE
 # ifdef POSIX_FADV_NOREUSE
 	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_NOREUSE) != 0)
-		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
+		error(EXIT_FAILURE, errno, "parse_leases: fadvise %s", config.dhcpdlease_file);
 # endif				/* POSIX_FADV_NOREUSE */
 # ifdef POSIX_FADV_SEQUENTIAL
 	if (posix_fadvise(fileno(dhcpd_leases), 0, 0, POSIX_FADV_SEQUENTIAL) != 0)
-		err(EXIT_FAILURE, "parse_leases: fadvise %s", config.dhcpdlease_file);
+		error(EXIT_FAILURE, errno, "parse_leases: fadvise %s", config.dhcpdlease_file);
 # endif				/* POSIX_FADV_SEQUENTIAL */
 #endif				/* HAVE_POSIX_FADVISE */
 	/* I found out that there's one lease address per 300 bytes in
@@ -86,7 +87,7 @@ int parse_leases(void)
 	 * If someone has higher density in lease file I'm interested to
 	 * hear about that. */
 	if (stat(config.dhcpdlease_file, &lease_file_stats))
-		err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
+		error(EXIT_FAILURE, errno, "parse_leases: %s", config.dhcpdlease_file);
 	line = xmalloc(sizeof(char) * MAXLEN);
 	line[0] = '\0';
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
@@ -95,7 +96,7 @@ int parse_leases(void)
 		ethernets = true;
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases))
-			err(EXIT_FAILURE, "parse_leases: %s", config.dhcpdlease_file);
+			error(EXIT_FAILURE, errno, "parse_leases: %s", config.dhcpdlease_file);
 		switch (xstrstr(line)) {
 			/* It's a lease, save IP */
 		case PREFIX_LEASE:
@@ -186,15 +187,15 @@ void parse_config(int is_include, const char *restrict config_file,
 	/* Open configuration file */
 	dhcpd_config = fopen(config_file, "r");
 	if (dhcpd_config == NULL)
-		err(EXIT_FAILURE, "parse_config: %s", config_file);
+		error(EXIT_FAILURE, errno, "parse_config: %s", config_file);
 #ifdef HAVE_POSIX_FADVISE
 # ifdef POSIX_FADV_NOREUSE
 	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_NOREUSE) != 0)
-		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
+		error(EXIT_FAILURE, errno, "parse_config: fadvise %s", config_file);
 # endif				/* POSIX_FADV_NOREUSE */
 # ifdef POSIX_FADV_SEQUENTIAL
 	if (posix_fadvise(fileno(dhcpd_config), 0, 0, POSIX_FADV_SEQUENTIAL) != 0)
-		err(EXIT_FAILURE, "parse_config: fadvise %s", config_file);
+		error(EXIT_FAILURE, errno, "parse_config: fadvise %s", config_file);
 # endif				/* POSIX_FADV_SEQUENTIAL */
 #endif				/* HAVE_POSIX_FADVISE */
 	/* Very hairy stuff begins. */
@@ -364,8 +365,8 @@ void parse_config(int is_include, const char *restrict config_file,
 				shared_p->backups = 0;
 				if (SHARED_NETWORKS < num_shared_networks + 2)
 					/* FIXME: make this to go away by reallocating more space. */
-					errx(EXIT_FAILURE,
-					     "parse_config: increase default.h SHARED_NETWORKS and recompile");
+					error(EXIT_FAILURE, 0,
+					      "parse_config: increase default.h SHARED_NETWORKS and recompile");
 				argument = ITS_NOTHING_INTERESTING;
 				braces_shared = braces;
 				break;
@@ -380,7 +381,7 @@ void parse_config(int is_include, const char *restrict config_file,
 				argument = ITS_NOTHING_INTERESTING;
 				break;
 			default:
-				warnx("impossible occurred, report a bug");
+				error(0, 0, "impossible occurred, report a bug");
 				assert(0);
 			}
 		}
