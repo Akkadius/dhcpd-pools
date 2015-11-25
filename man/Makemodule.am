@@ -1,3 +1,2 @@
 man_MANS = man/dhcpd-pools.1
-EXTRA_DIST += man/dhcpd-pools.1.in
-CLEANFILES += man/dhcpd-pools.1
+PATHFILES += man/dhcpd-pools.1

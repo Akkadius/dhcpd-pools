@@ -1,0 +1,1 @@
+command[check_dhcpd_pools]=@bindir@/dhcpd-pools --warning $ARG1$ --critical $ARG2$

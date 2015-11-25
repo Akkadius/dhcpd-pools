@@ -134,8 +134,7 @@ AM_CONDITIONAL([ENABLE_DOXYGEN],  [test "x$enable_doxygen" = "xyes"])
 AS_IF([test x$enable_doxygen = xyes], [
 	AC_CHECK_PROGS([DOXYGEN], [doxygen])
 	AS_IF([test "x$DOXYGEN" = "x"],
-		AC_MSG_ERROR([doxygen not in path]),
-		AC_CONFIG_FILES([doc/doxy.conf])
+		AC_MSG_ERROR([doxygen not in path])
 	)
 
 	AC_CHECK_PROGS([DOXYGEN_DOT], [dot])
@@ -149,7 +148,6 @@ AM_CONDITIONAL([HAVE_DOXYGEN_DOT], [test "x$DOXYGEN_DOT" != "x"])
 AC_CONFIG_FILES([
 	Makefile
 	lib/Makefile
-	man/dhcpd-pools.1
 ])
 
 AC_OUTPUT

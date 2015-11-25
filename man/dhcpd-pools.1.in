@@ -1,4 +1,4 @@
-.TH DHCPD-POOLS "1" "2015-09-04" "@PACKAGE_STRING@" "User Commands"
+.TH DHCPD-POOLS "1" "2015-09-04" "@VERSION@" "User Commands"
 .SH NAME
 dhcpd-pools \- ISC dhcpd pools usage analysis
 .SH SYNOPSIS

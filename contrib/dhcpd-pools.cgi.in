@@ -1,4 +1,4 @@
-#!/bin/sh
+#!@SHELL@
 #
 # Simple CGI for dhcpd-pools.
 
@@ -26,7 +26,7 @@ echo "<p>This was situation at "
 date
 echo "</p>"
 
-/usr/local/bin/dhcpd-pools --format html
+@bindir@/dhcpd-pools --format html
 
 echo "</body>"
 echo "</html>"

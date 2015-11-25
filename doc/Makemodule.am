@@ -1,5 +1,9 @@
+PATHFILES += \
+	doc/doxy.conf
+nodist_noinst_DATA = \
+	doc/doxy.conf
+
 EXTRA_DIST += \
-	doc/doxy.conf.in \
 	doc/introduction.dox
 
 if ENABLE_DOXYGEN
