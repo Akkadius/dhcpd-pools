@@ -130,6 +130,7 @@ struct configuration_t {
 	char *output_file;
 	int output_limit[2];
 	bool backups_found;
+	bool snet_alarms;
 	double warning;
 	double critical;
 	double minsize;

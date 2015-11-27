@@ -94,7 +94,8 @@ int main(int argc, char **argv)
 	char const *tmp;
 	struct range_t *tmp_ranges;
 	enum {
-		OPT_WARN = CHAR_MAX + 1,
+		OPT_SNET_ALARMS = CHAR_MAX + 1,
+		OPT_WARN,
 		OPT_CRIT,
 		OPT_MINSIZE
 	};
@@ -110,6 +111,7 @@ int main(int argc, char **argv)
 		{"limit", required_argument, NULL, 'L'},
 		{"version", no_argument, NULL, 'v'},
 		{"help", no_argument, NULL, 'h'},
+		{"snet-alarms", no_argument, NULL, OPT_SNET_ALARMS},
 		{"warning", required_argument, NULL, OPT_WARN},
 		{"critical", required_argument, NULL, OPT_CRIT},
 		{"minsize", required_argument, NULL, OPT_MINSIZE},
@@ -127,6 +129,7 @@ int main(int argc, char **argv)
 	 * command line option */
 	config.output_file[0] = '\0';
 	/* Alarming defaults. */
+	config.snet_alarms = false;
 	config.warning = ALARM_WARN;
 	config.critical = ALARM_CRIT;
 	/* File location defaults */
@@ -193,6 +196,9 @@ int main(int argc, char **argv)
 					      "main: output mask `%s' is illegal", optarg);
 				}
 			}
+			break;
+		case OPT_SNET_ALARMS:
+			config.snet_alarms = true;
 			break;
 		case OPT_WARN:
 			strcpy(config.output_format, "a");

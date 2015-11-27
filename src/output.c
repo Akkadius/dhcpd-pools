@@ -1000,6 +1000,9 @@ int output_alarming(void)
 
 	if (config.output_limit[1] & BIT1) {
 		for (i = 0; i < num_ranges; i++) {
+			if (config.snet_alarms && range_p->shared_net != shared_networks) {
+				continue;
+			}
 			if (config.minsize < range_size) {
 				perc = (float)(100 * range_p->count) / range_size;
 				if (config.critical < perc)

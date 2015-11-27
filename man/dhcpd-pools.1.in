@@ -161,6 +161,12 @@ is
 If critical percentage is not specified it defaults to
 .BR @ALARM_CRIT@ .
 .TP
+\fB\-\-snet\-alarms
+Suppress range alarms that are part of shared networks.  Use of this option
+will keep alarm criteria applied to ranges that are not part of shared-net
+along with shared-net alarms.  This option may help reducing alarm noise for
+configurations that has lots of small ranges in big shared-networks.
+.TP
 \fB\-\-minsize\fR=\fIsize\fR
 Ignore ranges and shared networks that are smaller or equal to the
 defined size.  This option is meaningful only in context of alarming, and
