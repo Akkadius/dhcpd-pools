@@ -46,20 +46,17 @@
 #include "dhcpd-pools.h"
 
 /*! \brief Prepare data for analysis. The function will sort leases and
- * ranges.
- * FIXME: This function should return void. */
-int prepare_data(void)
+ * ranges. */
+void prepare_data(void)
 {
 	/* Sort leases */
 	HASH_SORT(leases, leasecomp);
 	/* Sort ranges */
 	qsort(ranges, (size_t)num_ranges, sizeof(struct range_t), &rangecomp);
-	return 0;
 }
 
-/*! \brief Perform counting.  Join leases with ranges, and update counters.
- * FIXME: This function should return void. */
-int do_counting(void)
+/*! \brief Perform counting.  Join leases with ranges, and update counters. */
+void do_counting(void)
 {
 	struct range_t *restrict range_p;
 	const struct leases_t *restrict l = leases;
@@ -121,5 +118,4 @@ int do_counting(void)
 		shared_networks->backups += range_p->backups;
 		range_p++;
 	}
-	return 0;
 }

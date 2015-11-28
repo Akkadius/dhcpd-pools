@@ -219,13 +219,13 @@ extern struct leases_t *leases;
 extern unsigned int RANGES;
 
 /* Function prototypes */
-extern int prepare_memory(void);
+extern void prepare_memory(void);
 extern void set_ipv_functions(int version);
 extern int parse_leases(void);
 extern void parse_config(int, const char *__restrict, struct shared_network_t *__restrict)
     __attribute__ ((nonnull(2, 3)));
-extern int prepare_data(void);
-extern int do_counting(void);
+extern void prepare_data(void);
+extern void do_counting(void);
 extern void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */

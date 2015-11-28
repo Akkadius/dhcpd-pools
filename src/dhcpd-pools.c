@@ -287,9 +287,8 @@ int main(int argc, char **argv)
 }
 
 /*! \brief Run time initialization. Global allocations, counter
- * initializations, etc are here.
- * FIXME: This function should return void. */
-int prepare_memory(void)
+ * initializations, etc are here. */
+void prepare_memory(void)
 {
 	config.dhcp_version = VERSION_UNKNOWN;
 	RANGES = 64;
@@ -301,5 +300,4 @@ int prepare_memory(void)
 	shared_networks->used = 0;
 	shared_networks->touched = 0;
 	shared_networks->backups = 0;
-	return 0;
 }

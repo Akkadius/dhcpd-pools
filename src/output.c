@@ -58,8 +58,7 @@
 
 #include "dhcpd-pools.h"
 
-/*! \brief Text output format, which is the default.
- * FIXME: This function should return void. */
+/*! \brief Text output format, which is the default. */
 int output_txt(void)
 {
 	unsigned int i;
@@ -214,9 +213,7 @@ int output_txt(void)
 	return 0;
 }
 
-/*! \brief The xml output formats.
- * FIXME: This function should return void.
- */
+/*! \brief The xml output formats. */
 int output_xml(void)
 {
 	unsigned int i;
@@ -319,9 +316,7 @@ int output_xml(void)
 	return 0;
 }
 
-/*! \brief The json output formats.
- * FIXME: This function should return void.
- */
+/*! \brief The json output formats. */
 int output_json(void)
 {
 	unsigned int i = 0;
@@ -598,9 +593,7 @@ static void newsection(FILE *restrict f, char const *restrict title)
 	output_line(f, "h3", title);
 }
 
-/*! \brief Output html format.
- * FIXME: This function should return void.
- */
+/*! \brief Output html format. */
 int output_html(void)
 {
 	unsigned int i;
@@ -788,9 +781,7 @@ int output_html(void)
 	return 0;
 }
 
-/*! \brief Output cvs format.
- * FIXME: This function should return void.
- */
+/*! \brief Output cvs format. */
 int output_csv(void)
 {
 	unsigned int i;
@@ -932,9 +923,7 @@ int output_csv(void)
 	return 0;
 }
 
-/*! \brief Output alarm text, and return program exit value.
- * FIXME: This function should return void.
- */
+/*! \brief Output alarm text, and return program exit value. */
 int output_alarming(void)
 {
 	FILE *outfile;
