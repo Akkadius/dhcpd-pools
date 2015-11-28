@@ -145,7 +145,6 @@ int main(int argc, char **argv)
 	config.output_limit[0] = (*tmp - '0');
 	tmp++;
 	config.output_limit[1] = (*tmp - '0');
-	config.fullhtml = false;
 	/* Make sure some output format is selected by default */
 	strncpy(config.output_format, OUTPUT_FORMAT, (size_t)1);
 	/* Default sort order is by IPs small to big */
@@ -245,11 +244,10 @@ int main(int argc, char **argv)
 		output_analysis = output_alarming;
 		break;
 	case 'h':
-		output_analysis = output_html;
+		error(EXIT_FAILURE, 0, "html table only output format is deprecated");
 		break;
 	case 'H':
 		output_analysis = output_html;
-		config.fullhtml = true;
 		break;
 	case 'x':
 		output_analysis = output_xml;

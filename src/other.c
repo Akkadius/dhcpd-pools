@@ -448,7 +448,6 @@ This is ISC dhcpd pools usage analyzer.\n\
 	fprintf(out, "\
   -f, --format=[thHcxXjJ] output format\n\
                            t for text\n\
-                           h for html table\n\
                            H for full html page\n\
                            x for xml\n\
                            X for xml with active lease details\n\

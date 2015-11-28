@@ -43,6 +43,12 @@ Dependencies to other projects.
 
 		See quick start.
 
+	https://getbootstrap.com/
+	https://datatables.net/
+
+		Java Bootstrap and DataTables java scripts are used in html
+		output.
+
 Test data wanted.
 
 	Maintainer is interested to get copy of your dhcpd.conf

@@ -124,7 +124,6 @@ struct configuration_t {
 	char *dhcpdconf_file;
 	char *dhcpdlease_file;
 	char output_format[2];
-	bool fullhtml;
 	char sort[6];
 	bool reverse_order;
 	char *output_file;

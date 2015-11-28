@@ -68,12 +68,10 @@ Sort results in reverse order.
 Output format.
 Text
 .RI ( t ).
-Standard html
-.RI ( h )
-outputs only the HTML tables, and is useful for embedding more complex web
-pages.  Full-html
+Full-html
 .RI ( H )
-provides complete HTML headers, etc., including in-line CSS.  The
+page output.
+The
 .RI ( c )
 stands for comma-separated values.  Output format xml
 .RI ( x )
