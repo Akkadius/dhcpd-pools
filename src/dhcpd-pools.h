@@ -133,6 +133,8 @@ struct configuration_t {
 	bool snet_alarms;
 	double warning;
 	double critical;
+	double warn_count;
+	double crit_count;
 	double minsize;
 };
 /*! \struct shared_network_t

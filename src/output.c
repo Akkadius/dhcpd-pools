@@ -1005,9 +1005,9 @@ int output_alarming(void)
 			}
 			if (config.minsize < range_size) {
 				perc = (float)(100 * range_p->count) / range_size;
-				if (config.critical < perc)
+				if (config.critical < perc && (range_size - range_p->count) < config.crit_count)
 					rc++;
-				else if (config.warning < perc)
+				else if (config.warning < perc && (range_size - range_p->count) < config.warn_count)
 					rw++;
 				else
 					ro++;
@@ -1025,9 +1025,9 @@ int output_alarming(void)
 				perc =
 				    shared_p->available ==
 				    0 ? 100 : (float)(100 * shared_p->used) / shared_p->available;
-				if (config.critical < perc)
+				if (config.critical < perc && shared_p->available < config.crit_count)
 					sc++;
-				else if (config.warning < perc)
+				else if (config.warning < perc && shared_p->available < config.warn_count)
 					sw++;
 				else
 					so++;

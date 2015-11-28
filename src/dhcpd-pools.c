@@ -97,7 +97,9 @@ int main(int argc, char **argv)
 		OPT_SNET_ALARMS = CHAR_MAX + 1,
 		OPT_WARN,
 		OPT_CRIT,
-		OPT_MINSIZE
+		OPT_MINSIZE,
+		OPT_WARN_COUNT,
+		OPT_CRIT_COUNT
 	};
 	int ret_val;
 
@@ -114,6 +116,8 @@ int main(int argc, char **argv)
 		{"snet-alarms", no_argument, NULL, OPT_SNET_ALARMS},
 		{"warning", required_argument, NULL, OPT_WARN},
 		{"critical", required_argument, NULL, OPT_CRIT},
+		{"warn-count", required_argument, NULL, OPT_WARN_COUNT},
+		{"crit-count", required_argument, NULL, OPT_CRIT_COUNT},
 		{"minsize", required_argument, NULL, OPT_MINSIZE},
 		{NULL, 0, NULL, 0}
 	};
@@ -132,6 +136,8 @@ int main(int argc, char **argv)
 	config.snet_alarms = false;
 	config.warning = ALARM_WARN;
 	config.critical = ALARM_CRIT;
+	config.warn_count = 0x100000000;	/* == 2^32 that is the entire IPv4 space */
+	config.crit_count = 0x100000000;	/* basically turns off the count criteria */
 	/* File location defaults */
 	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE, MAXLEN - 1);
 	strncpy(config.dhcpdlease_file, DHCPDLEASE_FILE, MAXLEN - 1);
@@ -207,6 +213,14 @@ int main(int argc, char **argv)
 		case OPT_CRIT:
 			strcpy(config.output_format, "a");
 			config.critical = strtod_or_err(optarg, "illegal argument");
+			break;
+		case OPT_WARN_COUNT:
+			strcpy(config.output_format, "a");
+			config.warn_count = strtod_or_err(optarg, "illegal argument");
+			break;
+		case OPT_CRIT_COUNT:
+			strcpy(config.output_format, "a");
+			config.crit_count = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_MINSIZE:
 			config.minsize = strtod_or_err(optarg, "illegal argument");

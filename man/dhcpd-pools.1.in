@@ -161,6 +161,27 @@ is
 If critical percentage is not specified it defaults to
 .BR @ALARM_CRIT@ .
 .TP
+\fB\-\-warn\-count\fR=\fInumber\fR
+A
+.I number
+of free leases before alarm is raised.  When specified both \-\-warning
+.I percent
+and count
+.I number
+are required to be exceeded in order to alarm criteria being fulfilled.
+.IP
+This option is intented to be used in setup where very large and small
+shared-networks and ranges co-exists.  In such environments percent based
+alarming can lead to either flood of alarms about small ranges, or way too
+great overhead of free addresses in large shared-networks.  Suggested usage
+is to set percentage to a level that makes small ranges to ring, and set the
+count to match level when an enormous shared-network is too few free leases.
+.IP
+Defaults to 2^32, that is size of entire IPv4 address space.
+.TP
+\fB\-\-crit\-count\fR=\fInumber\fR
+Same as \-\-warn\-count, but for critical alarms.
+.TP
 \fB\-\-snet\-alarms
 Suppress range alarms that are part of shared networks.  Use of this option
 will keep alarm criteria applied to ranges that are not part of shared-net
