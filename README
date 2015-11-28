@@ -1,53 +1,56 @@
-This is dhcpd-pools which is made for ISC dhcpd pool range analysis.
+This is dhcpd-pools - ISC dhcpd lease status utility.
 
-== Quick start
+Quick start.
 
+	Get the uthash, assuming you do not have it already.
+
+	cd /tmp
+	wget https://github.com/troydhanson/uthash/archive/master.zip
+	unzip master.zip
+
+	Build the dhcpd-pools project.
+
+	cd /tmp/dhcpd-pools
 	./bootstrap
-	./configure --prefix=/usr/local
+	./configure --with-uthash=/tmp/uthash-master/include
 	make
+	make check
 	make install
 
-	# Notice that there are configuration options for dhcpd.conf,
-	# dhcpd.leases, and uthash include paths, among other things.
+	Notice that there are configuration options for default dhcpd.conf,
+	dhcpd.leases paths, among other things.
 
 	./configure --help
 
-== General information
+	Read the manual to see what options are available, and what they to.
 
-	With this command you can check usage of pool addresses
-	when address space is great. Command is designed so that
-	it will not get slow even there is thousands of IPs in
-	lease file. This kind of huge dhcpd installation can be
-	near by DSL DSLAMs or some other public access connection
-	points.
+	man ./man/dhcpd-pools.1
 
-	This command will not print nice to know information like
-	DHCPStatus does. Output is limited only to list only
-	usage for ranges, shared network and total address space.
-	Limiting what is printed is the right thing to do when
-	there is thousands of addresses. If your address space is
-	small some other dhcp analyzer might be more suitable for
-	you.
-
-== Dependencies to other projects
+Dependencies to other projects.
 
 	http://www.gnu.org/software/gnulib/
 
-		If you have gnulib checked out somewhere at file
-		system you can avoid download by setting
-		GNULIB_SRCDIR environment variable.
+		You can avoid repeated gnulib downloads by setting
+		GNULIB_SRCDIR environment variable.  For example:
+
+		git clone git://git.savannah.gnu.org/gnulib.git ~/src/gnulib
+		export GNULIB_SRCDIR="$HOME/src/gnulib"
+
+		Assumign detached gnulib please remember to git pull the
+		latest updates before building dhcpd-pools.
 
 	http://uthash.sourceforge.net/
 
-== Test data wanted
+		See quick start.
+
+Test data wanted.
 
 	Maintainer is interested to get copy of your dhcpd.conf
-	and dhcpd.leases file, with includes if you use them.
+	and dhcpd.leases files, and include files if you use them.
 	Intention is to collect large set of data to build
-	realistic regression test environment. By giving your
-	data to maintainer you can be sure that updates will work
-	for you.
+	realistic regression test environment.
 
 	If you are interested to help this way put all files into
-	tar.gz, and send them to kerolasa@iki.fi. It would be nice
-	that email subject line would have 'dhcpd-pools test data'.
+	tar.gz, and send them to:
+
+	Sami Kerola <kerolasa@iki.fi>
