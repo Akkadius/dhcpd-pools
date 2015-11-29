@@ -185,12 +185,12 @@ struct leases_t {
 	UT_hash_handle hh;
 };
 /*! \enum limbits
- * \brief Output limit bits
+ * \brief Output limit bits: R_BIT ranges, S_BIT shared networks, A_BIT all.
  */
 enum limbits {
-	BIT1 = 0x1,
-	BIT2 = 0x2,
-	BIT3 = 0x4
+	R_BIT = 0x1,
+	S_BIT = 0x2,
+	A_BIT = 0x4
 };
 
 /*! \def STATE_OK

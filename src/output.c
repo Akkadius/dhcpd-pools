@@ -82,7 +82,7 @@ int output_txt(void)
 	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
 
-	if (config.output_limit[0] & BIT1) {
+	if (config.output_limit[0] & R_BIT) {
 		fprintf(outfile, "Ranges:\n");
 		fprintf
 		    (outfile,
@@ -97,7 +97,7 @@ int output_txt(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & BIT1) {
+	if (config.output_limit[1] & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			if (range_p->shared_net) {
 				fprintf(outfile, "%-20s", range_p->shared_net->name);
@@ -129,10 +129,10 @@ int output_txt(void)
 			range_size = get_range_size(range_p);
 		}
 	}
-	if (config.output_limit[1] & BIT1 && config.output_limit[0] & BIT2) {
+	if (config.output_limit[1] & R_BIT && config.output_limit[0] & S_BIT) {
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & BIT2) {
+	if (config.output_limit[0] & S_BIT) {
 		fprintf(outfile, "Shared networks:\n");
 		fprintf(outfile,
 			"name                   max   cur     percent  touch    t+c  t+c perc");
@@ -141,7 +141,7 @@ int output_txt(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & BIT2) {
+	if (config.output_limit[1] & S_BIT) {
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			fprintf(outfile,
@@ -163,10 +163,10 @@ int output_txt(void)
 			fprintf(outfile, "\n");
 		}
 	}
-	if (config.output_limit[1] & BIT2 && config.output_limit[0] & BIT3) {
+	if (config.output_limit[1] & S_BIT && config.output_limit[0] & A_BIT) {
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & BIT3) {
+	if (config.output_limit[0] & A_BIT) {
 		fprintf(outfile, "Sum of all ranges:\n");
 		fprintf(outfile,
 			"name                   max   cur     percent  touch    t+c  t+c perc");
@@ -176,7 +176,7 @@ int output_txt(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & BIT3) {
+	if (config.output_limit[1] & A_BIT) {
 		fprintf(outfile, "%-20s %5g %5g %10.3f %7g %6g %9.3f",
 			shared_networks->name,
 			shared_networks->available,
@@ -254,7 +254,7 @@ int output_xml(void)
 		}
 	}
 
-	if (config.output_limit[1] & BIT1) {
+	if (config.output_limit[1] & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			fprintf(outfile, "<subnet>\n");
 			if (range_p->shared_net) {
@@ -275,7 +275,7 @@ int output_xml(void)
 		}
 	}
 
-	if (config.output_limit[1] & BIT2) {
+	if (config.output_limit[1] & S_BIT) {
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			fprintf(outfile, "<shared-network>\n");
@@ -289,7 +289,7 @@ int output_xml(void)
 		}
 	}
 
-	if (config.output_limit[0] & BIT3) {
+	if (config.output_limit[0] & A_BIT) {
 		fprintf(outfile, "<summary>\n");
 		fprintf(outfile, "\t<location>%s</location>\n", shared_networks->name);
 		fprintf(outfile, "\t<defined>%g</defined>\n", shared_networks->available);
@@ -367,7 +367,7 @@ int output_json(void)
 		sep++;
 	}
 
-	if (config.output_limit[1] & BIT1) {
+	if (config.output_limit[1] & R_BIT) {
 		if (sep) {
 			fprintf(outfile, ",\n");
 		}
@@ -399,7 +399,7 @@ int output_json(void)
 		sep++;
 	}
 
-	if (config.output_limit[1] & BIT2) {
+	if (config.output_limit[1] & S_BIT) {
 		if (sep) {
 			fprintf(outfile, ",\n");
 		}
@@ -422,7 +422,7 @@ int output_json(void)
 		sep++;
 	}
 
-	if (config.output_limit[0] & BIT3) {
+	if (config.output_limit[0] & A_BIT) {
 		if (sep) {
 			fprintf(outfile, ",\n");
 		}
@@ -618,7 +618,7 @@ int output_html(void)
 	html_header(outfile);
 	newsection(outfile, "Sum of all");
 	table_start(outfile, "a", "all");
-	if (config.output_limit[0] & BIT3) {
+	if (config.output_limit[0] & A_BIT) {
 		start_tag(outfile, "thead");
 		start_tag(outfile, "tr");
 		output_line(outfile, "th", "name");
@@ -635,7 +635,7 @@ int output_html(void)
 		end_tag(outfile, "tr");
 		end_tag(outfile, "thead");
 	}
-	if (config.output_limit[1] & BIT3) {
+	if (config.output_limit[1] & A_BIT) {
 		start_tag(outfile, "tbody");
 		start_tag(outfile, "tr");
 		output_line(outfile, "td", shared_networks->name);
@@ -666,7 +666,7 @@ int output_html(void)
 	table_end(outfile);
 	newsection(outfile, "Shared networks");
 	table_start(outfile, "s", "snet");
-	if (config.output_limit[0] & BIT2) {
+	if (config.output_limit[0] & S_BIT) {
 		start_tag(outfile, "thead");
 		start_tag(outfile, "tr");
 		output_line(outfile, "th", "name");
@@ -683,7 +683,7 @@ int output_html(void)
 		end_tag(outfile, "tr");
 		end_tag(outfile, "thead");
 	}
-	if (config.output_limit[1] & BIT2) {
+	if (config.output_limit[1] & S_BIT) {
 		start_tag(outfile, "tbody");
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
@@ -716,7 +716,7 @@ int output_html(void)
 	table_end(outfile);
 	newsection(outfile, "Ranges");
 	table_start(outfile, "r", "ranges");
-	if (config.output_limit[0] & BIT1) {
+	if (config.output_limit[0] & R_BIT) {
 		start_tag(outfile, "thead");
 		start_tag(outfile, "tr");
 		output_line(outfile, "th", "shared net name");
@@ -735,7 +735,7 @@ int output_html(void)
 		end_tag(outfile, "tr");
 		end_tag(outfile, "thead");
 	}
-	if (config.output_limit[1] & BIT1) {
+	if (config.output_limit[1] & R_BIT) {
 		start_tag(outfile, "tbody");
 		for (i = 0; i < num_ranges; i++) {
 			start_tag(outfile, "tr");
@@ -803,7 +803,7 @@ int output_csv(void)
 	range_p = ranges;
 	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
-	if (config.output_limit[0] & BIT1) {
+	if (config.output_limit[0] & R_BIT) {
 		fprintf(outfile, "\"Ranges:\"\n");
 		fprintf
 		    (outfile,
@@ -813,7 +813,7 @@ int output_csv(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & BIT1) {
+	if (config.output_limit[1] & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			if (range_p->shared_net) {
 				fprintf(outfile, "\"%s\",", range_p->shared_net->name);
@@ -841,7 +841,7 @@ int output_csv(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & BIT2) {
+	if (config.output_limit[0] & S_BIT) {
 		fprintf(outfile, "\"Shared networks:\"\n");
 		fprintf(outfile,
 			"\"name\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
@@ -850,7 +850,7 @@ int output_csv(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & BIT2) {
+	if (config.output_limit[1] & S_BIT) {
 
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
@@ -877,7 +877,7 @@ int output_csv(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & BIT3) {
+	if (config.output_limit[0] & A_BIT) {
 		fprintf(outfile, "\"Sum of all ranges:\"\n");
 		fprintf(outfile,
 			"\"name\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
@@ -886,7 +886,7 @@ int output_csv(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & BIT3) {
+	if (config.output_limit[1] & A_BIT) {
 
 		fprintf(outfile,
 			"\"%s\",\"%g\",\"%g\",\"%.3f\",\"%g\",\"%g\",\"%.3f\"",
@@ -948,7 +948,7 @@ int output_alarming(void)
 		outfile = stdout;
 	}
 
-	if (config.output_limit[1] & BIT1) {
+	if (config.output_limit[1] & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			if (config.snet_alarms && range_p->shared_net != shared_networks) {
 				continue;
@@ -968,7 +968,7 @@ int output_alarming(void)
 			range_size = get_range_size(range_p);
 		}
 	}
-	if (config.output_limit[1] & BIT2) {
+	if (config.output_limit[1] & S_BIT) {
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			if (config.minsize < shared_p->available) {
@@ -994,19 +994,19 @@ int output_alarming(void)
 	else
 		ret_val = STATE_OK;
 
-	if ((0 < rc && config.output_limit[1] & BIT1)
-	    || (0 < sc && config.output_limit[1] & BIT2)) {
+	if ((0 < rc && config.output_limit[1] & R_BIT)
+	    || (0 < sc && config.output_limit[1] & S_BIT)) {
 		fprintf(outfile, "CRITICAL: %s:", program_name);
-	} else if ((0 < rw && config.output_limit[1] & BIT1)
-		   || (0 < sw && config.output_limit[1] & BIT2)) {
+	} else if ((0 < rw && config.output_limit[1] & R_BIT)
+		   || (0 < sw && config.output_limit[1] & S_BIT)) {
 		fprintf(outfile, "WARNING: %s:", program_name);
 	} else {
-		if (config.output_limit[1] & BIT3)
+		if (config.output_limit[1] & A_BIT)
 			fprintf(outfile, "OK:");
 		else
 			return ret_val;
 	}
-	if (config.output_limit[0] & BIT1) {
+	if (config.output_limit[0] & R_BIT) {
 		fprintf(outfile, " Ranges - crit: %d warn: %d ok: %d", rc, rw, ro);
 		if (ri != 0) {
 			fprintf(outfile, " ignored: %d", ri);
@@ -1019,7 +1019,7 @@ int output_alarming(void)
 	} else {
 		fprintf(outfile, " ");
 	}
-	if (config.output_limit[0] & BIT2) {
+	if (config.output_limit[0] & S_BIT) {
 		fprintf(outfile, "Shared nets - crit: %d warn: %d ok: %d", sc, sw, so);
 		if (si != 0) {
 			fprintf(outfile, " ignored: %d", si);
