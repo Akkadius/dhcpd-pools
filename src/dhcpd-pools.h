@@ -115,27 +115,6 @@ enum prefix_t {
 	PREFIX_HARDWARE_ETHERNET,
 	NUM_OF_PREFIX
 };
-/*! \struct configuration_t
- * \brief Runtime configuration.
- */
-struct configuration_t {
-	char dhcpv6;
-	enum dhcp_version dhcp_version;
-	char *dhcpdconf_file;
-	char *dhcpdlease_file;
-	char output_format[2];
-	char sort[6];
-	bool reverse_order;
-	char *output_file;
-	int output_limit[2];
-	bool backups_found;
-	bool snet_alarms;
-	double warning;
-	double critical;
-	double warn_count;
-	double crit_count;
-	double minsize;
-};
 /*! \struct shared_network_t
  * \brief Counters for an individual shared network.
  */
@@ -200,6 +179,36 @@ enum limbits {
 # define STATE_WARNING 1
 # define STATE_CRITICAL 2
 
+typedef int (*comparer_t) (struct range_t *r1, struct range_t *r2);
+
+/*! \struct output_sort
+ * \brief Linked list of sort functions.
+ */
+struct output_sort {
+	comparer_t func;
+	struct output_sort *next;
+};
+/*! \struct configuration_t
+ * \brief Runtime configuration.
+ */
+struct configuration_t {
+	char dhcpv6;
+	enum dhcp_version dhcp_version;
+	char *dhcpdconf_file;
+	char *dhcpdlease_file;
+	char output_format[2];
+	struct output_sort *sorts;
+	bool reverse_order;
+	char *output_file;
+	int output_limit[2];
+	bool backups_found;
+	bool snet_alarms;
+	double warning;
+	double critical;
+	double warn_count;
+	double crit_count;
+	double minsize;
+};
 /* Global variables */
 /* \var prefix_length Length of each prefix.  */
 extern int prefix_length[2][NUM_OF_PREFIX];
@@ -289,7 +298,6 @@ extern int comp_touched(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PU
 extern int rangecomp(const void *__restrict r1, const void *__restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
-typedef int (*comparer_t) (struct range_t *r1, struct range_t *r2);
 extern comparer_t field_selector(char c);
 extern double ret_percent(struct range_t r);
 extern double ret_tc(struct range_t r) _DP_ATTRIBUTE_CONST;

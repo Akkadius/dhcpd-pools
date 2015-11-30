@@ -220,7 +220,7 @@ comparer_t field_selector(char c)
 {
 	switch (c) {
 	case 'n':
-		break;
+		return NULL;
 	case 'i':
 		return comp_ip;
 	case 'm':
@@ -249,32 +249,23 @@ comparer_t field_selector(char c)
  */
 static int merge(struct range_t *restrict left, struct range_t *restrict right)
 {
-	int i, len, ret;
-	comparer_t comparer;
-	int cmp;
+	struct output_sort *p;
+	int ret;
 
-	len = strlen(config.sort);
-	for (i = 0; i < len; i++) {
-		/* Handling strings is case of it's own */
-		if (config.sort[i] == 'n') {
+	for (p = config.sorts; p; p = p->next) {
+		if (p->func == NULL) {
+			/* String sorting is special. */
 			ret = strcmp(left->shared_net->name, right->shared_net->name);
-			if (0 < ret)
-				return (0);
-			if (ret < 0)
-				return (1);
-			continue;
+		} else {
+			/* Range sorts are common. */
+			ret = p->func(left, right);
 		}
-		/* Select which function is pointed by comparer */
-		comparer = field_selector(config.sort[i]);
-		cmp = comparer(left, right);
-		/* If fields are equal use next sort method */
-		if (cmp == 0)
-			continue;
-		if (cmp < 0)
+		if (0 < ret)
+			return (0);
+		if (ret < 0)
 			return (1);
-		return (0);
 	}
-	/* If all comparers where equal */
+	/* this is reached if nothing was sorted */
 	return (0);
 }
 

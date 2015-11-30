@@ -57,9 +57,9 @@ or monitor subset of data.
 Path to the dhcpd.leases file.
 .TP
 \fB\-s\fR, \fB\-\-sort\fR=\fI[nimcptTe]\fR
-Sort ranges by chosen fields as a sorting keys.  Maximum of five sort keys
-can be defined.  Keys weight from left to right, i.e., if more weighting keys
-are equal next one is used.  The IP field is default sort key.
+Sort ranges by chosen fields as a sorting keys.  Keys weight from left to
+right, i.e., if more weighting keys are equal next one is used.  The IP
+field is default sort key.
 .TP
 \fB\-r\fR, \fB\-\-reverse\fR
 Sort results in reverse order.

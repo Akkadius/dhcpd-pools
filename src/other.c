@@ -402,6 +402,8 @@ void flip_ranges(struct range_t *restrict flip_me, struct range_t *restrict tmp_
 /*! \brief Free memory, flush buffers etc. */
 void clean_up(void)
 {
+	struct output_sort *cur, *next;
+
 	/* Just in case there something in buffers */
 	if (fflush(NULL))
 		error(0, 0, "clean_up: fflush");
@@ -417,6 +419,10 @@ void clean_up(void)
 		for (i = 0; i < num_shared_networks; i++)
 			free((shared_networks + i)->name);
 		free(shared_networks);
+	}
+	for (cur = config.sorts; cur; cur = next) {
+		next = cur->next;
+		free(cur);
 	}
 }
 

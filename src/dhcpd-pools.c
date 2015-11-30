@@ -89,7 +89,7 @@ struct leases_t *(*find_lease) (union ipaddr_t *ip);
  * alarming. */
 int main(int argc, char **argv)
 {
-	int i, sorts = 0;
+	int i;
 	int option_index = 0;
 	char const *tmp;
 	struct range_t *tmp_ranges;
@@ -150,6 +150,7 @@ int main(int argc, char **argv)
 	/* Default sort order is by IPs small to big */
 	config.reverse_order = false;
 	config.backups_found = false;
+	prepare_memory();
 	/* Parse command line options */
 	while (1) {
 		int c;
@@ -171,16 +172,23 @@ int main(int argc, char **argv)
 			strncpy(config.output_format, optarg, (size_t)1);
 			break;
 		case 's':
+		{
 			/* Output sorting option */
-			sorts = strlen(optarg);
-			if (5 < sorts) {
-				error(0, 0, "main: only first 5 sort orders will be used");
-				strncpy(config.sort, optarg, (size_t)5);
-				sorts = 5;
-			} else
-				strncpy(config.sort, optarg, (size_t)sorts);
-			for (i = 0; i < sorts; i++)
-				field_selector(config.sort[i]);
+			struct output_sort *p = config.sorts;
+
+			while (p && p->next)
+				p = p->next;
+			for (i = 0; i < strlen(optarg); i++) {
+				if (config.sorts == NULL) {
+					config.sorts = xcalloc(1, sizeof(struct output_sort));
+					p = config.sorts;
+				} else {
+					p->next = xcalloc(1, sizeof(struct output_sort));
+					p = p->next;
+				}
+				p->func = field_selector(optarg[i]);
+			}
+		}
 			break;
 		case 'r':
 			/* What ever sort in reverse order */
@@ -269,14 +277,13 @@ int main(int argc, char **argv)
 		error(EXIT_FAILURE, 0, "main: unknown output format `%c'", config.output_format[0]);
 	}
 	/* Do the job */
-	prepare_memory();
 	set_ipv_functions(VERSION_UNKNOWN);
 	parse_config(true, config.dhcpdconf_file, shared_networks);
 	parse_leases();
 	prepare_data();
 	do_counting();
 	tmp_ranges = xmalloc(sizeof(struct range_t) * num_ranges);
-	if (sorts != 0)
+	if (config.sorts != NULL)
 		mergesort_ranges(ranges, num_ranges, tmp_ranges);
 	if (config.reverse_order == true)
 		flip_ranges(ranges, tmp_ranges);
@@ -300,4 +307,5 @@ void prepare_memory(void)
 	shared_networks->used = 0;
 	shared_networks->touched = 0;
 	shared_networks->backups = 0;
+	config.sorts = NULL;
 }
