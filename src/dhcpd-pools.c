@@ -42,7 +42,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <limits.h>
 
@@ -76,6 +75,15 @@ int (*leasecomp) (const struct leases_t *restrict a, const struct leases_t *rest
 int (*output_analysis) (void);
 void (*add_lease) (union ipaddr_t *ip, enum ltype type);
 struct leases_t *(*find_lease) (union ipaddr_t *ip);
+
+static int return_limit(const char c)
+{
+	if ('0' <= c && c < '8')
+		return c - '0';
+	clean_up();
+	error(EXIT_FAILURE, 0, "return_limit: output mask '%s' is illegal", optarg);
+	return 0;
+}
 
 /*! \brief Start of execution.  Parse options, and call other other
  * functions one after another.  At the moment adding threading support
@@ -142,9 +150,9 @@ int main(int argc, char **argv)
 	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE, MAXLEN - 1);
 	strncpy(config.dhcpdlease_file, DHCPDLEASE_FILE, MAXLEN - 1);
 	tmp = OUTPUT_LIMIT;
-	config.output_limit[0] = (*tmp - '0');
+	config.header_limit = (*tmp - '0');
 	tmp++;
-	config.output_limit[1] = (*tmp - '0');
+	config.number_limit = (*tmp - '0');
 	/* Make sure some output format is selected by default */
 	strncpy(config.output_format, OUTPUT_FORMAT, (size_t)1);
 	/* Default sort order is by IPs small to big */
@@ -200,15 +208,8 @@ int main(int argc, char **argv)
 			break;
 		case 'L':
 			/* Specification what will be printed */
-			for (i = 0; i < 2; i++) {
-				if (optarg[i] >= '0' && optarg[i] < '8')
-					config.output_limit[i] = optarg[i] - '0';
-				else {
-					clean_up();
-					error(EXIT_FAILURE, 0,
-					      "main: output mask `%s' is illegal", optarg);
-				}
-			}
+			config.header_limit = return_limit(optarg[0]);
+			config.number_limit = return_limit(optarg[1]);
 			break;
 		case OPT_SNET_ALARMS:
 			config.snet_alarms = true;

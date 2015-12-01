@@ -44,7 +44,6 @@
 
 # include <config.h>
 # include <arpa/inet.h>
-# include <stdbool.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <string.h>
@@ -198,16 +197,18 @@ struct configuration_t {
 	char *dhcpdlease_file;
 	char output_format[2];
 	struct output_sort *sorts;
-	bool reverse_order;
 	char *output_file;
-	int output_limit[2];
-	bool backups_found;
-	bool snet_alarms;
 	double warning;
 	double critical;
 	double warn_count;
 	double crit_count;
 	double minsize;
+	unsigned int
+		reverse_order:1,
+		backups_found:1,
+		snet_alarms:1,
+		header_limit:3,
+		number_limit:3;
 };
 /* Global variables */
 /* \var prefix_length Length of each prefix.  */

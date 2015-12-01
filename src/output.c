@@ -45,7 +45,6 @@
 #include <langinfo.h>
 #include <math.h>
 #include <netinet/in.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -82,7 +81,7 @@ int output_txt(void)
 	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
 
-	if (config.output_limit[0] & R_BIT) {
+	if (config.header_limit & R_BIT) {
 		fprintf(outfile, "Ranges:\n");
 		fprintf
 		    (outfile,
@@ -92,12 +91,12 @@ int output_txt(void)
 		     "first ip",
 		     max_ipaddr_length,
 		     "last ip", "max", "cur", "percent", "touch", "t+c", "t+c perc");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, "     bu  bu perc");
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & R_BIT) {
+	if (config.number_limit & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			if (range_p->shared_net) {
 				fprintf(outfile, "%-20s", range_p->shared_net->name);
@@ -119,7 +118,7 @@ int output_txt(void)
 				range_p->touched,
 				range_p->touched + range_p->count,
 				(float)(100 * (range_p->touched + range_p->count)) / range_size);
-			if (config.backups_found == true) {
+			if (config.backups_found == 1) {
 				fprintf(outfile, "%7g %8.3f",
 					range_p->backups,
 					(float)(100 * range_p->backups) / range_size);
@@ -129,19 +128,19 @@ int output_txt(void)
 			range_size = get_range_size(range_p);
 		}
 	}
-	if (config.output_limit[1] & R_BIT && config.output_limit[0] & S_BIT) {
+	if (config.number_limit & R_BIT && config.header_limit & S_BIT) {
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & S_BIT) {
+	if (config.header_limit & S_BIT) {
 		fprintf(outfile, "Shared networks:\n");
 		fprintf(outfile,
 			"name                   max   cur     percent  touch    t+c  t+c perc");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, "     bu  bu perc");
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & S_BIT) {
+	if (config.number_limit & S_BIT) {
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			fprintf(outfile,
@@ -154,7 +153,7 @@ int output_txt(void)
 				shared_p->available ==
 				0 ? -NAN : ((float)(100 * (shared_p->touched + shared_p->used)) /
 					    shared_p->available));
-			if (config.backups_found == true) {
+			if (config.backups_found == 1) {
 				fprintf(outfile, "%7g %8.3f",
 					shared_p->backups,
 					(float)(100 * shared_p->backups) / shared_p->available);
@@ -163,20 +162,20 @@ int output_txt(void)
 			fprintf(outfile, "\n");
 		}
 	}
-	if (config.output_limit[1] & S_BIT && config.output_limit[0] & A_BIT) {
+	if (config.number_limit & S_BIT && config.header_limit & A_BIT) {
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & A_BIT) {
+	if (config.header_limit & A_BIT) {
 		fprintf(outfile, "Sum of all ranges:\n");
 		fprintf(outfile,
 			"name                   max   cur     percent  touch    t+c  t+c perc");
 
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, "     bu  bu perc");
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & A_BIT) {
+	if (config.number_limit & A_BIT) {
 		fprintf(outfile, "%-20s %5g %5g %10.3f %7g %6g %9.3f",
 			shared_networks->name,
 			shared_networks->available,
@@ -190,7 +189,7 @@ int output_txt(void)
 					   (shared_networks->touched +
 					    shared_networks->used)) / shared_networks->available);
 
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, "%7g %8.3f",
 				shared_networks->available == 0 ? -NAN : shared_networks->backups,
 				(float)(100 * shared_networks->backups) /
@@ -254,7 +253,7 @@ int output_xml(void)
 		}
 	}
 
-	if (config.output_limit[1] & R_BIT) {
+	if (config.number_limit & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			fprintf(outfile, "<subnet>\n");
 			if (range_p->shared_net) {
@@ -275,7 +274,7 @@ int output_xml(void)
 		}
 	}
 
-	if (config.output_limit[1] & S_BIT) {
+	if (config.number_limit & S_BIT) {
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			fprintf(outfile, "<shared-network>\n");
@@ -289,7 +288,7 @@ int output_xml(void)
 		}
 	}
 
-	if (config.output_limit[0] & A_BIT) {
+	if (config.header_limit & A_BIT) {
 		fprintf(outfile, "<summary>\n");
 		fprintf(outfile, "\t<location>%s</location>\n", shared_networks->name);
 		fprintf(outfile, "\t<defined>%g</defined>\n", shared_networks->available);
@@ -367,7 +366,7 @@ int output_json(void)
 		sep++;
 	}
 
-	if (config.output_limit[1] & R_BIT) {
+	if (config.number_limit & R_BIT) {
 		if (sep) {
 			fprintf(outfile, ",\n");
 		}
@@ -399,7 +398,7 @@ int output_json(void)
 		sep++;
 	}
 
-	if (config.output_limit[1] & S_BIT) {
+	if (config.number_limit & S_BIT) {
 		if (sep) {
 			fprintf(outfile, ",\n");
 		}
@@ -422,7 +421,7 @@ int output_json(void)
 		sep++;
 	}
 
-	if (config.output_limit[0] & A_BIT) {
+	if (config.header_limit & A_BIT) {
 		if (sep) {
 			fprintf(outfile, ",\n");
 		}
@@ -618,7 +617,7 @@ int output_html(void)
 	html_header(outfile);
 	newsection(outfile, "Sum of all");
 	table_start(outfile, "a", "all");
-	if (config.output_limit[0] & A_BIT) {
+	if (config.header_limit & A_BIT) {
 		start_tag(outfile, "thead");
 		start_tag(outfile, "tr");
 		output_line(outfile, "th", "name");
@@ -628,14 +627,14 @@ int output_html(void)
 		output_line(outfile, "th", "touch");
 		output_line(outfile, "th", "t+c");
 		output_line(outfile, "th", "t+c perc");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			output_line(outfile, "th", "bu");
 			output_line(outfile, "th", "bu perc");
 		}
 		end_tag(outfile, "tr");
 		end_tag(outfile, "thead");
 	}
-	if (config.output_limit[1] & A_BIT) {
+	if (config.number_limit & A_BIT) {
 		start_tag(outfile, "tbody");
 		start_tag(outfile, "tr");
 		output_line(outfile, "td", shared_networks->name);
@@ -653,7 +652,7 @@ int output_html(void)
 									       +
 									       shared_networks->used))
 			     / shared_networks->available);
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			output_double(outfile, "td", shared_networks->backups);
 			output_float(outfile, "td",
 				     shared_networks->available == 0 ? -NAN : (float)(100 *
@@ -666,7 +665,7 @@ int output_html(void)
 	table_end(outfile);
 	newsection(outfile, "Shared networks");
 	table_start(outfile, "s", "snet");
-	if (config.output_limit[0] & S_BIT) {
+	if (config.header_limit & S_BIT) {
 		start_tag(outfile, "thead");
 		start_tag(outfile, "tr");
 		output_line(outfile, "th", "name");
@@ -676,14 +675,14 @@ int output_html(void)
 		output_line(outfile, "th", "touch");
 		output_line(outfile, "th", "t+c");
 		output_line(outfile, "th", "t+c perc");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			output_line(outfile, "th", "bu");
 			output_line(outfile, "th", "bu perc");
 		}
 		end_tag(outfile, "tr");
 		end_tag(outfile, "thead");
 	}
-	if (config.output_limit[1] & S_BIT) {
+	if (config.number_limit & S_BIT) {
 		start_tag(outfile, "tbody");
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
@@ -702,7 +701,7 @@ int output_html(void)
 									       (shared_p->touched +
 										shared_p->used)) /
 				     shared_p->available);
-			if (config.backups_found == true) {
+			if (config.backups_found == 1) {
 				output_double(outfile, "td", shared_p->backups);
 				output_float(outfile, "td",
 					     shared_p->available == 0 ? -NAN : (float)(100 *
@@ -716,7 +715,7 @@ int output_html(void)
 	table_end(outfile);
 	newsection(outfile, "Ranges");
 	table_start(outfile, "r", "ranges");
-	if (config.output_limit[0] & R_BIT) {
+	if (config.header_limit & R_BIT) {
 		start_tag(outfile, "thead");
 		start_tag(outfile, "tr");
 		output_line(outfile, "th", "shared net name");
@@ -728,14 +727,14 @@ int output_html(void)
 		output_line(outfile, "th", "touch");
 		output_line(outfile, "th", "t+c");
 		output_line(outfile, "th", "t+c perc");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			output_line(outfile, "th", "bu");
 			output_line(outfile, "th", "bu perc");
 		}
 		end_tag(outfile, "tr");
 		end_tag(outfile, "thead");
 	}
-	if (config.output_limit[1] & R_BIT) {
+	if (config.number_limit & R_BIT) {
 		start_tag(outfile, "tbody");
 		for (i = 0; i < num_ranges; i++) {
 			start_tag(outfile, "tr");
@@ -754,7 +753,7 @@ int output_html(void)
 			output_float(outfile, "td",
 				     (float)(100 *
 					     (range_p->touched + range_p->count)) / range_size);
-			if (config.backups_found == true) {
+			if (config.backups_found == 1) {
 				output_double(outfile, "td", range_p->backups);
 				output_float(outfile, "td",
 					     (float)(100 * range_p->backups) / range_size);
@@ -803,17 +802,17 @@ int output_csv(void)
 	range_p = ranges;
 	range_size = get_range_size(range_p);
 	shared_p = shared_networks;
-	if (config.output_limit[0] & R_BIT) {
+	if (config.header_limit & R_BIT) {
 		fprintf(outfile, "\"Ranges:\"\n");
 		fprintf
 		    (outfile,
 		     "\"shared net name\",\"first ip\",\"last ip\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, ",\"bu\",\"bu perc\"");
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & R_BIT) {
+	if (config.number_limit & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			if (range_p->shared_net) {
 				fprintf(outfile, "\"%s\",", range_p->shared_net->name);
@@ -829,7 +828,7 @@ int output_csv(void)
 				range_p->touched,
 				range_p->touched + range_p->count,
 				(float)(100 * (range_p->touched + range_p->count)) / range_size);
-			if (config.backups_found == true) {
+			if (config.backups_found == 1) {
 				fprintf(outfile, ",\"%g\",\"%.3f\"",
 					range_p->backups,
 					(float)(100 * range_p->backups) / range_size);
@@ -841,16 +840,16 @@ int output_csv(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & S_BIT) {
+	if (config.header_limit & S_BIT) {
 		fprintf(outfile, "\"Shared networks:\"\n");
 		fprintf(outfile,
 			"\"name\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, ",\"bu\",\"bu perc\"");
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & S_BIT) {
+	if (config.number_limit & S_BIT) {
 
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
@@ -865,7 +864,7 @@ int output_csv(void)
 									  (shared_p->touched +
 									   shared_p->used)) /
 				shared_p->available);
-			if (config.backups_found == true) {
+			if (config.backups_found == 1) {
 				fprintf(outfile, ",\"%g\",\"%.3f\"",
 					shared_p->backups,
 					shared_p->available ==
@@ -877,16 +876,16 @@ int output_csv(void)
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[0] & A_BIT) {
+	if (config.header_limit & A_BIT) {
 		fprintf(outfile, "\"Sum of all ranges:\"\n");
 		fprintf(outfile,
 			"\"name\",\"max\",\"cur\",\"percent\",\"touch\",\"t+c\",\"t+c perc\"");
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, ",\"bu\",\"bu perc\"");
 		}
 		fprintf(outfile, "\n");
 	}
-	if (config.output_limit[1] & A_BIT) {
+	if (config.number_limit & A_BIT) {
 
 		fprintf(outfile,
 			"\"%s\",\"%g\",\"%g\",\"%.3f\",\"%g\",\"%g\",\"%.3f\"",
@@ -900,7 +899,7 @@ int output_csv(void)
 			0 ? -NAN : (float)(100 *
 					   (shared_networks->touched +
 					    shared_networks->used)) / shared_networks->available);
-		if (config.backups_found == true) {
+		if (config.backups_found == 1) {
 			fprintf(outfile, "%7g %8.3f",
 				shared_networks->backups,
 				shared_networks->available ==
@@ -948,7 +947,7 @@ int output_alarming(void)
 		outfile = stdout;
 	}
 
-	if (config.output_limit[1] & R_BIT) {
+	if (config.number_limit & R_BIT) {
 		for (i = 0; i < num_ranges; i++) {
 			if (config.snet_alarms && range_p->shared_net != shared_networks) {
 				continue;
@@ -968,7 +967,7 @@ int output_alarming(void)
 			range_size = get_range_size(range_p);
 		}
 	}
-	if (config.output_limit[1] & S_BIT) {
+	if (config.number_limit & S_BIT) {
 		for (i = 0; i < num_shared_networks; i++) {
 			shared_p++;
 			if (config.minsize < shared_p->available) {
@@ -994,19 +993,19 @@ int output_alarming(void)
 	else
 		ret_val = STATE_OK;
 
-	if ((0 < rc && config.output_limit[1] & R_BIT)
-	    || (0 < sc && config.output_limit[1] & S_BIT)) {
+	if ((0 < rc && config.number_limit & R_BIT)
+	    || (0 < sc && config.number_limit & S_BIT)) {
 		fprintf(outfile, "CRITICAL: %s:", program_name);
-	} else if ((0 < rw && config.output_limit[1] & R_BIT)
-		   || (0 < sw && config.output_limit[1] & S_BIT)) {
+	} else if ((0 < rw && config.number_limit & R_BIT)
+		   || (0 < sw && config.number_limit & S_BIT)) {
 		fprintf(outfile, "WARNING: %s:", program_name);
 	} else {
-		if (config.output_limit[1] & A_BIT)
+		if (config.number_limit & A_BIT)
 			fprintf(outfile, "OK:");
 		else
 			return ret_val;
 	}
-	if (config.output_limit[0] & R_BIT) {
+	if (config.header_limit & R_BIT) {
 		fprintf(outfile, " Ranges - crit: %d warn: %d ok: %d", rc, rw, ro);
 		if (ri != 0) {
 			fprintf(outfile, " ignored: %d", ri);
@@ -1019,7 +1018,7 @@ int output_alarming(void)
 	} else {
 		fprintf(outfile, " ");
 	}
-	if (config.output_limit[0] & S_BIT) {
+	if (config.header_limit & S_BIT) {
 		fprintf(outfile, "Shared nets - crit: %d warn: %d ok: %d", sc, sw, so);
 		if (si != 0) {
 			fprintf(outfile, " ignored: %d", si);
