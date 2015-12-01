@@ -502,7 +502,7 @@ static void html_footer(FILE *restrict f)
 	fprintf(f, "<small>Generated using %s<br />\n", PACKAGE_STRING);
 	fprintf(f, "More info at <a href=\"%s\">%s</a>\n", PACKAGE_URL, PACKAGE_URL);
 	fprintf(f, "</small></div></div>\n");
-	fprintf(f, "<script src=\"//code.jquery.com/jquery-2.1.4.min.js\" type=\"text/javascript\"></script>\n");
+	fprintf(f, "<script src=\"https://code.jquery.com/jquery-2.1.4.min.js\" type=\"text/javascript\"></script>\n");
 	fprintf(f, "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js\" type=\"text/javascript\"></script>\n");
 	fprintf(f, "<script src=\"https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js\" type=\"text/javascript\"></script>\n");
 	fprintf(f, "<script type=\"text/javascript\" class=\"init\">$(document).ready(function() { $('#s').DataTable(); } );</script>\n");
