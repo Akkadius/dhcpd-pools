@@ -237,7 +237,7 @@ int output_xml(void)
 
 	fprintf(outfile, "<dhcpstatus>\n");
 
-	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
+	if (config.output_format == OUTPUT_ETHERNETS) {
 		struct leases_t *l;
 
 		for (l = leases; l != NULL; l = l->hh.next) {
@@ -342,7 +342,7 @@ int output_json(void)
 
 	fprintf(outfile, "{\n");
 
-	if (config.output_format[0] == 'X' || config.output_format[0] == 'J') {
+	if (config.output_format == OUTPUT_ETHERNETS) {
 		struct leases_t *l;
 
 		fprintf(outfile, "   \"active_leases\": [");

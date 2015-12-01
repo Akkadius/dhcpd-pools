@@ -100,6 +100,7 @@ int main(int argc, char **argv)
 	int i;
 	int option_index = 0;
 	char const *tmp;
+	char *output_format_tmp;
 	struct range_t *tmp_ranges;
 	enum {
 		OPT_SNET_ALARMS = CHAR_MAX + 1,
@@ -154,7 +155,7 @@ int main(int argc, char **argv)
 	tmp++;
 	config.number_limit = (*tmp - '0');
 	/* Make sure some output format is selected by default */
-	strncpy(config.output_format, OUTPUT_FORMAT, (size_t)1);
+	output_format_tmp = OUTPUT_FORMAT;
 	/* Default sort order is by IPs small to big */
 	config.reverse_order = false;
 	config.backups_found = false;
@@ -177,7 +178,7 @@ int main(int argc, char **argv)
 			break;
 		case 'f':
 			/* Output format */
-			strncpy(config.output_format, optarg, (size_t)1);
+			output_format_tmp = optarg;
 			break;
 		case 's':
 		{
@@ -215,19 +216,19 @@ int main(int argc, char **argv)
 			config.snet_alarms = true;
 			break;
 		case OPT_WARN:
-			strcpy(config.output_format, "a");
+			output_format_tmp = "a";
 			config.warning = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_CRIT:
-			strcpy(config.output_format, "a");
+			output_format_tmp = "a";
 			config.critical = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_WARN_COUNT:
-			strcpy(config.output_format, "a");
+			output_format_tmp = "a";
 			config.warn_count = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_CRIT_COUNT:
-			strcpy(config.output_format, "a");
+			output_format_tmp = "a";
 			config.crit_count = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_MINSIZE:
@@ -245,37 +246,45 @@ int main(int argc, char **argv)
 		}
 	}
 	/* Output function selection */
-	switch (config.output_format[0]) {
+	switch (output_format_tmp[0]) {
 	case 't':
 		output_analysis = output_txt;
+		config.output_format = OUTPUT_SHORT;
 		break;
 	case 'a':
 		output_analysis = output_alarming;
+		config.output_format = OUTPUT_SHORT;
 		break;
 	case 'h':
 		error(EXIT_FAILURE, 0, "html table only output format is deprecated");
 		break;
 	case 'H':
 		output_analysis = output_html;
+		config.output_format = OUTPUT_SHORT;
 		break;
 	case 'x':
 		output_analysis = output_xml;
+		config.output_format = OUTPUT_SHORT;
 		break;
 	case 'X':
 		output_analysis = output_xml;
+		config.output_format = OUTPUT_ETHERNETS;
 		break;
 	case 'j':
 		output_analysis = output_json;
+		config.output_format = OUTPUT_SHORT;
 		break;
 	case 'J':
 		output_analysis = output_json;
+		config.output_format = OUTPUT_ETHERNETS;
 		break;
 	case 'c':
 		output_analysis = output_csv;
+		config.output_format = OUTPUT_SHORT;
 		break;
 	default:
 		clean_up();
-		error(EXIT_FAILURE, 0, "main: unknown output format `%c'", config.output_format[0]);
+		error(EXIT_FAILURE, 0, "main: unknown output format '%c'", output_format_tmp[0]);
 	}
 	/* Do the job */
 	set_ipv_functions(VERSION_UNKNOWN);

@@ -114,6 +114,13 @@ enum prefix_t {
 	PREFIX_HARDWARE_ETHERNET,
 	NUM_OF_PREFIX
 };
+/*! \enum dhcp_version
+ * \brief Indicator which IP version is in use.
+ */
+enum output_formats {
+	OUTPUT_SHORT,
+	OUTPUT_ETHERNETS
+};
 /*! \struct shared_network_t
  * \brief Counters for an individual shared network.
  */
@@ -195,7 +202,6 @@ struct configuration_t {
 	enum dhcp_version dhcp_version;
 	char *dhcpdconf_file;
 	char *dhcpdlease_file;
-	char output_format[2];
 	struct output_sort *sorts;
 	char *output_file;
 	double warning;
@@ -207,6 +213,7 @@ struct configuration_t {
 		reverse_order:1,
 		backups_found:1,
 		snet_alarms:1,
+		output_format:1,
 		header_limit:3,
 		number_limit:3;
 };

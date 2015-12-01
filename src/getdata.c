@@ -92,7 +92,7 @@ int parse_leases(void)
 	line[0] = '\0';
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
 	ipstring[0] = '\0';
-	if (config.output_format[0] == 'X' || config.output_format[0] == 'J')
+	if (config.output_format == OUTPUT_ETHERNETS)
 		ethernets = true;
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases))
