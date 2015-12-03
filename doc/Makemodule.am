@@ -8,7 +8,7 @@ EXTRA_DIST += \
 
 if ENABLE_DOXYGEN
 
-doxyfile.stamp:
+doc/doxyfile.stamp:
 	$(DOXYGEN) doc/doxy.conf
 	date > doc/doxyfile.stamp
 
