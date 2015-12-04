@@ -40,7 +40,6 @@
 #include <config.h>
 
 #include <arpa/inet.h>
-#include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -246,7 +245,8 @@ void parse_config(int is_include, const char *restrict config_file,
 				break;
 			} else if (argument == ITS_A_RANGE_SECOND_IP && i == 0) {
 				if (!range_p) {
-					error(EXIT_FAILURE, 0, "parse_config: range_p uninitialized: please report a bug");
+					puts("parse_config: range_p uninitialized: report a bug");
+					abort();
 				}
 				range_p->last_ip = range_p->first_ip;
 				goto newrange;
@@ -384,8 +384,8 @@ void parse_config(int is_include, const char *restrict config_file,
 				argument = ITS_NOTHING_INTERESTING;
 				break;
 			default:
-				error(0, 0, "impossible occurred, report a bug");
-				assert(0);
+				puts("impossible occurred, report a bug");
+				abort();
 			}
 		}
 	}
