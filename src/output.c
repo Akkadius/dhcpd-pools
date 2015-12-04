@@ -200,12 +200,12 @@ int output_txt(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			error(0, 0, "output_txt: fflush");
+			error(EXIT_FAILURE, errno, "output_txt: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			error(0, 0, "output_txt: fclose");
+			error(EXIT_FAILURE, errno, "output_txt: fclose");
 		}
 	}
 
@@ -303,12 +303,12 @@ int output_xml(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			error(0, 0, "output_xml: fflush");
+			error(EXIT_FAILURE, errno, "output_xml: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			error(0, 0, "output_xml: fclose");
+			error(EXIT_FAILURE, errno, "output_xml: fclose");
 		}
 	}
 
@@ -440,12 +440,12 @@ int output_json(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			error(0, 0, "output_json: fflush");
+			error(EXIT_FAILURE, errno, "output_json: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			error(0, 0, "output_json: fclose");
+			error(EXIT_FAILURE, errno, "output_json: fclose");
 		}
 	}
 
@@ -769,12 +769,12 @@ int output_html(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			error(0, 0, "output_html: fflush");
+			error(EXIT_FAILURE, errno, "output_html: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			error(0, 0, "output_html: fclose");
+			error(EXIT_FAILURE, errno, "output_html: fclose");
 		}
 	}
 	return 0;
@@ -911,12 +911,12 @@ int output_csv(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			error(0, 0, "output_cvs: fflush");
+			error(EXIT_FAILURE, errno, "output_cvs: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			error(0, 0, "output_cvs: fclose");
+			error(EXIT_FAILURE, errno, "output_cvs: fclose");
 		}
 	}
 	return 0;
@@ -1032,12 +1032,12 @@ int output_alarming(void)
 	if (outfile == stdout) {
 		ret = fflush(stdout);
 		if (ret) {
-			error(0, 0, "output_alarming: fflush");
+			error(EXIT_FAILURE, errno, "output_alarming: fflush");
 		}
 	} else {
 		ret = close_stream(outfile);
 		if (ret) {
-			error(0, 0, "output_alarming: fclose");
+			error(EXIT_FAILURE, errno, "output_alarming: fclose");
 		}
 	}
 	return ret_val;

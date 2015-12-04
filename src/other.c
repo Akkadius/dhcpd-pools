@@ -405,7 +405,7 @@ void clean_up(void)
 
 	/* Just in case there something in buffers */
 	if (fflush(NULL))
-		error(0, 0, "clean_up: fflush");
+		error(EXIT_FAILURE, errno, "clean_up: fflush");
 	free(config.dhcpdconf_file);
 	free(config.dhcpdlease_file);
 	free(config.output_file);
