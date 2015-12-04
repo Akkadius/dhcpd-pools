@@ -66,7 +66,7 @@ int output_txt(void)
 	struct shared_network_t *shared_p;
 	int ret;
 	FILE *outfile;
-	int max_ipaddr_length = config.dhcp_version == VERSION_6 ? 39 : 16;
+	int max_ipaddr_length = config.ip_version == IPv6 ? 39 : 16;
 
 	if (config.output_file[0]) {
 		outfile = fopen(config.output_file, "w+");
@@ -237,7 +237,7 @@ int output_xml(void)
 
 	fprintf(outfile, "<dhcpstatus>\n");
 
-	if (config.output_format == OUTPUT_ETHERNETS) {
+	if (config.print_mac_addreses == 1) {
 		struct leases_t *l;
 
 		for (l = leases; l != NULL; l = l->hh.next) {
@@ -342,7 +342,7 @@ int output_json(void)
 
 	fprintf(outfile, "{\n");
 
-	if (config.output_format == OUTPUT_ETHERNETS) {
+	if (config.print_mac_addreses == 1) {
 		struct leases_t *l;
 
 		fprintf(outfile, "   \"active_leases\": [");

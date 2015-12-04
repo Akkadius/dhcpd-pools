@@ -92,12 +92,12 @@ union ipaddr_t {
 	unsigned char v6[16];
 };
 /*! \enum dhcp_version
- * \brief Indicator which IP version is in use.
+ * \brief The IP version, IPv4 or IPv6, served by the dhcpd.
  */
 enum dhcp_version {
-	VERSION_4,
-	VERSION_6,
-	VERSION_UNKNOWN
+	IPvUNKNOWN,
+	IPv4,
+	IPv6
 };
 /*! \enum prefix_t
  * \brief Enumeration of interesting data in dhcpd.leases file, that has
@@ -113,13 +113,6 @@ enum prefix_t {
 	PREFIX_BINDING_STATE_BACKUP,
 	PREFIX_HARDWARE_ETHERNET,
 	NUM_OF_PREFIX
-};
-/*! \enum dhcp_version
- * \brief Indicator which IP version is in use.
- */
-enum output_formats {
-	OUTPUT_SHORT,
-	OUTPUT_ETHERNETS
 };
 /*! \struct shared_network_t
  * \brief Counters for an individual shared network.
@@ -173,18 +166,21 @@ struct leases_t {
  * \brief Output limit bits: R_BIT ranges, S_BIT shared networks, A_BIT all.
  */
 enum limbits {
-	R_BIT = 0x1,
-	S_BIT = 0x2,
-	A_BIT = 0x4
+	R_BIT = (1 << 0),
+	S_BIT = (1 << 1),
+	A_BIT = (1 << 2)
 };
 
 /*! \def STATE_OK
- * \brief Nagios alarm exit value.
+ * \brief Nagios alarm exit values.
  */
 # define STATE_OK 0
 # define STATE_WARNING 1
 # define STATE_CRITICAL 2
 
+/*! \var comparer_t
+ * \brief Function pointer holding sort algorithm.
+ */
 typedef int (*comparer_t) (struct range_t *r1, struct range_t *r2);
 
 /*! \struct output_sort
@@ -199,7 +195,7 @@ struct output_sort {
  */
 struct configuration_t {
 	char dhcpv6;
-	enum dhcp_version dhcp_version;
+	enum dhcp_version ip_version;
 	char *dhcpdconf_file;
 	char *dhcpdlease_file;
 	struct output_sort *sorts;
@@ -213,7 +209,7 @@ struct configuration_t {
 		reverse_order:1,
 		backups_found:1,
 		snet_alarms:1,
-		output_format:1,
+		print_mac_addreses:1,
 		header_limit:3,
 		number_limit:3;
 };

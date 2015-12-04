@@ -62,8 +62,8 @@ void set_ipv_functions(int version)
 {
 	switch (version) {
 
-	case VERSION_4:
-		config.dhcp_version = version;
+	case IPv4:
+		config.ip_version = version;
 		add_lease = add_lease_v4;
 		copy_ipaddr = copy_ipaddr_v4;
 		find_lease = find_lease_v4;
@@ -75,8 +75,8 @@ void set_ipv_functions(int version)
 		xstrstr = xstrstr_v4;
 		break;
 
-	case VERSION_6:
-		config.dhcp_version = version;
+	case IPv6:
+		config.ip_version = version;
 		add_lease = add_lease_v6;
 		copy_ipaddr = copy_ipaddr_v6;
 		find_lease = find_lease_v6;
@@ -88,8 +88,8 @@ void set_ipv_functions(int version)
 		xstrstr = xstrstr_v6;
 		break;
 
-	case VERSION_UNKNOWN:
-		config.dhcp_version = version;
+	case IPvUNKNOWN:
+		config.ip_version = version;
 		add_lease = add_lease_init;
 		copy_ipaddr = copy_ipaddr_init;
 		find_lease = find_lease_init;
@@ -119,9 +119,9 @@ int parse_ipaddr_init(const char *restrict src, union ipaddr_t *restrict dst)
 	struct in6_addr addr6;
 
 	if (inet_aton(src, &addr) == 1)
-		set_ipv_functions(VERSION_4);
+		set_ipv_functions(IPv4);
 	else if (inet_pton(AF_INET6, src, &addr6) == 1)
-		set_ipv_functions(VERSION_6);
+		set_ipv_functions(IPv6);
 	else
 		return 0;
 	return parse_ipaddr(src, dst);
@@ -244,10 +244,10 @@ int
     xstrstr_init(const char *restrict str)
 {
 	if (memcmp("lease ", str, 6)) {
-		set_ipv_functions(VERSION_4);
+		set_ipv_functions(IPv4);
 		return PREFIX_LEASE;
 	} else if (memcmp("  iaaddr ", str, 9)) {
-		set_ipv_functions(VERSION_6);
+		set_ipv_functions(IPv6);
 		return PREFIX_LEASE;
 	}
 	return NUM_OF_PREFIX;

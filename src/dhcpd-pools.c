@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	int i;
 	int option_index = 0;
 	char const *tmp;
-	char *output_format_tmp;
+	char *print_mac_addreses_tmp;
 	struct range_t *tmp_ranges;
 	enum {
 		OPT_SNET_ALARMS = CHAR_MAX + 1,
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
 	tmp++;
 	config.number_limit = (*tmp - '0');
 	/* Make sure some output format is selected by default */
-	output_format_tmp = OUTPUT_FORMAT;
+	print_mac_addreses_tmp = OUTPUT_FORMAT;
 	/* Default sort order is by IPs small to big */
 	config.reverse_order = false;
 	config.backups_found = false;
@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 			break;
 		case 'f':
 			/* Output format */
-			output_format_tmp = optarg;
+			print_mac_addreses_tmp = optarg;
 			break;
 		case 's':
 		{
@@ -216,19 +216,19 @@ int main(int argc, char **argv)
 			config.snet_alarms = true;
 			break;
 		case OPT_WARN:
-			output_format_tmp = "a";
+			print_mac_addreses_tmp = "a";
 			config.warning = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_CRIT:
-			output_format_tmp = "a";
+			print_mac_addreses_tmp = "a";
 			config.critical = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_WARN_COUNT:
-			output_format_tmp = "a";
+			print_mac_addreses_tmp = "a";
 			config.warn_count = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_CRIT_COUNT:
-			output_format_tmp = "a";
+			print_mac_addreses_tmp = "a";
 			config.crit_count = strtod_or_err(optarg, "illegal argument");
 			break;
 		case OPT_MINSIZE:
@@ -246,48 +246,48 @@ int main(int argc, char **argv)
 		}
 	}
 	/* Output function selection */
-	switch (output_format_tmp[0]) {
+	switch (print_mac_addreses_tmp[0]) {
 	case 't':
 		output_analysis = output_txt;
-		config.output_format = OUTPUT_SHORT;
+		config.print_mac_addreses = 0;
 		break;
 	case 'a':
 		output_analysis = output_alarming;
-		config.output_format = OUTPUT_SHORT;
+		config.print_mac_addreses = 0;
 		break;
 	case 'h':
 		error(EXIT_FAILURE, 0, "html table only output format is deprecated");
 		break;
 	case 'H':
 		output_analysis = output_html;
-		config.output_format = OUTPUT_SHORT;
+		config.print_mac_addreses = 0;
 		break;
 	case 'x':
 		output_analysis = output_xml;
-		config.output_format = OUTPUT_SHORT;
+		config.print_mac_addreses = 0;
 		break;
 	case 'X':
 		output_analysis = output_xml;
-		config.output_format = OUTPUT_ETHERNETS;
+		config.print_mac_addreses = 1;
 		break;
 	case 'j':
 		output_analysis = output_json;
-		config.output_format = OUTPUT_SHORT;
+		config.print_mac_addreses = 0;
 		break;
 	case 'J':
 		output_analysis = output_json;
-		config.output_format = OUTPUT_ETHERNETS;
+		config.print_mac_addreses = 1;
 		break;
 	case 'c':
 		output_analysis = output_csv;
-		config.output_format = OUTPUT_SHORT;
+		config.print_mac_addreses = 0;
 		break;
 	default:
 		clean_up();
-		error(EXIT_FAILURE, 0, "main: unknown output format '%c'", output_format_tmp[0]);
+		error(EXIT_FAILURE, 0, "main: unknown output format '%c'", print_mac_addreses_tmp[0]);
 	}
 	/* Do the job */
-	set_ipv_functions(VERSION_UNKNOWN);
+	set_ipv_functions(IPvUNKNOWN);
 	parse_config(true, config.dhcpdconf_file, shared_networks);
 	parse_leases();
 	prepare_data();
@@ -307,7 +307,7 @@ int main(int argc, char **argv)
  * initializations, etc are here. */
 void prepare_memory(void)
 {
-	config.dhcp_version = VERSION_UNKNOWN;
+	config.ip_version = IPvUNKNOWN;
 	RANGES = 64;
 	num_ranges = num_shared_networks = 0;
 	shared_networks = xmalloc(sizeof(struct shared_network_t) * SHARED_NETWORKS);

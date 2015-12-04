@@ -92,7 +92,7 @@ int parse_leases(void)
 	line[0] = '\0';
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
 	ipstring[0] = '\0';
-	if (config.output_format == OUTPUT_ETHERNETS)
+	if (config.print_mac_addreses == 1)
 		ethernets = true;
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases))
@@ -102,8 +102,8 @@ int parse_leases(void)
 		case PREFIX_LEASE:
 			stop =
 			    memccpy(ipstring,
-				    line + (config.dhcp_version ==
-					    VERSION_4 ? 6 : 9), ' ', strlen(line));
+				    line + (config.ip_version ==
+					    IPv4 ? 6 : 9), ' ', strlen(line));
 			if (stop != NULL) {
 				--stop;
 				*stop = '\0';
