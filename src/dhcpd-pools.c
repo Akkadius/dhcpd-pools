@@ -49,6 +49,7 @@
 #include "closeout.h"
 #include "error.h"
 #include "progname.h"
+#include "quote.h"
 #include "xalloc.h"
 
 #include "dhcpd-pools.h"
@@ -81,7 +82,7 @@ static int return_limit(const char c)
 	if ('0' <= c && c < '8')
 		return c - '0';
 	clean_up();
-	error(EXIT_FAILURE, 0, "return_limit: output mask '%s' is illegal", optarg);
+	error(EXIT_FAILURE, 0, "return_limit: output mask %s is illegal", quote(optarg));
 	return 0;
 }
 
@@ -241,7 +242,7 @@ int main(int argc, char **argv)
 			/* Print help */
 			usage(EXIT_SUCCESS);
 		default:
-			error(EXIT_FAILURE, 0, "Try `%s --help' for more information.",
+			error(EXIT_FAILURE, 0, "Try %s --help for more information.",
 			      program_name);
 		}
 	}
@@ -284,7 +285,7 @@ int main(int argc, char **argv)
 		break;
 	default:
 		clean_up();
-		error(EXIT_FAILURE, 0, "main: unknown output format '%c'", print_mac_addreses_tmp[0]);
+		error(EXIT_FAILURE, 0, "unknown output format: %s", quote(print_mac_addreses_tmp));
 	}
 	/* Do the job */
 	set_ipv_functions(IPvUNKNOWN);

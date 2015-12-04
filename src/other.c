@@ -51,6 +51,7 @@
 
 #include "error.h"
 #include "progname.h"
+#include "quote.h"
 
 #include "dhcpd-pools.h"
 #include "defaults.h"
@@ -378,7 +379,7 @@ double strtod_or_err(const char *restrict str, const char *restrict errmesg)
 		goto err;
 	return num;
  err:
-	error(EXIT_FAILURE, errno, "%s: '%s'", errmesg, str);
+	error(EXIT_FAILURE, errno, "%s: %s", errmesg, quote(str));
 	return 0;
 }
 

@@ -46,6 +46,7 @@
 
 #include "error.h"
 #include "progname.h"
+#include "quote.h"
 
 #include "dhcpd-pools.h"
 
@@ -236,8 +237,11 @@ comparer_t field_selector(char c)
 	case 'e':
 		return comp_tcperc;
 	default:
-		clean_up();
-		error(EXIT_FAILURE, 0, "field_selector: unknown sort order `%c'", c);
+		{
+			char str[2] = { c, '\0' };
+			clean_up();
+			error(EXIT_FAILURE, 0, "field_selector: unknown sort order: %s", quote(str));
+		}
 	}
 	return NULL;
 }
