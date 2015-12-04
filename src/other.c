@@ -439,49 +439,45 @@ void __attribute__ ((__noreturn__)) print_version(void)
 /*! \brief Command line help screen. */
 void __attribute__ ((__noreturn__)) usage(int status)
 {
-	FILE *out;
+	FILE *out = status == EXIT_SUCCESS ? stdout : stderr;
 
-	out = status != 0 ? stderr : stdout;
+	fprintf(out,	"Usage: %s [OPTIONS]\n", program_name);
+	fputs(		"\n", out);
+	fputs(		"This is ISC dhcpd pools usage analyzer.\n", out);
+	fputs(		"\n", out);
+	fputs(		"  -c, --config=FILE      path to the dhcpd.conf file\n", out);
+	fputs(		"  -l, --leases=FILE      path to the dhcpd.leases file\n", out);
+	fputs(		"  -f, --format=[thHcxXjJ] output format\n", out);
+	fputs(		"                           t for text\n", out);
+	fputs(		"                           H for full html page\n", out);
+	fputs(		"                           x for xml\n", out);
+	fputs(		"                           X for xml with active lease details\n", out);
+	fputs(		"                           j for json\n", out);
+	fputs(		"                           J for json with active lease details\n", out);
+	fputs(		"                           c for comma separated values\n", out);
+	fputs(		"  -s, --sort=[nimcptTe]  sort ranges by\n", out);
+	fputs(		"                           n name\n", out);
+	fputs(		"                           i IP\n", out);
+	fputs(		"                           m maximum\n", out);
+	fputs(		"                           c current\n", out);
+	fputs(		"                           p percent\n", out);
+	fputs(		"                           t touched\n", out);
+	fputs(		"                           T t+c\n", out);
+	fputs(		"                           e t+c perc\n", out);
+	fputs(		"  -r, --reverse          reverse order sort\n", out);
+	fputs(		"  -o, --output=FILE      output into a file\n", out);
+	fputs(		"  -L, --limit=NR         output limit mask 77 - 00\n", out);
+	fputs(		"      --warning=PERC     set warning alarming limit\n", out);
+	fputs(		"      --critical=PERC    set critical alarming limit\n", out);
+	fputs(		"      --warn-count=NR    a number of free leases before warning raised\n", out);
+	fputs(		"      --crit-count=NR    a number of free leases before critical raised\n", out);
+	fputs(		"      --minsize=size     disable alarms for small ranges and shared-nets\n", out);
+	fputs(		"      --snet-alarms      suppress range alarms that are part of a shared-net\n", out);
+	fputs(		"  -v, --version          output version information and exit\n", out);
+	fputs(		"  -h, --help             display this help and exit\n", out);
+	fputs(		"\n", out);
+	fprintf(out,	"Report bugs to <%s>\n", PACKAGE_BUGREPORT);
+	fprintf(out,	"Homepage: %s\n", PACKAGE_URL);
 
-	fprintf(out, "\
-Usage: %s [OPTIONS]\n\n\
-This is ISC dhcpd pools usage analyzer.\n\
-\n", program_name);
-	fprintf(out, "\
-  -c, --config=FILE      path to the dhcpd.conf file\n\
-  -l, --leases=FILE      path to the dhcpd.leases file\n");
-	fprintf(out, "\
-  -f, --format=[thHcxXjJ] output format\n\
-                           t for text\n\
-                           H for full html page\n\
-                           x for xml\n\
-                           X for xml with active lease details\n\
-                           j for json\n\
-                           J for json with active lease details\n\
-                           c for comma separated values\n");
-	fprintf(out, "\
-  -s, --sort=[nimcptTe]  sort ranges by\n\
-                           n name\n\
-                           i IP\n\
-                           m maximum\n\
-                           c current\n\
-                           p percent\n\
-                           t touched\n\
-                           T t+c\n\
-                           e t+c perc\n\
-  -r, --reverse		 reverse order sort\n\
-  -o, --output=FILE      output into a file\n\
-  -L, --limit=NR         output limit mask 77 - 00\n");
-	fprintf(out, "\
-      --warning=PERC     set warning alarming limit\n\
-      --critical=PERC    set critical alarming limit\n\
-      --minsize=size     disable alarms for small ranges and shared-nets\n");
-	fprintf(out, "\
-  -v, --version          version information\n\
-  -h, --help             this screen\n\
-\n\
-Report bugs to <%s>\n\
-Homepage: %s\n", PACKAGE_BUGREPORT, PACKAGE_URL);
-
-	exit(out == stderr ? EXIT_FAILURE : EXIT_SUCCESS);
+	exit(status);
 }
