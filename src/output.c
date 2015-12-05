@@ -974,9 +974,9 @@ int output_alarming(void)
 				perc =
 				    shared_p->available ==
 				    0 ? 100 : (float)(100 * shared_p->used) / shared_p->available;
-				if (config.critical < perc && shared_p->available < config.crit_count)
+				if (config.critical < perc && shared_p->used < config.crit_count)
 					sc++;
-				else if (config.warning < perc && shared_p->available < config.warn_count)
+				else if (config.warning < perc && shared_p->used < config.warn_count)
 					sw++;
 				else
 					so++;

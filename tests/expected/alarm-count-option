@@ -1,0 +1,17 @@
+== warn count ==
+WARNING: dhcpd-pools: Ranges - crit: 0 warn: 3 ok: 2; | range_crit=0 range_warn=3 range_ok=2
+Shared nets - crit: 0 warn: 1 ok: 1; | snet_crit=0 snet_warn=1 snet_ok=1
+1
+== crit count ==
+CRITICAL: dhcpd-pools: Ranges - crit: 3 warn: 0 ok: 2; | range_crit=3 range_warn=0 range_ok=2
+Shared nets - crit: 1 warn: 0 ok: 1; | snet_crit=1 snet_warn=0 snet_ok=1
+2
+== minsize ==
+OK: Ranges - crit: 0 warn: 0 ok: 0 ignored: 5; | range_crit=0 range_warn=0 range_ok=0 range_ignored=5
+Shared nets - crit: 0 warn: 0 ok: 0 ignored: 2; | snet_crit=0 snet_warn=0 snet_ok=0 snet_ignored=2
+
+0
+== snet alarms ==
+WARNING: dhcpd-pools: Ranges - crit: 0 warn: 0 ok: 0; | range_crit=0 range_warn=0 range_ok=0
+Shared nets - crit: 0 warn: 2 ok: 0; | snet_crit=0 snet_warn=2 snet_ok=0
+1

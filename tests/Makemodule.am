@@ -1,4 +1,5 @@
 TESTS = \
+	tests/alarm-count-option \
 	tests/alarm-critical \
 	tests/alarm-critical-ranges \
 	tests/alarm-critical-snets \
