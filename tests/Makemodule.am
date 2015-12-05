@@ -20,6 +20,7 @@ TESTS = \
 	tests/one-line \
 	tests/same-twice \
 	tests/simple \
+	tests/sorts \
 	tests/v6
 
 EXTRA_DIST += \
