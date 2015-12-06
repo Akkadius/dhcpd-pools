@@ -7,6 +7,35 @@ Please send dhcpd-pools bug reports to kerolasa@iki.fi.
 
 gpg: Signature is crated using RSA key ID FDE9B739.
 
+Version 2.28
+Sami Kerola (26):
+      portability: Solaris 10 does not have err.h
+      fix couple compiler warnings
+      make binary exec path dynamic in scripts referring to it
+      update doxygen.conf file
+      add --snet-alarms option to suppress excess range alarms
+      add --warn-count and --crit-count options to suppress alarm noise
+      improve README file instructions
+      make html output to use Bootstrap and DataTables
+      fix typo in README
+      correct return value FIXME items
+      use more descriptive names in limit bits enum definition
+      remove upper limit of sort order definitions
+      fix protocol specifier in html output
+      use bitmap for booleans and other config that has known size
+      simplify output format selection, and passing
+      fix doxygen build
+      fix improve variable names
+      print include system error message when output fails
+      drop a core when bug condition happens
+      make usage() easier to read
+      unify quotation in error messages
+      add --warn-count and --crit-count test, and fix related bug
+      test all sorting options
+      change NAN markup to make tests work on mac
+      fix out of tree build tests
+      release: 2.28
+
 Version 2.27
 Sami Kerola (9):
       docs: remove very basic git usage info
