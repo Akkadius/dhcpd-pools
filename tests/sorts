@@ -9,61 +9,61 @@ if [ ! -d tests/outputs ]; then
 fi
 
 echo '== name ==' > tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=n --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== ip ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=i --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== maxium ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=m --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== current ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=current --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== percent ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	-s peeeeeeeeeeercent --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== touched ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=t --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== t+c ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=T --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== t+c perc ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=e --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== reverse ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--reverse --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== broken ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--sort=x 2>tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM

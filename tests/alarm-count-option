@@ -9,25 +9,25 @@ if [ ! -d tests/outputs ]; then
 fi
 
 echo '== warn count ==' > tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--warning=40 --warn-count=20 --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== crit count ==' >> tests/outputs/$IAM
-dhcpd-pools --config tests/confs/complete --leases tests/leases/complete \
+dhcpd-pools --config $top_srcdir/tests/confs/complete --leases $top_srcdir/tests/leases/complete \
 	--critical=40 --crit-count=20 --output=tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== minsize ==' >> tests/outputs/$IAM
-dhcpd-pools -c tests/confs/complete -l tests/leases/complete \
+dhcpd-pools -c $top_srcdir/tests/confs/complete -l $top_srcdir/tests/leases/complete \
 	--warning=40 --warn-count=20 --minsize=40 -o tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
 
 echo '== snet alarms ==' >> tests/outputs/$IAM
-dhcpd-pools -c tests/confs/complete -l tests/leases/complete \
+dhcpd-pools -c $top_srcdir/tests/confs/complete -l $top_srcdir/tests/leases/complete \
 	--warning=40 --snet-alarms -o tests/outputs/$IAM-too
 echo $? >> tests/outputs/$IAM-too
 cat tests/outputs/$IAM-too >> tests/outputs/$IAM
