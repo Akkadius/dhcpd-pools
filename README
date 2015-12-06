@@ -11,7 +11,7 @@ Quick start.
 	Build the dhcpd-pools project.
 
 	cd /tmp/dhcpd-pools
-	./bootstrap
+	./bootstrap	# only when building git clone
 	./configure --with-uthash=/tmp/uthash-master/include
 	make
 	make check
