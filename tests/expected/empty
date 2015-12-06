@@ -6,4 +6,4 @@ name                   max   cur     percent  touch    t+c  t+c perc
 
 Sum of all ranges:
 name                   max   cur     percent  touch    t+c  t+c perc
-All networks             0     0       -nan       0      0      -nan
+All networks             0     0        nan       0      0       nan
