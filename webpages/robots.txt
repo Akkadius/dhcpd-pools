@@ -1,2 +1,3 @@
+Sitemap: http://dhcpd-pools.sourceforge.net/sitemap.txt
 User-agent: *
-Allow: /
+Disallow:
