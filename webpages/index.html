@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta name="author" content="Sami Kerola" />
+<meta name="contact_addr" content="kerolasa@iki.fi" />
+<meta name="distribution" content="global" />
+<meta name="keywords" content="dhcpd, dhcp, pool, leases, analyzer, reporting, alarming, nagios" />
+<meta name="abstract" content="ISC dhcpd lease analysis and reporting software" />
+<meta name="language" content="en" />
+<meta name="owner" content="Sami Kerola" />
+<meta name="rating" content="general" />
+<meta name="revisit-after" content="15" />
+<meta name="robots" content="index, follow" />
+<title>ISC dhcpd lease analysis and reporting</title>
+<style xml:space="preserve" type="text/css">
+BODY {
+background-color:#ffffff;
+margin:20px;
+width:520px;
+}
+</style>
+</head>
+<body>
+<div itemscope itemtype="http://schema.org/SoftwareApplication">
+<h1>ISC dhcpd lease analysis and reporting</h1>
+<p>This is <span itemprop="name">dhcpd-pools</span>
+<a href="https://www.isc.org/software/dhcp" itemprop="applicationSuite">ISC dhcp</a>
+shared network and pool range
+<span itemprop="applicationCategory">usage analysis</span>.
+<span itemprop="description">Purpose of command is to count usage ratio of
+each IP range and shared network pool which ISC dhcpd is in control
+of.</span> Users of the command are most likely ISPs and other organizations
+that have large IP space.</p>
+<p>Program is written C. Design goal is to get analysis done quickly where
+there is lots of data. On cheap laptop the speed of analysis is more than
+100k leases per second. Number of ranges, or shared networks, does not make
+any significant difference in getting analysis done.</p>
+<hr />
+<pre>prompt&gt; ./dhcpd-pools -c ~/testdata/dhcpd.conf -l ~/testdata/dhcpd.leases -o ~/sampleoutput.txt
+prompt&gt; cat ~/<a href="http://dhcpd-pools.sourceforge.net/sampleoutput.txt">sampleoutput.txt</a></pre>
+<hr />
+<h3>Where I can get dhcpd-pools?</h3>
+<p>Download
+<a href="https://sourceforge.net/projects/dhcpd-pools/files/" itemprop="downloadUrl">release package</a>
+or clone from git<br /></p>
+<pre>
+git clone git://git.code.sf.net/p/dhcpd-pools/code dhcpd-pools</pre>
+<p>See also
+<a href="http://sourceforge.net/projects/dhcpd-pools">SourceForge</a> project page.</p>
+<h3>Documentation</h3>
+<p>The dhcpd-pools
+<a href="http://dhcpd-pools.sourceforge.net/man.html">manual page</a>, and
+<a href="http://dhcpd-pools.sourceforge.net/doxygen/">Doxygen</a> software
+reference documentation are available online.</p>
+<h3>Reference information</h3>
+<p>
+<script type='text/javascript' src='https://www.openhub.net/p/dhcpd-pools/widgets/project_factoids_stats?format=js'></script>
+</p>
+<p>The program was written because
+<a href="http://dhcpstatus.sourceforge.net/">DHCPStatus</a>,
+<a href="http://freshmeat.net/projects/dhcpusestats/">DHCP Usage Statistics</a>,
+<a href="http://www.omar.org/opensource/reportdhcp/">reportdhcp.pl</a>,
+<a href="http://www.ofb.net/%7Ejheiss/lease_analyzer">lease_analyzer</a> and
+<a href="http://www.net-track.ch/opensource/dhcpd-snmp/">dhcpd-snmp</a>
+where too slow to handle huge number of leases. There is also difference in
+printed details. The dhcpd-pools does not print quote as much information as
+some other tools.</p>
+<p>Notice that this utility is not the same as
+<a href="http://folk.uio.no/trondham/software/dhcpd-pool.html">dhcpd-pool</a>
+that is maintained by Trond Hasle Amundsen.</p>
+<p>Just for laugh, obsolete awk proof of concept (version 1.4)
+<a href="http://dhcpd-pools.sourceforge.net/dhcpd-pools.awk">dhcpd-pools.awk</a></p>
+<h3>Where to send questions, bug reports, code contributions...</h3>
+<p><a href="http://www.iki.fi/kerolasa/" itemprop="copyrightHolder">Sami Kerola</a>
+&lt;<a href="mailto:kerolasa@iki.fi">kerolasa@iki.fi</a>&gt;</p>
+<div style="visibility:hidden">
+<span itemprop="datePublished" datetime="2006-03-13T00:00:00+0000">Mon Mar 13 00:00:00 GMT 2006</span>
+<span itemprop="dateModified" datetime="2015-12-06T17:49:17+0000">Sun Dec  6 17:49:17 GMT 2015</span>
+<span itemprop="version">2.28</span>
+<span itemprop="license">FreeBSD License</span>
+<a href="http://dhcpd-pools.sourceforge.net/" itemprop="url"></a>
+<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+<span itemprop="price">0</span>
+<meta itemprop="priceCurrency" content="EUR" />
+</div>
+<div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+<span itemprop="ratingValue">5</span> (
+<span itemprop="ratingCount">1</span> ratings )
+</div>
+</div>
+</div>
+</body>
+</html>
