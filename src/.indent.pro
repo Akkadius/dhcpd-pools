@@ -7,7 +7,9 @@
 -Tsize_t
 -Ttime_t
 -Tuintmax_t
--l100
--ppi1
--bad
--sob
+--blank-lines-after-declarations
+--format-all-comments
+--line-length100
+--preprocessor-indentation1
+--start-left-side-of-comments
+--swallow-optional-blank-lines
