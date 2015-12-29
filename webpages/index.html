@@ -19,7 +19,13 @@
 BODY {
 background-color:#ffffff;
 margin:20px;
-width:520px;
+max-width:700px;
+}
+DIV.tt {
+font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace;
+font-size: 12px;
+font-style: normal;
+font-variant: normal;
 }
 </style>
 </head>
@@ -39,15 +45,17 @@ there is lots of data. On cheap laptop the speed of analysis is more than
 100k leases per second. Number of ranges, or shared networks, does not make
 any significant difference in getting analysis done.</p>
 <hr />
-<pre>prompt&gt; ./dhcpd-pools -c ~/testdata/dhcpd.conf -l ~/testdata/dhcpd.leases -o ~/sampleoutput.txt
-prompt&gt; cat ~/<a href="http://dhcpd-pools.sourceforge.net/sampleoutput.txt">sampleoutput.txt</a></pre>
+<div class="tt">
+prompt&gt; ./dhcpd-pools -c /etc/dhcpd.conf -l /var/lib/dhcp/dhcpd.leases -o
+./sampleoutput.txt<br />
+prompt&gt; cat ./<a href="http://dhcpd-pools.sourceforge.net/sampleoutput.txt">sampleoutput.txt</a></pre>
+</div>
 <hr />
 <h3>Where I can get dhcpd-pools?</h3>
 <p>Download
 <a href="https://sourceforge.net/projects/dhcpd-pools/files/" itemprop="downloadUrl">release package</a>
 or clone from git<br /></p>
-<pre>
-git clone git://git.code.sf.net/p/dhcpd-pools/code dhcpd-pools</pre>
+<div class="tt">git clone git://git.code.sf.net/p/dhcpd-pools/code dhcpd-pools</div>
 <p>See also
 <a href="http://sourceforge.net/projects/dhcpd-pools">SourceForge</a> project page.</p>
 <h3>Documentation</h3>
