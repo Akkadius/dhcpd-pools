@@ -163,6 +163,19 @@ static int is_interesting_config_clause(char const *restrict s)
 	return ITS_NOTHING_INTERESTING;
 }
 
+/*! \brief Flip first and last IP in range if they are in unusual order.
+ */
+void reorder_last_first(struct range_t *range_p)
+{
+	if (ipcomp(&range_p->first_ip, &range_p->last_ip) > 0) {
+		union ipaddr_t tmp;
+
+		tmp = range_p->first_ip;
+		range_p->first_ip = range_p->last_ip;
+		range_p->last_ip = tmp;
+	}
+}
+
 /*! \brief The dhcpd.conf file parser.
  * FIXME: This spaghetti monster function need to be rewrote at least
  * ones.
@@ -334,6 +347,7 @@ void parse_config(int is_include, const char *restrict config_file,
 					copy_ipaddr(&range_p->first_ip, &addr);
 				}
 				copy_ipaddr(&range_p->last_ip, &addr);
+				reorder_last_first(range_p);
  newrange:
 				range_p->count = 0;
 				range_p->touched = 0;
