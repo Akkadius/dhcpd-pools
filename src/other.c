@@ -474,6 +474,7 @@ void __attribute__ ((__noreturn__)) usage(int status)
 	fputs(		"      --crit-count=NR    a number of free leases before critical raised\n", out);
 	fputs(		"      --minsize=size     disable alarms for small ranges and shared-nets\n", out);
 	fputs(		"      --snet-alarms      suppress range alarms that are part of a shared-net\n", out);
+	fputs(		"  -p  --perfdata         print additional perfdata in alarming mode\n", out);
 	fputs(		"  -v, --version          output version information and exit\n", out);
 	fputs(		"  -h, --help             display this help and exit\n", out);
 	fputs(		"\n", out);

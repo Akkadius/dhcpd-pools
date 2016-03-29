@@ -1014,6 +1014,29 @@ int output_alarming(void)
 		if (ri != 0) {
 			fprintf(outfile, " range_ignored=%d", ri);
 		}
+		if (config.perfdata == 1 && config.number_limit & R_BIT) {
+			for (i = 0; i < num_ranges; i++) {
+				range_p--;
+				range_size = get_range_size(range_p);
+				if (config.minsize < range_size) {
+					fprintf(outfile, " %s_r=",
+						ntop_ipaddr(&range_p->first_ip));
+					fprintf(outfile, "%g;%g;%g;0;%g",
+						range_p->count,
+						(range_size * config.warning / 100),
+						(range_size * config.critical / 100),
+						range_size);
+					fprintf(outfile, " %s_rt=%g",
+						ntop_ipaddr(&range_p->first_ip),
+						range_p->touched);
+					if (config.backups_found == 1) {
+						fprintf(outfile, " %s_rbu=%g",
+							ntop_ipaddr(&range_p->first_ip),
+							range_p->backups);
+					}
+				}
+			}
+		}
 		fprintf(outfile, "\n");
 	} else {
 		fprintf(outfile, " ");
@@ -1025,7 +1048,29 @@ int output_alarming(void)
 		}
 		fprintf(outfile, "; | snet_crit=%d snet_warn=%d snet_ok=%d", sc, sw, so);
 		if (si != 0) {
-			fprintf(outfile, " snet_ignored=%d\n", si);
+			fprintf(outfile, " snet_ignored=%d", si);
+		}
+		if (config.perfdata == 1 && config.header_limit & R_BIT) {
+			for (i = 0; i < num_shared_networks; i++) {
+				if (config.minsize < shared_p->available) {
+					fprintf(outfile, " '%s_s'=%g;%g;%g;0;%g",
+						shared_p->name,
+						shared_p->used,
+						(shared_p->available * config.warning / 100),
+						(shared_p->available * config.critical / 100),
+						shared_p->available);
+					fprintf(outfile, " '%s_st'=%g",
+						shared_p->name,
+						shared_p->touched);
+					if (config.backups_found == 1) {
+						fprintf(outfile, " '%s_sbu'=%g",
+						shared_p->name,
+						shared_p->backups);
+					}
+				}
+				shared_p--;
+			}
+			fprintf(outfile, "\n");
 		}
 	}
 	fprintf(outfile, "\n");

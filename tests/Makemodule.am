@@ -13,6 +13,7 @@ TESTS = \
 	tests/big-small \
 	tests/bootp \
 	tests/complete \
+	tests/complete-perfdata \
 	tests/empty \
 	tests/full-json \
 	tests/full-xml \
@@ -22,7 +23,8 @@ TESTS = \
 	tests/same-twice \
 	tests/simple \
 	tests/sorts \
-	tests/v6
+	tests/v6 \
+	tests/v6-perfdata
 
 EXTRA_DIST += \
 	tests/confs \

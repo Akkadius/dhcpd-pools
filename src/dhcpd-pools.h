@@ -210,6 +210,7 @@ struct configuration_t {
 		backups_found:1,
 		snet_alarms:1,
 		print_mac_addreses:1,
+		perfdata:1,
 		header_limit:3,
 		number_limit:3;
 };

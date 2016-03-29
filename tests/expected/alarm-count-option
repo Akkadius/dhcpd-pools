@@ -9,7 +9,6 @@ Shared nets - crit: 1 warn: 0 ok: 1; | snet_crit=1 snet_warn=0 snet_ok=1
 == minsize ==
 OK: Ranges - crit: 0 warn: 0 ok: 0 ignored: 5; | range_crit=0 range_warn=0 range_ok=0 range_ignored=5
 Shared nets - crit: 0 warn: 0 ok: 0 ignored: 2; | snet_crit=0 snet_warn=0 snet_ok=0 snet_ignored=2
-
 0
 == snet alarms ==
 WARNING: dhcpd-pools: Ranges - crit: 0 warn: 0 ok: 0; | range_crit=0 range_warn=0 range_ok=0

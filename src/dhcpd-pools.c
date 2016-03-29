@@ -129,6 +129,7 @@ int main(int argc, char **argv)
 		{"warn-count", required_argument, NULL, OPT_WARN_COUNT},
 		{"crit-count", required_argument, NULL, OPT_CRIT_COUNT},
 		{"minsize", required_argument, NULL, OPT_MINSIZE},
+		{"perfdata", no_argument, NULL, 'p'},
 		{NULL, 0, NULL, 0}
 	};
 
@@ -148,6 +149,7 @@ int main(int argc, char **argv)
 	config.critical = ALARM_CRIT;
 	config.warn_count = 0x100000000;	/* == 2^32 that is the entire IPv4 space */
 	config.crit_count = 0x100000000;	/* basically turns off the count criteria */
+	config.perfdata = false;
 	/* File location defaults */
 	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE, MAXLEN - 1);
 	strncpy(config.dhcpdlease_file, DHCPDLEASE_FILE, MAXLEN - 1);
@@ -165,7 +167,7 @@ int main(int argc, char **argv)
 	while (1) {
 		int c;
 
-		c = getopt_long(argc, argv, "c:l:f:o:s:rL:vh", long_options, &option_index);
+		c = getopt_long(argc, argv, "c:l:f:o:s:rL:pvh", long_options, &option_index);
 		if (c == EOF)
 			break;
 		switch (c) {
@@ -234,6 +236,10 @@ int main(int argc, char **argv)
 			break;
 		case OPT_MINSIZE:
 			config.minsize = strtod_or_err(optarg, "illegal argument");
+			break;
+		case 'p':
+			/* Print additional performance data in alarming mode */
+			config.perfdata = true;
 			break;
 		case 'v':
 			/* Print version */

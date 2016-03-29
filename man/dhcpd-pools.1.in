@@ -192,6 +192,12 @@ defined size.  This option is meaningful only in context of alarming, and
 will intented to supress for example single host ranges.  By default this
 option is not in use.
 .TP
+\fB\-p\fR, \fB\-\-perfdata\fR
+Print additional performance data, like lease count, touched leases and
+backup leases.  This option is meaningful only in context of alarming and
+will print lots of data, if there are many networks.  By default this option
+is not in use.
+.TP
 \fB\-v\fR, \fB\-\-version\fR
 Print version information to standard output and exit successfully.
 .TP
