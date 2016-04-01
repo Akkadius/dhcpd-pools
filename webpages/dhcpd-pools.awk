@@ -1,5 +1,9 @@
 # This is ISC dhcpd pool statistics script.
 #
+# The script is first version which was used to test that
+# analysis algorithm is sane. This script is no longer
+# maintained, and can be considered as historic reference.
+#
 # Licensed under the Open Software License version 1.1
 # http://opensource.org/licenses/osl.php
 #
