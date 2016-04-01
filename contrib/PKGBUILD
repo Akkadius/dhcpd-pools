@@ -1,0 +1,36 @@
+# Archlinux package file. Just download this file, and
+#	makepkg PKGBUILD
+#	pacman -U ./dhcpd-pools*.pkg.tar.xz
+
+pkgname=dhcpd-pools
+pkgver=0
+pkgrel=1
+pkgdesc="ISC dhcpd lease status utility"
+arch=('i686' 'x86_64')
+url=http://dhcpd-pools.sourceforge.net/
+license=('BSD')
+depends=('pacman')
+makedepends=('uthash' 'git')
+source=("$pkgname"::'git://git.code.sf.net/p/dhcpd-pools/code')
+md5sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  # Use the tag of the last commit
+  git describe --long | sed -E 's/([^-]*-g)/r\1/;s/-/./g'
+}
+
+build() {
+  cd "$srcdir/$pkgname"
+  ./bootstrap
+  ./configure \
+	--prefix=/usr \
+	--bindir=/usr/bin
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  make PREFIX=/ DESTDIR="$pkgdir" install
+  install -D -m644 COPYING "${pkgdir}/usr/share/licenses/${pkgname}/COPYING"
+}
