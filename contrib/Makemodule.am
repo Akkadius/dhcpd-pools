@@ -1,5 +1,5 @@
 contribdir = $(datadir)/dhcpd-pools/
-PATHFILES += contrib/dhcpd-pools.cgi contrib/nagios.conf
-dist_contrib_SCRIPTS = contrib/dhcpd-pools.cgi contrib/snmptest.pl
+PATHFILES += contrib/nagios.conf
+dist_contrib_SCRIPTS = contrib/snmptest.pl
 dist_contrib_DATA = contrib/nagios.conf
 EXTRA_DIST += contrib/munin_plugins
