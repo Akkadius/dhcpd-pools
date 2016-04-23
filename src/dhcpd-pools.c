@@ -98,7 +98,6 @@ static int return_limit(const char c)
  * alarming. */
 int main(int argc, char **argv)
 {
-	int i;
 	int option_index = 0;
 	char const *tmp;
 	char *print_mac_addreses_tmp;
@@ -187,10 +186,11 @@ int main(int argc, char **argv)
 		{
 			/* Output sorting option */
 			struct output_sort *p = config.sorts;
+			size_t len;
 
 			while (p && p->next)
 				p = p->next;
-			for (i = 0; i < strlen(optarg); i++) {
+			for (len = 0; len < strlen(optarg); len++) {
 				if (config.sorts == NULL) {
 					config.sorts = xcalloc(1, sizeof(struct output_sort));
 					p = config.sorts;
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 					p->next = xcalloc(1, sizeof(struct output_sort));
 					p = p->next;
 				}
-				p->func = field_selector(optarg[i]);
+				p->func = field_selector(optarg[len]);
 			}
 		}
 			break;
