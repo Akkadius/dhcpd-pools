@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xml:lang="en" xmlns="http://usefulinc.com/ns/doap#"
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  <Project rdf:about="http://dhcpd-pools.sourceforge.net/">
+    <name>dhcpd-pools</name>
+    <homepage rdf:resource="http://dhcpd-pools.sourceforge.net/" />
+    <shortdesc>This is dhcpd-pools ISC dhcp shared network and pool
+    range usage analysis tool.</shortdesc>
+    <description>Purpose of command is to count usage ratio of each
+    IP range and shared network pool which ISC dhcpd is in control
+    of. Program is written C. Design goal is to get analysis done
+    quickly where there is lots of data. On cheap laptop the speed
+    of analysis is more than 100k leases per second. Number of
+    ranges, or shared networks, does not make any significant
+    difference in getting analysis done.</description>
+    <mailing-list rdf:resource="https://lists.sourceforge.net/lists/listinfo/dhcpd-pools-announce" />
+    <download-page rdf:resource="https://sourceforge.net/projects/dhcpd-pools/files/" />
+    <programming-language>C</programming-language>
+    <repository>
+      <GitRepository>
+        <location rdf:resource="git://git.code.sf.net/p/dhcpd-pools/code dhcpd-pools-code" />
+        <browse rdf:resource="https://sourceforge.net/p/dhcpd-pools/code/ci/master/tree/" />
+      </GitRepository>
+    </repository>
+    <License rdf:about="http://usefulinc.com/doap/licenses/bsd">
+      <rdfs:label>BSD</rdfs:label>
+      <rdfs:seeAlso rdf:resource="http://www.opensource.org/licenses/bsd-license.php" />
+    </License>
+    <maintainer>
+      <foaf:Person>
+        <foaf:name>Sami Kerola</foaf:name>
+        <foaf:mbox rdf:resource="mailto:kerolasa@iki.fi" />
+      </foaf:Person>
+    </maintainer>
+  </Project>
+</rdf:RDF>
