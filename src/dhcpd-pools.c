@@ -144,12 +144,12 @@ int main(int argc, char **argv)
 	 * command line option */
 	config.output_file[0] = '\0';
 	/* Alarming defaults. */
-	config.snet_alarms = false;
+	config.snet_alarms = 0;
 	config.warning = ALARM_WARN;
 	config.critical = ALARM_CRIT;
 	config.warn_count = 0x100000000;	/* == 2^32 that is the entire IPv4 space */
 	config.crit_count = 0x100000000;	/* basically turns off the count criteria */
-	config.perfdata = false;
+	config.perfdata = 0;
 	/* File location defaults */
 	strncpy(config.dhcpdconf_file, DHCPDCONF_FILE, MAXLEN - 1);
 	strncpy(config.dhcpdlease_file, DHCPDLEASE_FILE, MAXLEN - 1);
@@ -160,8 +160,8 @@ int main(int argc, char **argv)
 	/* Make sure some output format is selected by default */
 	print_mac_addreses_tmp = OUTPUT_FORMAT;
 	/* Default sort order is by IPs small to big */
-	config.reverse_order = false;
-	config.backups_found = false;
+	config.reverse_order = 0;
+	config.backups_found = 0;
 	prepare_memory();
 	/* Parse command line options */
 	while (1) {
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 			break;
 		case 'r':
 			/* What ever sort in reverse order */
-			config.reverse_order = true;
+			config.reverse_order = 1;
 			break;
 		case 'o':
 			/* Output file */
@@ -216,7 +216,7 @@ int main(int argc, char **argv)
 			config.number_limit = return_limit(optarg[1]);
 			break;
 		case OPT_SNET_ALARMS:
-			config.snet_alarms = true;
+			config.snet_alarms = 1;
 			break;
 		case OPT_WARN:
 			print_mac_addreses_tmp = "a";
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 			break;
 		case 'p':
 			/* Print additional performance data in alarming mode */
-			config.perfdata = true;
+			config.perfdata = 1;
 			break;
 		case 'v':
 			/* Print version */
@@ -295,14 +295,14 @@ int main(int argc, char **argv)
 	}
 	/* Do the job */
 	set_ipv_functions(IPvUNKNOWN);
-	parse_config(true, config.dhcpdconf_file, shared_networks);
+	parse_config(1, config.dhcpdconf_file, shared_networks);
 	parse_leases();
 	prepare_data();
 	do_counting();
 	tmp_ranges = xmalloc(sizeof(struct range_t) * num_ranges);
 	if (config.sorts != NULL)
 		mergesort_ranges(ranges, num_ranges, tmp_ranges);
-	if (config.reverse_order == true)
+	if (config.reverse_order == 1)
 		flip_ranges(ranges, tmp_ranges);
 	free(tmp_ranges);
 	ret_val = output_analysis();

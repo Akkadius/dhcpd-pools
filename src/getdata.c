@@ -44,7 +44,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <netinet/in.h>
-#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -65,7 +64,7 @@ int parse_leases(void)
 	char *line, *ipstring, macstring[20], *stop;
 	union ipaddr_t addr;
 	struct stat lease_file_stats;
-	bool ethernets = false;
+	int ethernets = 0;	/* boolean */
 	struct leases_t *lease;
 
 	dhcpd_leases = fopen(config.dhcpdlease_file, "r");
@@ -92,7 +91,7 @@ int parse_leases(void)
 	ipstring = xmalloc(sizeof(char) * MAXLEN);
 	ipstring[0] = '\0';
 	if (config.print_mac_addreses == 1)
-		ethernets = true;
+		ethernets = 1;
 	while (!feof(dhcpd_leases)) {
 		if (!fgets(line, MAXLEN, dhcpd_leases) && ferror(dhcpd_leases))
 			error(EXIT_FAILURE, errno, "parse_leases: %s", config.dhcpdlease_file);
@@ -128,10 +127,10 @@ int parse_leases(void)
 			if ((lease = find_lease(&addr)) != NULL)
 				delete_lease(lease);
 			add_lease(&addr, BACKUP);
-			config.backups_found = true;
+			config.backups_found = 1;
 			break;
 		case PREFIX_HARDWARE_ETHERNET:
-			if (ethernets == false)
+			if (ethernets == 0)
 				break;
 			memcpy(macstring, line + 20, 17);
 			macstring[17] = '\0';
@@ -184,7 +183,7 @@ void parse_config(int is_include, const char *restrict config_file,
 		  struct shared_network_t *restrict shared_p)
 {
 	FILE *dhcpd_config;
-	bool newclause = true, comment = false, one_ip_range = false;
+	int newclause = 1, comment = 0, one_ip_range = 0; /* booleans */
 	int quote = 0, braces = 0, argument = ITS_NOTHING_INTERESTING;
 	size_t i = 0;
 	char *word;
@@ -220,10 +219,10 @@ void parse_config(int is_include, const char *restrict config_file,
 			/* Handle comments if they are not quoted */
 		case '#':
 			if (quote == 0)
-				comment = true;
+				comment = 1;
 			continue;
 		case '"':
-			if (comment == false) {
+			if (comment == 0) {
 				quote++;
 				/* Either one or zero */
 				quote = quote % 2;
@@ -233,18 +232,18 @@ void parse_config(int is_include, const char *restrict config_file,
 			/* New line resets comment section, but
 			 * not if quoted */
 			if (quote == 0)
-				comment = false;
+				comment = 0;
 			break;
 		case ';':
 			/* Quoted colon does not mean new clause */
 			if (0 < quote)
 				break;
-			if (comment == false
+			if (comment == 0
 			    && argument != ITS_A_RANGE_FIRST_IP
 			    && argument != ITS_A_RANGE_SECOND_IP && argument != ITS_AN_INCLUCE) {
-				newclause = true;
+				newclause = 1;
 				i = 0;
-			} else if (argument == ITS_A_RANGE_FIRST_IP && one_ip_range == true) {
+			} else if (argument == ITS_A_RANGE_FIRST_IP && one_ip_range == 1) {
 				argument = ITS_A_RANGE_SECOND_IP;
 				c = ' ';
 			} else if (argument == ITS_A_RANGE_SECOND_IP && 0 < i) {
@@ -274,14 +273,14 @@ void parse_config(int is_include, const char *restrict config_file,
 			 *
 			 * shared-network DSL{ ... */
 			if (i == 0) {
-				newclause = true;
+				newclause = 1;
 				continue;
 			} else
 				break;
 		case '}':
 			if (0 < quote)
 				break;
-			if (comment == false) {
+			if (comment == 0) {
 				braces--;
 				/* End of shared-network */
 				if (braces_shared == braces) {
@@ -290,23 +289,23 @@ void parse_config(int is_include, const char *restrict config_file,
 					braces_shared = 1000;
 					shared_p = shared_networks;
 				}
-				/* Not literally true, but works for this
+				/* Not literally 1, but works for this
 				 * program */
-				newclause = true;
+				newclause = 1;
 			}
 			continue;
 		default:
 			break;
 		}
 		/* Either inside comment or Nth word of clause. */
-		if (comment == true || (newclause == false && argument == ITS_NOTHING_INTERESTING))
+		if (comment == 1 || (newclause == 0 && argument == ITS_NOTHING_INTERESTING))
 			continue;
 		/* Strip white spaces before new clause word. */
-		if ((newclause == true || argument != ITS_NOTHING_INTERESTING)
-		    && isspace(c) && i == 0 && one_ip_range == false)
+		if ((newclause == 1 || argument != ITS_NOTHING_INTERESTING)
+		    && isspace(c) && i == 0 && one_ip_range == 0)
 			continue;
 		/* Save to word which clause this is. */
-		if ((newclause == true || argument != ITS_NOTHING_INTERESTING)
+		if ((newclause == 1 || argument != ITS_NOTHING_INTERESTING)
 		    && (!isspace(c) || 0 < quote)) {
 			word[i] = c;
 			i++;
@@ -314,26 +313,26 @@ void parse_config(int is_include, const char *restrict config_file,
 			 * of words are this long which the program is
 			 * searching. */
 			if (MAXLEN == i) {
-				newclause = false;
+				newclause = 0;
 				i = 0;
 				continue;
 			}
 		}
 		/* See if clause is something that parser is looking for. */
-		else if (newclause == true) {
+		else if (newclause == 1) {
 			/* Insert string end & set state */
 			word[i] = '\0';
 			if (word[i - 1] != '{')
-				newclause = false;
+				newclause = 0;
 			i = 0;
 			argument = is_interesting_config_clause(word);
 			if (argument == ITS_A_RANGE_FIRST_IP)
-				one_ip_range = true;
+				one_ip_range = 1;
 		}
 		/* words after range, shared-network or include */
 		else if (argument != ITS_NOTHING_INTERESTING) {
 			word[i] = '\0';
-			newclause = false;
+			newclause = 0;
 			i = 0;
 
 			switch (argument) {
@@ -342,8 +341,8 @@ void parse_config(int is_include, const char *restrict config_file,
 				range_p = ranges + num_ranges;
 				argument = ITS_NOTHING_INTERESTING;
 				parse_ipaddr(word, &addr);
-				if (one_ip_range == true) {
-					one_ip_range = false;
+				if (one_ip_range == 1) {
+					one_ip_range = 0;
 					copy_ipaddr(&range_p->first_ip, &addr);
 				}
 				copy_ipaddr(&range_p->last_ip, &addr);
@@ -359,7 +358,7 @@ void parse_config(int is_include, const char *restrict config_file,
 					ranges = xrealloc(ranges, sizeof(struct range_t) * RANGES);
 					range_p = ranges + num_ranges;
 				}
-				newclause = true;
+				newclause = 1;
 				break;
 			case ITS_A_RANGE_FIRST_IP:
 				/* printf ("range 1nd ip: %s\n", word); */
@@ -368,7 +367,7 @@ void parse_config(int is_include, const char *restrict config_file,
 					/* word was not ip, try again */
 					break;
 				copy_ipaddr(&range_p->first_ip, &addr);
-				one_ip_range = false;
+				one_ip_range = 0;
 				argument = ITS_A_RANGE_SECOND_IP;
 				break;
 			case ITS_A_SHAREDNET:
@@ -390,8 +389,8 @@ void parse_config(int is_include, const char *restrict config_file,
 			case ITS_AN_INCLUCE:
 				/* printf ("include file: %s\n", word); */
 				argument = ITS_NOTHING_INTERESTING;
-				parse_config(false, word, shared_p);
-				newclause = true;
+				parse_config(0, word, shared_p);
+				newclause = 1;
 				break;
 			case ITS_NOTHING_INTERESTING:
 				/* printf ("nothing interesting: %s\n", word); */
