@@ -1002,8 +1002,12 @@ int output_alarming(void)
 	} else {
 		if (config.number_limit & A_BIT)
 			fprintf(outfile, "OK:");
-		else
+		else {
+			if (close_stream(outfile)) {
+				error(EXIT_FAILURE, errno, "output_alarming: fclose");
+			}
 			return ret_val;
+		}
 	}
 	if (config.header_limit & R_BIT) {
 		fprintf(outfile, " Ranges - crit: %d warn: %d ok: %d", rc, rw, ro);
