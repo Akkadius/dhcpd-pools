@@ -63,6 +63,8 @@
 /getopt_int.h
 /gettext.h
 /gettimeofday.c
+/hard-locale.c
+/hard-locale.h
 /inet_pton.c
 /intprops.h
 /isnan.c
