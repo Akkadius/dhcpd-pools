@@ -65,8 +65,8 @@ void do_counting(void)
 	/* Walk through ranges */
 	range_p = ranges;
 	for (i = 0; i < num_ranges; i++) {
-		for (; l != NULL && ipcomp(&range_p->first_ip, &l->ip) < 0; l = l->hh.prev)
-			/* rewind */ ;
+		while (l != NULL && ipcomp(&range_p->first_ip, &l->ip) < 0)
+			l = l->hh.prev;	/* rewind */
 		if (l == NULL)
 			l = leases;
 		for (; l != NULL && ipcomp(&l->ip, &range_p->last_ip) <= 0; l = l->hh.next) {
