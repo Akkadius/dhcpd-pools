@@ -24,6 +24,9 @@ AM_INIT_AUTOMAKE([
 AC_CONFIG_SRCDIR([src/dhcpd-pools.h])
 AC_CONFIG_HEADERS([config.h])
 
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])],
+			    [AC_SUBST([AM_DEFAULT_VERBOSITY], [1])])
+
 # Checks for programs
 AC_USE_SYSTEM_EXTENSIONS
 AC_C_RESTRICT
