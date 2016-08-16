@@ -70,7 +70,7 @@ int (*parse_ipaddr) (const char *restrict src, union ipaddr_t *restrict dst);
 void (*copy_ipaddr) (union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 const char *(*ntop_ipaddr) (const union ipaddr_t *ip);
 double (*get_range_size) (const struct range_t *r);
-int (*xstrstr) (const char *__restrict str);
+int (*xstrstr) (const char *restrict str);
 int (*ipcomp) (const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
 int (*leasecomp) (const struct leases_t *restrict a, const struct leases_t *restrict b);
 int (*output_analysis) (void);

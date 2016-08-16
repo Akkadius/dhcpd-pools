@@ -236,11 +236,11 @@ extern unsigned int RANGES;
 extern void prepare_memory(void);
 extern void set_ipv_functions(int version);
 extern int parse_leases(void);
-extern void parse_config(int, const char *__restrict, struct shared_network_t *__restrict)
+extern void parse_config(int, const char *restrict, struct shared_network_t *restrict)
     __attribute__ ((nonnull(2, 3)));
 extern void prepare_data(void);
 extern void do_counting(void);
-extern void flip_ranges(struct range_t *__restrict ranges, struct range_t *__restrict tmp_ranges)
+extern void flip_ranges(struct range_t *restrict ranges, struct range_t *restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
 extern int (*parse_ipaddr) (const char *restrict src, union ipaddr_t *restrict dst);
@@ -265,14 +265,14 @@ extern double get_range_size_init(const struct range_t *r) _DP_ATTRIBUTE_CONST;
 extern double get_range_size_v4(const struct range_t *r) _DP_ATTRIBUTE_PURE;
 extern double get_range_size_v6(const struct range_t *r) _DP_ATTRIBUTE_PURE;
 
-extern int (*xstrstr) (const char *__restrict str);
-extern int xstrstr_init(const char *__restrict str) _DP_ATTRIBUTE_CONST;
-extern int xstrstr_v4(const char *__restrict str)
+extern int (*xstrstr) (const char *restrict str);
+extern int xstrstr_init(const char *restrict str) _DP_ATTRIBUTE_CONST;
+extern int xstrstr_v4(const char *restrict str)
 _DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
-extern int xstrstr_v6(const char *__restrict str)
+extern int xstrstr_v6(const char *restrict str)
 _DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
 
-extern double strtod_or_err(const char *__restrict str, const char *__restrict errmesg);
+extern double strtod_or_err(const char *restrict str, const char *restrict errmesg);
 extern void print_version(void) __attribute__ ((noreturn));
 extern void usage(int status) __attribute__ ((noreturn));
 /* qsort required functions... */
@@ -300,15 +300,15 @@ extern int comp_percent(struct range_t *r1, struct range_t *r2);
 extern int comp_tc(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
 extern int comp_tcperc(struct range_t *r1, struct range_t *r2);
 extern int comp_touched(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
-extern int rangecomp(const void *__restrict r1, const void *__restrict r2)
+extern int rangecomp(const void *restrict r1, const void *restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
 extern comparer_t field_selector(char c);
 extern double ret_percent(struct range_t r);
 extern double ret_tc(struct range_t r) _DP_ATTRIBUTE_CONST;
 extern double ret_tcperc(struct range_t r);
-extern void mergesort_ranges(struct range_t *__restrict orig, int size,
-			     struct range_t *__restrict temp)
+extern void mergesort_ranges(struct range_t *restrict orig, int size,
+			     struct range_t *restrict temp)
     __attribute__ ((nonnull(1, 3)));
 /* output function pointer and functions */
 extern int (*output_analysis) (void);
