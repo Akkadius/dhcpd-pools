@@ -22,7 +22,7 @@ Quick start.
 
 	./configure --help
 
-	Read the manual to see what options are available, and what they to.
+	Remember to read the friendly manual page.
 
 	man ./man/dhcpd-pools.1
 

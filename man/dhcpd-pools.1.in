@@ -168,7 +168,7 @@ and count
 .I number
 are required to be exceeded in order to alarm criteria being fulfilled.
 .IP
-This option is intented to be used in setup where very large and small
+This option is intended to be used in setup where very large and small
 shared-networks and ranges co-exists.  In such environments percent based
 alarming can lead to either flood of alarms about small ranges, or way too
 great overhead of free addresses in large shared-networks.  Suggested usage
@@ -189,7 +189,7 @@ configurations that has lots of small ranges in big shared-networks.
 \fB\-\-minsize\fR=\fIsize\fR
 Ignore ranges and shared networks that are smaller or equal to the
 defined size.  This option is meaningful only in context of alarming, and
-will intented to supress for example single host ranges.  By default this
+will intended to suppress for example single host ranges.  By default this
 option is not in use.
 .TP
 \fB\-p\fR, \fB\-\-perfdata\fR
@@ -226,7 +226,7 @@ $ dhcpd-pools \-c dhcpd.conf \-l dhcpd.leases \-L 22 \-\-critical 70 \-\-warning
 .br
 [no-output]
 .br
-Supress printing OK, and make alarm only to go off if shared networks
+Suppress printing OK, and make alarm only to go off if shared networks
 exceed critial or warning levels.
 .SH FILES
 .TP
