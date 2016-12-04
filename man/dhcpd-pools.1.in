@@ -202,6 +202,10 @@ backup leases.  This option is meaningful only in context of alarming and
 will print lots of data, if there are many networks.  By default this option
 is not in use.
 .TP
+\fB\-A\fR, \fB\-\-all\-as\-shared\fR
+Treat all stand-alone subnets as shared-network with named formed from it's
+CIDR.  By default this option is not in use for backwards compatibility.
+.TP
 \fB\-v\fR, \fB\-\-version\fR
 Print version information to standard output and exit successfully.
 .TP

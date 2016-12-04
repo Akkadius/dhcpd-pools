@@ -108,6 +108,7 @@ struct shared_network_t {
 	double used;
 	double touched;
 	double backups;
+	int netmask;
 };
 /*! \struct range_t
  * \brief Counters for an individual range.
@@ -128,7 +129,9 @@ enum isc_conf_parser {
 	ITS_A_RANGE_FIRST_IP,
 	ITS_A_RANGE_SECOND_IP,
 	ITS_A_SHAREDNET,
-	ITS_AN_INCLUCE
+	ITS_AN_INCLUCE,
+	ITS_A_SUBNET,
+	ITS_A_NETMASK
 };
 /*! \enum ltype
  * \brief Lease state types.
@@ -196,6 +199,7 @@ struct configuration_t {
 		snet_alarms:1,
 		print_mac_addreses:1,
 		perfdata:1,
+		all_as_shared:1,
 		header_limit:3,
 		number_limit:3;
 };

@@ -129,6 +129,7 @@ int main(int argc, char **argv)
 		{"crit-count", required_argument, NULL, OPT_CRIT_COUNT},
 		{"minsize", required_argument, NULL, OPT_MINSIZE},
 		{"perfdata", no_argument, NULL, 'p'},
+		{"all-as-shared", no_argument, NULL, 'A'},
 		{NULL, 0, NULL, 0}
 	};
 
@@ -161,12 +162,14 @@ int main(int argc, char **argv)
 	/* Default sort order is by IPs small to big */
 	config.reverse_order = 0;
 	config.backups_found = 0;
+	/* Treat single networks as shared with network CIDR as name */
+	config.all_as_shared = 0;
 	prepare_memory();
 	/* Parse command line options */
 	while (1) {
 		int c;
 
-		c = getopt_long(argc, argv, "c:l:f:o:s:rL:pvh", long_options, &option_index);
+		c = getopt_long(argc, argv, "c:l:f:o:s:rL:pAvh", long_options, &option_index);
 		if (c == EOF)
 			break;
 		switch (c) {
@@ -240,6 +243,10 @@ int main(int argc, char **argv)
 		case 'p':
 			/* Print additional performance data in alarming mode */
 			config.perfdata = 1;
+			break;
+		case 'A':
+			/* Treat single networks as shared with network CIDR as name */
+			config.all_as_shared = 1;
 			break;
 		case 'v':
 			/* Print version */

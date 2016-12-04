@@ -153,6 +153,12 @@ static int is_interesting_config_clause(char const *restrict s)
 		return ITS_A_RANGE_FIRST_IP;
 	if (strstr(s, "shared-network"))
 		return ITS_A_SHAREDNET;
+	if (config.all_as_shared) {
+		if (strstr(s, "subnet"))
+			return ITS_A_SUBNET;
+		if (strstr(s, "netmask"))
+			return ITS_A_NETMASK;
+	}
 	if (strstr(s, "include"))
 		return ITS_AN_INCLUCE;
 	return ITS_NOTHING_INTERESTING;
@@ -364,6 +370,12 @@ void parse_config(int is_include, const char *restrict config_file,
 				argument = ITS_A_RANGE_SECOND_IP;
 				break;
 			case ITS_A_SHAREDNET:
+			case ITS_A_SUBNET:
+				/* ignore subnets inside a shared-network */
+				if (argument == ITS_A_SUBNET && shared_p != shared_networks) {
+					argument = ITS_NOTHING_INTERESTING;
+					break;
+				}
 				/* printf ("shared-network named: %s\n", word); */
 				num_shared_networks++;
 				shared_p = shared_networks + num_shared_networks;
@@ -372,10 +384,32 @@ void parse_config(int is_include, const char *restrict config_file,
 				shared_p->used = 0;
 				shared_p->touched = 0;
 				shared_p->backups = 0;
+				shared_p->netmask = (argument == ITS_A_SUBNET ? -1 : 0); /* do not fill in netmask */
 				if (SHARED_NETWORKS < num_shared_networks + 2)
 					/* FIXME: make this to go away by reallocating more space. */
 					error(EXIT_FAILURE, 0,
 					      "parse_config: increase default.h SHARED_NETWORKS and recompile");
+				/* record network's mask too */
+				if (argument == ITS_A_SUBNET)
+				        newclause = 1;
+				argument = ITS_NOTHING_INTERESTING;
+				braces_shared = braces;
+				break;
+			case ITS_A_NETMASK:
+				/* fill in only when requested to do so */
+				if (shared_p->netmask) {
+					if (!(parse_ipaddr(word, &addr)))
+						break;
+					shared_p->netmask = 32;
+					while ((addr.v4 & 0x01) == 0) {
+						addr.v4 >>= 1;
+						shared_p->netmask--;
+					}
+					snprintf(word, MAXLEN-1, "%s/%d", shared_p->name, shared_p->netmask);
+					if (shared_p->name)
+						free(shared_p->name);
+					shared_p->name = xstrdup(word);
+				}
 				argument = ITS_NOTHING_INTERESTING;
 				braces_shared = braces;
 				break;
