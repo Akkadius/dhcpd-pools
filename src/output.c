@@ -433,7 +433,6 @@ int output_json(void)
 		fprintf(outfile, "         \"free\":%g\n",
 			shared_networks->available - shared_networks->used);
 		fprintf(outfile, "   }");	/* end of summary */
-		sep++;
 	}
 
 	fprintf(outfile, "\n}\n");
