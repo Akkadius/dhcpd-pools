@@ -1,9 +1,25 @@
-.TH DHCPD-POOLS "1" "2015-09-04" "@VERSION@" "User Commands"
+.TH DHCPD-POOLS "1" "2017-01-06" "@VERSION@" "User Commands"
 .SH NAME
 dhcpd-pools \- ISC dhcpd pools usage analysis
 .SH SYNOPSIS
-.B dhcpd-pools
-[options]
+.SY dhcpd-pools
+.OP \-\-config file
+.OP \-\-leases file
+.OP \-\-sort nimcptTe
+.OP \-\-reverse
+.OP \-\-format thHcxXjJ
+.OP \-\-output file
+.OP \-\-limit nr
+.OP \-\-warning percent
+.OP \-\-critical percent
+.OP \-\-warn\-count number
+.OP \-\-crit\-count number
+.OP \-\-snet\-alarms
+.OP \-\-minsize size
+.OP \-\-perfdata
+.OP \-\-version
+.OP \-\-help
+.YS
 .SH DESCRIPTION
 The program analyses ISC dhcpd shared network and pool usage and outputs the
 results in a format selected by user.
@@ -104,29 +120,17 @@ determines which numeric analysis tables to include in the output.  The
 following values are "OR'd" together to create the desired output.  The
 default is
 .IR @OUTPUT_LIMIT@ .
-.PP
-.RS
-.PD 0
-.TP
-.B 01
-Print ranges
-.TP
-.B 02
-Print shared networks
-.TP
-.B 04
-Print total summary
-.TP
-.B 10
-Print range header
-.TP
-.B 20
-Print shared network header
-.TP
-.B 40
-Print total summary header
-.PD
-.RE
+.IP
+.TS
+tab(:);
+ll.
+0\fI1\fR:Print ranges
+0\fI2\fR:Print shared networks
+0\fI4\fR:Print total summary
+\fI1\fR0:Print range header
+\fI2\fR0:Print shared network header
+\fI4\fR0:Print total summary header
+.TE
 .IP
 The output limit for total summary has special meaning in
 .B \-\-warning
