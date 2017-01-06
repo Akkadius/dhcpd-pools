@@ -63,21 +63,6 @@
 #  define unlikely(x)	(x)
 # endif
 
-/* The __attribute__ feature is available in gcc versions 2.5 and later.
- * The attribute __pure__ was added in gcc 2.96.  */
-# if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-#  define _DP_ATTRIBUTE_PURE __attribute__ ((__pure__))
-# else
-#  define _DP_ATTRIBUTE_PURE	/* empty */
-# endif
-
-/* The __const__ attribute was added in gcc 2.95.  */
-# if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95)
-#  define _DP_ATTRIBUTE_CONST __attribute__ ((__const__))
-# else
-#  define _DP_ATTRIBUTE_CONST	/* empty */
-# endif
-
 /* The attribute __hot__ was added in gcc 4.3.  */
 # if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
 #  define _DP_ATTRIBUTE_HOT __attribute__ ((__hot__))
@@ -245,45 +230,45 @@ extern void flip_ranges(struct range_t *restrict ranges, struct range_t *restric
 /* support functions */
 extern int (*parse_ipaddr) (const char *restrict src, union ipaddr_t *restrict dst);
 extern int parse_ipaddr_init(const char *restrict src,
-			     union ipaddr_t *restrict dst) _DP_ATTRIBUTE_CONST;
+			     union ipaddr_t *restrict dst);
 extern int parse_ipaddr_v4(const char *restrict src, union ipaddr_t *restrict dst);
 extern int parse_ipaddr_v6(const char *restrict src, union ipaddr_t *restrict dst);
 
 extern void (*copy_ipaddr) (union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 extern void copy_ipaddr_init(union ipaddr_t *restrict dst,
-			     const union ipaddr_t *restrict src) _DP_ATTRIBUTE_CONST;
+			     const union ipaddr_t *restrict src);
 extern void copy_ipaddr_v4(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 extern void copy_ipaddr_v6(union ipaddr_t *restrict dst, const union ipaddr_t *restrict src);
 
 extern const char *(*ntop_ipaddr) (const union ipaddr_t *ip);
-extern const char *ntop_ipaddr_init(const union ipaddr_t *ip) _DP_ATTRIBUTE_CONST;
+extern const char *ntop_ipaddr_init(const union ipaddr_t *ip);
 extern const char *ntop_ipaddr_v4(const union ipaddr_t *ip);
 extern const char *ntop_ipaddr_v6(const union ipaddr_t *ip);
 
 extern double (*get_range_size) (const struct range_t *r);
-extern double get_range_size_init(const struct range_t *r) _DP_ATTRIBUTE_CONST;
-extern double get_range_size_v4(const struct range_t *r) _DP_ATTRIBUTE_PURE;
-extern double get_range_size_v6(const struct range_t *r) _DP_ATTRIBUTE_PURE;
+extern double get_range_size_init(const struct range_t *r);
+extern double get_range_size_v4(const struct range_t *r);
+extern double get_range_size_v6(const struct range_t *r);
 
 extern int (*xstrstr) (const char *restrict str);
-extern int xstrstr_init(const char *restrict str) _DP_ATTRIBUTE_CONST;
+extern int xstrstr_init(const char *restrict str);
 extern int xstrstr_v4(const char *restrict str)
-_DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
+_DP_ATTRIBUTE_HOT;
 extern int xstrstr_v6(const char *restrict str)
-_DP_ATTRIBUTE_HOT _DP_ATTRIBUTE_PURE;
+_DP_ATTRIBUTE_HOT;
 
 extern double strtod_or_err(const char *restrict str, const char *restrict errmesg);
-extern void print_version(void) __attribute__ ((noreturn));
-extern void usage(int status) __attribute__ ((noreturn));
+extern void __attribute__ ((noreturn)) print_version(void);
+extern void __attribute__ ((noreturn)) usage(int status);
 /* qsort required functions... */
 /* ...for ranges and... */
 extern int (*ipcomp) (const union ipaddr_t *restrict a, const union ipaddr_t *restrict b);
 extern int ipcomp_init(const union ipaddr_t *restrict a,
-		       const union ipaddr_t *restrict b) _DP_ATTRIBUTE_CONST;
+		       const union ipaddr_t *restrict b);
 extern int ipcomp_v4(const union ipaddr_t *restrict a,
-		     const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
+		     const union ipaddr_t *restrict b);
 extern int ipcomp_v6(const union ipaddr_t *restrict a,
-		     const union ipaddr_t *restrict b) _DP_ATTRIBUTE_PURE;
+		     const union ipaddr_t *restrict b);
 
 extern int (*leasecomp) (const struct leases_t *restrict a, const struct leases_t *restrict b);
 extern int leasecomp_init(const struct leases_t *restrict a
@@ -292,20 +277,20 @@ extern int leasecomp_init(const struct leases_t *restrict a
 extern int leasecomp_v4(const struct leases_t *restrict a, const struct leases_t *restrict b);
 extern int leasecomp_v6(const struct leases_t *restrict a, const struct leases_t *restrict b);
 
-extern int comp_cur(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
-extern int comp_double(double f1, double f2) _DP_ATTRIBUTE_CONST;
+extern int comp_cur(struct range_t *r1, struct range_t *r2);
+extern int comp_double(double f1, double f2);
 extern int comp_ip(struct range_t *r1, struct range_t *r2);
 extern int comp_max(struct range_t *r1, struct range_t *r2);
 extern int comp_percent(struct range_t *r1, struct range_t *r2);
-extern int comp_tc(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
+extern int comp_tc(struct range_t *r1, struct range_t *r2);
 extern int comp_tcperc(struct range_t *r1, struct range_t *r2);
-extern int comp_touched(struct range_t *r1, struct range_t *r2) _DP_ATTRIBUTE_PURE;
+extern int comp_touched(struct range_t *r1, struct range_t *r2);
 extern int rangecomp(const void *restrict r1, const void *restrict r2)
     __attribute__ ((nonnull(1, 2)));
 /* sort function pointer and functions */
 extern comparer_t field_selector(char c);
 extern double ret_percent(struct range_t r);
-extern double ret_tc(struct range_t r) _DP_ATTRIBUTE_CONST;
+extern double ret_tc(struct range_t r);
 extern double ret_tcperc(struct range_t r);
 extern void mergesort_ranges(struct range_t *restrict orig, int size,
 			     struct range_t *restrict temp)
@@ -322,14 +307,14 @@ extern int output_alarming(void);
 extern void clean_up(void);
 /* Hash functions */
 extern void (*add_lease) (union ipaddr_t *ip, enum ltype type);
-extern void add_lease_init(union ipaddr_t *ip, enum ltype type) _DP_ATTRIBUTE_CONST;
+extern void add_lease_init(union ipaddr_t *ip, enum ltype type);
 extern void add_lease_v4(union ipaddr_t *ip, enum ltype type);
 extern void add_lease_v6(union ipaddr_t *ip, enum ltype type);
 
 extern struct leases_t *(*find_lease) (union ipaddr_t *ip);
-extern struct leases_t *find_lease_init(union ipaddr_t *ip) _DP_ATTRIBUTE_CONST;
-extern struct leases_t *find_lease_v4(union ipaddr_t *ip) _DP_ATTRIBUTE_PURE;
-extern struct leases_t *find_lease_v6(union ipaddr_t *ip) _DP_ATTRIBUTE_PURE;
+extern struct leases_t *find_lease_init(union ipaddr_t *ip);
+extern struct leases_t *find_lease_v4(union ipaddr_t *ip);
+extern struct leases_t *find_lease_v6(union ipaddr_t *ip);
 
 extern void delete_lease(struct leases_t *lease);
 extern void delete_all_leases(void);

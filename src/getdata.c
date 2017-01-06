@@ -164,7 +164,7 @@ static int is_interesting_config_clause(char const *restrict s)
 
 /*! \brief Flip first and last IP in range if they are in unusual order.
  */
-void reorder_last_first(struct range_t *range_p)
+static void reorder_last_first(struct range_t *range_p)
 {
 	if (ipcomp(&range_p->first_ip, &range_p->last_ip) > 0) {
 		union ipaddr_t tmp;
