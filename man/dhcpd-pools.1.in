@@ -7,7 +7,7 @@ dhcpd-pools \- ISC dhcpd pools usage analysis
 .OP \-\-leases file
 .OP \-\-sort nimcptTe
 .OP \-\-reverse
-.OP \-\-format thHcxXjJ
+.OP \-\-format tHcxXjJ
 .OP \-\-output file
 .OP \-\-limit nr
 .OP \-\-warning percent
@@ -80,7 +80,7 @@ field is default sort key.
 \fB\-r\fR, \fB\-\-reverse\fR
 Sort results in reverse order.
 .TP
-\fB\-f\fR, \fB\-\-format\fR=\fI[thHcxXjJ]\fR
+\fB\-f\fR, \fB\-\-format\fR=\fI[tHcxXjJ]\fR
 Output format.
 Text
 .RI ( t ).
