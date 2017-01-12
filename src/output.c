@@ -468,6 +468,8 @@ static void html_header(FILE *restrict f)
 	if (tmp == NULL) {
 		error(EXIT_FAILURE, errno, "html_header: localtime");
 	}
+	setlocale(LC_CTYPE, "");
+	setlocale(LC_NUMERIC, "");
 	if (strftime(outstr, sizeof(outstr), nl_langinfo(D_T_FMT), &result) == 0) {
 		error(EXIT_FAILURE, 0, "html_header: strftime returned 0");
 	}
