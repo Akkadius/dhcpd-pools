@@ -43,6 +43,7 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <langinfo.h>
+#include <locale.h>
 #include <math.h>
 #include <netinet/in.h>
 #include <stdio.h>
