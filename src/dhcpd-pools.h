@@ -225,7 +225,7 @@ extern void parse_config(int, const char *restrict, struct shared_network_t *res
     __attribute__ ((nonnull(2, 3)));
 extern void prepare_data(void);
 extern void do_counting(void);
-extern void flip_ranges(struct range_t *restrict ranges, struct range_t *restrict tmp_ranges)
+extern void flip_ranges(struct range_t *restrict flip_me, struct range_t *restrict tmp_ranges)
     __attribute__ ((nonnull(1, 2)));
 /* support functions */
 extern int (*parse_ipaddr) (const char *restrict src, union ipaddr_t *restrict dst);
@@ -306,15 +306,15 @@ extern int output_alarming(void);
 /* Memory release, file closing etc */
 extern void clean_up(void);
 /* Hash functions */
-extern void (*add_lease) (union ipaddr_t *ip, enum ltype type);
-extern void add_lease_init(union ipaddr_t *ip, enum ltype type);
-extern void add_lease_v4(union ipaddr_t *ip, enum ltype type);
-extern void add_lease_v6(union ipaddr_t *ip, enum ltype type);
+extern void (*add_lease) (union ipaddr_t *addr, enum ltype type);
+extern void add_lease_init(union ipaddr_t *addr, enum ltype type);
+extern void add_lease_v4(union ipaddr_t *addr, enum ltype type);
+extern void add_lease_v6(union ipaddr_t *addr, enum ltype type);
 
-extern struct leases_t *(*find_lease) (union ipaddr_t *ip);
-extern struct leases_t *find_lease_init(union ipaddr_t *ip);
-extern struct leases_t *find_lease_v4(union ipaddr_t *ip);
-extern struct leases_t *find_lease_v6(union ipaddr_t *ip);
+extern struct leases_t *(*find_lease) (union ipaddr_t *addr);
+extern struct leases_t *find_lease_init(union ipaddr_t *addr);
+extern struct leases_t *find_lease_v4(union ipaddr_t *addr);
+extern struct leases_t *find_lease_v6(union ipaddr_t *addr);
 
 extern void delete_lease(struct leases_t *lease);
 extern void delete_all_leases(void);
