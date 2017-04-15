@@ -6,6 +6,7 @@
 /Makefile
 /Makefile.am
 /Makefile.in
+/_Noreturn.h
 /alloca.h
 /alloca.in.h
 /arg-nonnull.h
@@ -57,6 +58,11 @@
 /fstat.c
 /ftell.c
 /ftello.c
+/getopt-cdefs.in.h
+/getopt-core.h
+/getopt-ext.h
+/getopt-pfx-core.h
+/getopt-pfx-ext.h
 /getopt.c
 /getopt.in.h
 /getopt1.c
