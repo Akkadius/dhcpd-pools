@@ -249,9 +249,9 @@ void parse_config(int is_include, const char *restrict config_file,
 				break;
 			} else if (argument == ITS_A_RANGE_SECOND_IP && i == 0) {
 				if (!range_p) {
-					fpos_t pos;
-					fgetpos(dhcpd_config, &pos);
-					error(EXIT_FAILURE, 0, "parse_config: parsing failed at position: %Ld", pos);
+					long int pos;
+					pos = ftell(dhcpd_config);
+					error(EXIT_FAILURE, 0, "parse_config: parsing failed at position: %ld", pos);
 				}
 				range_p->last_ip = range_p->first_ip;
 				goto newrange;
