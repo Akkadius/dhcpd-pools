@@ -43,6 +43,7 @@
 /fd-hook.h
 /fdopen.c
 /fflush.c
+/filename.h
 /flexmember.h
 /float+.h
 /float.c
@@ -90,6 +91,8 @@
 /locale.h
 /locale.in.h
 /localeconv.c
+/localtime-buffer.c
+/localtime-buffer.h
 /lseek.c
 /malloc.c
 /malloca.c
@@ -123,6 +126,8 @@
 /ref-del.sed
 /ref-del.sin
 /setenv.c
+/stat-w32.c
+/stat-w32.h
 /stat.c
 /stdalign.in.h
 /stdbool.in.h
@@ -165,6 +170,7 @@
 /time_r.c
 /time_rz.c
 /timegm.c
+/tzset.c
 /unistd.c
 /unistd.h
 /unistd.in.h
