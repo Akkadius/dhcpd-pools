@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 {
 	int option_index = 0;
 	char const *tmp;
-	char *print_mac_addreses_tmp;
+	const char *print_mac_addreses_tmp;
 	struct range_t *tmp_ranges;
 	enum {
 		OPT_SNET_ALARMS = CHAR_MAX + 1,
