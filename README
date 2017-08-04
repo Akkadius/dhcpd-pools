@@ -1,62 +1,30 @@
-This is dhcpd-pools - ISC dhcpd lease status utility.
+### This is dhcpd-pools - ISC dhcpd lease status utility.
 
-Quick start.
+# Quick start (Debian & Ubuntu)
 
-	Get the uthash, assuming you do not have it already.
+<pre>
+sudo apt-get install -y unzip
+sudo apt-get install -y libtool
 
-	cd /tmp
-	wget https://github.com/troydhanson/uthash/archive/master.zip
-	unzip master.zip
+git clone https://github.com/Akkadius/dhcpd-pools.git
 
-	Build the dhcpd-pools project.
+cd /tmp
+wget https://github.com/troydhanson/uthash/archive/master.zip
+unzip master.zip
 
-	cd /tmp/dhcpd-pools
-	./bootstrap	# only when building git clone
-	./configure --with-uthash=/tmp/uthash-master/include
-	make
-	make check
-	make install
-
-	Notice that there are configuration options for default dhcpd.conf,
-	dhcpd.leases paths, among other things.
-
-	./configure --help
-
-	Remember to read the friendly manual page.
-
-	man ./man/dhcpd-pools.1
+cd /tmp/dhcpd-pools
+./bootstrap	# only when building git clone
+./configure --with-uthash=/tmp/uthash-master/include
+make -j4
+make check
+make install
+</pre>
 
 Dependencies to other projects.
+* http://www.gnu.org/software/gnulib/
+* http://uthash.sourceforge.net/
+* https://getbootstrap.com/
+* https://datatables.net/
 
-	http://www.gnu.org/software/gnulib/
-
-		You can avoid repeated gnulib downloads by setting
-		GNULIB_SRCDIR environment variable.  For example:
-
-		git clone git://git.savannah.gnu.org/gnulib.git ~/src/gnulib
-		export GNULIB_SRCDIR="$HOME/src/gnulib"
-
-		Assumign detached gnulib please remember to git pull the
-		latest updates before building dhcpd-pools.
-
-	http://uthash.sourceforge.net/
-
-		See quick start.
-
-	https://getbootstrap.com/
-	https://datatables.net/
-
-		Bootstrap and DataTables java scripts are used in html
-		output.
-
-Test data wanted.
-
-	Maintainer is interested to get copy of your dhcpd.conf
-	and dhcpd.leases files, and include files if you use them.
-	Intention is to collect large set of data to build
-	realistic regression test environment.
-
-	If you are interested to help this way put all files into
-	tar.gz, and send them to:
-
-	Sami Kerola <kerolasa@iki.fi>
+Original credit:
+http://dhcpd-pools.sourceforge.net/
