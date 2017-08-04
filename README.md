@@ -3,12 +3,12 @@
 # Quick start (Debian & Ubuntu)
 
 <pre>
-sudo apt-get install -y unzip
-sudo apt-get install -y libtool
+sudo apt-get install -y unzip libtool
+
+cd /tmp
 
 git clone https://github.com/Akkadius/dhcpd-pools.git
 
-cd /tmp
 wget https://github.com/troydhanson/uthash/archive/master.zip
 unzip master.zip
 
