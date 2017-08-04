@@ -3,7 +3,7 @@
 # Quick start (Debian & Ubuntu)
 
 <pre>
-sudo apt-get install -y unzip libtool
+sudo apt-get install -y unzip libtool autoconf
 
 cd /tmp
 
